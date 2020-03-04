@@ -49,39 +49,54 @@ app.on('ready', function() {
                     fs.writeFile(targetDirectory + filePathList[i] + common_extension, '', {encoding : 'utf8', flag : "wx"}, (err) => {
                         if (err !== null){
                             if (err.code === 'EEXIST'){
-                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\n" + err.path + "はすでに存在します。", i])
+                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "はすでに存在します。", i])
                             } else if (err.code === 'ENOENT'){
                                 // パスが存在しない場合と、不正文字が使用されている場合がある
-                                if (/^.*(\/|\\).*$/g.test(filePathList[i]) === true) {
-                                    let addPathList = filePathList[i].split(/\/|\\/);
-                                    addPathList.pop();
-                                    // パスの補完を行う。
-                                    fs.mkdir((targetDirectory + addPathList.join('\/')).toString().replace(/\\/g, '\/'), { recursive: true }, (err) => {
-                                        if (err !== null) {
-                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\nフォルダが作成できませんでした。", i]);
-                                        } else {
-                                            fs.writeFile((targetDirectory + filePathList[i] + common_extension).toString().replace(/\\/g, '\/'), '', {encoding : 'utf8', flag : "wx"}, (err) => {
-                                                if (err !== null){
-                                                    if (err.code === 'EEXIST'){
-                                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\n" + err.path + "はすでに存在します。", i])
-                                                    } else if (err.code === 'ENOENT') {
-                                                        // パス/ファイル名のエラーはすべてここでcatch。
-                                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\n" + err.path + "は不正なパス/ファイル名です。", i])
-                                                    } else {
-                                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\n" + err.path + "でエラーが発生しました。", i])
-                                                    }
-                                                } else {
-                                                    appWindow.webContents.send('message-from-main', ['promise_fill', "", i])
-                                                }
-                                            })
-                                        }
-                                    })
+                                // 連番作成用のコードかどうか確認。
+                                if (/^[^$*]*\$+[^$*]*\*\d+$/g.test(filePathList[i]) === true) {
+                                    
+                                    // 連番作成用コード
+                                    if ((10 ** filePathList[i].match(/\$/g).length - 1) >= filePathList[i].split('*')[1]) {
+                                        // filePathList[i].replace('$'.repeat(filePathList[i].match(/\$/g).length))
+                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n現在、連番作成は利用できません。", i]);
+                                    } else {
+                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n数字が大きすぎます。", i]);
+                                    }
+
                                 } else {
-                                    // ファイル名に不正文字が含まれる。
-                                    appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\n" + err.path + "は不正なパス/ファイル名です。", i])
+
+                                    if (/^.*(\/|\\).*$/g.test(filePathList[i]) === true) {
+                                        let addPathList = filePathList[i].split(/\/|\\/);
+                                        addPathList.pop();
+                                        // パスの補完を行う。
+                                        fs.mkdir((targetDirectory + addPathList.join('\/')).toString().replace(/\\/g, '\/'), { recursive: true }, (err) => {
+                                            if (err !== null) {
+                                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\nフォルダが作成できませんでした。", i]);
+                                            } else {
+                                                fs.writeFile((targetDirectory + filePathList[i] + common_extension).toString().replace(/\\/g, '\/'), '', {encoding : 'utf8', flag : "wx"}, (err) => {
+                                                    if (err !== null){
+                                                        if (err.code === 'EEXIST'){
+                                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "はすでに存在します。", i])
+                                                        } else if (err.code === 'ENOENT') {
+                                                            // パス/ファイル名のエラーはすべてここでcatch。
+                                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "は不正なパス/ファイル名です。", i])
+                                                        } else {
+                                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "でエラーが発生しました。", i])
+                                                        }
+                                                    } else {
+                                                        appWindow.webContents.send('message-from-main', ['promise_fill', "", i])
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    } else {
+                                        // ファイル名に不正文字が含まれる。
+                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "は不正なパス/ファイル名です。", i])
+                                    }
+
                                 }
                             } else {
-                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました\n" + err.path + "でエラーが発生しました。", i])
+                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "でエラーが発生しました。", i])
                             }
                         } else {
                             appWindow.webContents.send('message-from-main', ['promise_fill', "", i])
