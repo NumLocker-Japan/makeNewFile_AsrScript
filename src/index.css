@@ -64,6 +64,10 @@ body #descriptions dd {
   margin-left: 10px;
 }
 
+body #descriptions em {
+  font-size: 12px;
+}
+
 body #make {
   background-color: #E1E1E1;
   border: 1px solid #ADADAD;
