@@ -44,7 +44,6 @@ body{
     }
 
     em{
-        font-size: 13px;
         font-style: normal;
         font-weight: bold;
     }
@@ -55,7 +54,6 @@ body{
         }
 
         h1 {
-            font-size: 13px;
             margin: 10px 0 0px 0;
         }
 
@@ -66,16 +64,11 @@ body{
         dd{
             margin-left: 10px;
         }
-
-        em{
-            font-size: 12px;
-        }
     }
 
     #make{
         background-color: #E1E1E1;
         border: 1px solid #ADADAD;
-        font-size: 13px;
         padding: 2px 20px;
 
         &:hover, &:focus{
@@ -84,6 +77,10 @@ body{
             outline: none;
             transition: .5s;
         }
+    }
+
+    .title{
+        font-size: 13px;
     }
 
     // darkTheme

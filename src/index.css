@@ -42,7 +42,6 @@ body #common_extension:focus {
 }
 
 body em {
-  font-size: 13px;
   font-style: normal;
   font-weight: bold;
 }
@@ -52,7 +51,6 @@ body #descriptions p {
 }
 
 body #descriptions h1 {
-  font-size: 13px;
   margin: 10px 0 0px 0;
 }
 
@@ -64,14 +62,9 @@ body #descriptions dd {
   margin-left: 10px;
 }
 
-body #descriptions em {
-  font-size: 12px;
-}
-
 body #make {
   background-color: #E1E1E1;
   border: 1px solid #ADADAD;
-  font-size: 13px;
   padding: 2px 20px;
 }
 
@@ -80,6 +73,10 @@ body #make:hover, body #make:focus {
   border: 1px solid #0078D7;
   outline: none;
   transition: .5s;
+}
+
+body .title {
+  font-size: 13px;
 }
 
 body[darkTheme="true"] {
