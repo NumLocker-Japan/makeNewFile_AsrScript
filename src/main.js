@@ -2,6 +2,7 @@ const { app, BrowserWindow, globalShortcut, ipcMain, Menu } = require('electron'
 
 app.on('ready', function() {
     let appWindow = new BrowserWindow({ width: 680, height: 340, webPreferences: {
+        // Rendererプロセスでrequireできるようになる。
         nodeIntegration: true
     }})
     Menu.setApplicationMenu(null);
