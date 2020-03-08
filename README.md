@@ -2,6 +2,10 @@
 [As/R](https://all.undo.jp/asr/)のスクリプトコマンドとして使用可能なソフトウェア。<br>
 空のファイルの作成をサポート。ディレクトリを含めたファイル作成が可能。
 
+[こちら](https://all.undo.jp/asr/Appendix_UserTools.html)で配布していただいております。詳しい使用方法等は同梱のドキュメントをご確認ください。
+
+---------------------
+
 ## Authors
 NumLocker (https://github.com/NumLocker-Japan)
 
