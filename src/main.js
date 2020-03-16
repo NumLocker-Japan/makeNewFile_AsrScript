@@ -1,127 +1,163 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, Menu } = require('electron')
+const { app, BrowserWindow, globalShortcut, ipcMain, Menu, shell } = require('electron');
+const fs = require('fs');
 
 app.on('ready', function() {
-    let appWindow = new BrowserWindow({ width: 680, height: 340, webPreferences: {
-        // Rendererプロセスでrequireできるようになる。
-        nodeIntegration: true
-    }})
-    Menu.setApplicationMenu(null);
+	let appWindow = new BrowserWindow({ width: 680, height: 360, webPreferences: {
+		// Rendererプロセスでrequireできるようにする
+		nodeIntegration: false,
+		contextIsolation: false,
+		preload: __dirname + '/preload.js'
+	  }})
+	Menu.setApplicationMenu(null);
 
-    globalShortcut.register('Control+Shift+I', () => {
-        appWindow.webContents.openDevTools()
-    })
-    globalShortcut.register('Esc', () => {
-        appWindow.close()
-    })
+	// キーボードショートカットを指定
+	globalShortcut.register('Control+Shift+I', () => {
+		appWindow.webContents.openDevTools();
+	})
+	globalShortcut.register('Esc', () => {
+		appWindow.close();
+	})
+	globalShortcut.register('F1', () => {
+		shell.openExternal('https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/オンラインヘルプ');
+	})
 
-    appWindow.loadURL('file://' + __dirname + '/index.html');
+	appWindow.loadURL('file://' + __dirname + '/index.html');
 
-    ipcMain.on('message-from-renderer', (event, arg) => {
-        // Rendererからのmessage受け取り
-        if (arg === 'closeWindow') {
-            appWindow.close();
-        }
+	// アップデート関連
+	ipcMain.on('updateCheck-from-renderer', (event, arg) => {
+		if (arg[0] === 'checkUpdate') {
+			fs.readFile(arg[1] + 'resources\\version', 'utf8', (err, data) => {
+				if (err !== null) {
+					event.sender.send('updateCheck-reply', null);
+				} else {
+					event.sender.send('updateCheck-reply', data);
+				}
+			});
+		}
+	})
 
-        if (arg === 'getArgs') {
-            event.sender.send('reply-to-renderer', process.argv);
-        }
+	ipcMain.on('update-result', (event, arg) => {
+		if (arg[0] === 'success') {
+			arg[2][2] = Date.now();
+			arg[2][3] = 0;
+			fs.writeFile(arg[1] + 'resources\\version', arg[2].join('\n'), {encoding : 'utf8'}, (err) => {
+				// 
+			})
+		}
+		
+		if (arg[0] === 'failure') {
+			arg[2][3] = parseInt(arg[2][3]) + 1;
+			fs.writeFile(arg[1] + 'resources\\version', arg[2].join('\n'), {encoding : 'utf8'}, (err) => {
+				// 
+			})
+		}
+	})
 
-        if(arg[0] === 'run') {
-            run2(arg[1], arg[2], arg[3], arg[4]);
-        }
-    })
+	// Rendererからのmessage受け取り
+	ipcMain.on('message-from-renderer', (event, arg) => {
+		if (arg === 'closeWindow') {
+			appWindow.close();
+		}
 
+		if (arg === 'getArgs') {
+			event.sender.send('reply-to-renderer', process.argv);
+		}
 
-    const run2 = (targetDirectory, closeOnFinish, common_extension, filePathList) => {
+		if(arg[0] === 'run') {
+			runInMain(arg[1], arg[2], arg[3], arg[4]);
+		}
 
-        const fs = require('fs');
+		if (arg === 'openReleases') {
+			shell.openExternal('https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases');
+		}
+	})
 
-        const promise_run = new Promise((resolve, reject) => {
+	// Rendererプロセスからこちらに処理が移る
+	const runInMain = (targetDirectory, closeOnFinish, common_extension, filePathList) => {
 
-            ipcMain.on('message-from-renderer', (event, arg) => {
-                if (arg === 'finished') {
-                    resolve();
-                }
-            })
+		const makeFiles = (x) => {
+			return new Promise((resolve, reject) => {
+				if (x.trim() !== ''){
+					fs.writeFile(targetDirectory + x + common_extension, '', {encoding : 'utf8', flag : "wx"}, (err) => {
+						if (err !== null){
+							if (err.code === 'EEXIST'){
+								resolve("ファイルの作成に失敗しました。\n" + err.path + "はすでに存在します。");
+							} else if (err.code === 'ENOENT'){
+								// パスが存在しない場合と、不正文字が使用されている場合がある
+								// 連番作成用のコードかどうか確認。
+								if (/^[^$*]*\$+[^$*]*\*\d+$/g.test(x) === true) {
 
-            for (let i = 0; i < filePathList.length; i++) {
-                if (filePathList[i].trim() !== ''){
-                    fs.writeFile(targetDirectory + filePathList[i] + common_extension, '', {encoding : 'utf8', flag : "wx"}, (err) => {
-                        if (err !== null){
-                            if (err.code === 'EEXIST'){
-                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "はすでに存在します。", i])
-                            } else if (err.code === 'ENOENT'){
-                                // パスが存在しない場合と、不正文字が使用されている場合がある
-                                // 連番作成用のコードかどうか確認。
-                                if (/^[^$*]*\$+[^$*]*\*\d+$/g.test(filePathList[i]) === true) {
-                                    
-                                    // 連番作成用コード
-                                    if ((10 ** filePathList[i].match(/\$/g).length - 1) >= filePathList[i].split('*')[1]) {
-                                        // filePathList[i].replace('$'.repeat(filePathList[i].match(/\$/g).length))
-                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n現在、連番作成は利用できません。", i]);
-                                    } else {
-                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n数字が大きすぎます。", i]);
-                                    }
+									// 連番作成用コード
+									if ((10 ** x.match(/\$/g).length - 1) >= x.split('*')[1]) {
+										// x.replace('$'.repeat(x.match(/\$/g).length))
+										resolve("ファイルの作成に失敗しました。\n現在、連番作成は利用できません。");
+									} else {
+										resolve("ファイルの作成に失敗しました。\n数字が大きすぎます。");
+									}
+	
+								} else {
+	
+									if (/^.*(\/|\\).*$/g.test(x) === true) {
+										let addPathList = x.split(/\/|\\/);
+										addPathList.pop();
+										// パスの補完を行う。
+										fs.mkdir((targetDirectory + addPathList.join('\/')).toString().replace(/\\/g, '\/'), { recursive: true }, (err) => {
+											if (err !== null) {
+												resolve("ファイルの作成に失敗しました。\nフォルダが作成できませんでした。");
+											} else {
+												fs.writeFile((targetDirectory + x + common_extension).toString().replace(/\\/g, '\/'), '', {encoding : 'utf8', flag : "wx"}, (err) => {
+													if (err !== null){
+														if (err.code === 'EEXIST'){
+															resolve("ファイルの作成に失敗しました。\n" + err.path + "はすでに存在します。");
+														} else if (err.code === 'ENOENT') {
+															// パス/ファイル名のエラーはすべてここでcatch。
+															resolve("ファイルの作成に失敗しました。\n" + err.path + "は不正なパス/ファイル名です。");
+														} else {
+															resolve("ファイルの作成に失敗しました。\n" + err.path + "でエラーが発生しました。");
+														}
+													} else {
+														resolve(null);
+													}
+												})
+											}
+										})
+									} else {
+										// ファイル名に不正文字が含まれる。
+										resolve("ファイルの作成に失敗しました。\n" + err.path + "は不正なパス/ファイル名です。");
+									}
+								}
+							} else {
+								resolve("ファイルの作成に失敗しました。\n" + err.path + "でエラーが発生しました。");
+							}
+						} else {
+							resolve(null);
+						}
+					});
+				} else {
+					resolve(null);
+				}
+			})
+		}
 
-                                } else {
+		Promise.all(filePathList.map(x => {
+			return makeFiles(x);
+		})).then((result) => {
+			appWindow.webContents.send('message-from-main', ['alert', result]);
+			ipcMain.on('reply-to-main', (event, arg) => {
+				if (arg === 'finished') {
+					if (closeOnFinish === 'true') {
+						appWindow.close();
+					}
+				}
+			})
+		})
+	}
 
-                                    if (/^.*(\/|\\).*$/g.test(filePathList[i]) === true) {
-                                        let addPathList = filePathList[i].split(/\/|\\/);
-                                        addPathList.pop();
-                                        // パスの補完を行う。
-                                        fs.mkdir((targetDirectory + addPathList.join('\/')).toString().replace(/\\/g, '\/'), { recursive: true }, (err) => {
-                                            if (err !== null) {
-                                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\nフォルダが作成できませんでした。", i]);
-                                            } else {
-                                                fs.writeFile((targetDirectory + filePathList[i] + common_extension).toString().replace(/\\/g, '\/'), '', {encoding : 'utf8', flag : "wx"}, (err) => {
-                                                    if (err !== null){
-                                                        if (err.code === 'EEXIST'){
-                                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "はすでに存在します。", i])
-                                                        } else if (err.code === 'ENOENT') {
-                                                            // パス/ファイル名のエラーはすべてここでcatch。
-                                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "は不正なパス/ファイル名です。", i])
-                                                        } else {
-                                                            appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "でエラーが発生しました。", i])
-                                                        }
-                                                    } else {
-                                                        appWindow.webContents.send('message-from-main', ['promise_fill', "", i])
-                                                    }
-                                                })
-                                            }
-                                        })
-                                    } else {
-                                        // ファイル名に不正文字が含まれる。
-                                        appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "は不正なパス/ファイル名です。", i])
-                                    }
-
-                                }
-                            } else {
-                                appWindow.webContents.send('message-from-main', ['alert', "ファイルの作成に失敗しました。\n" + err.path + "でエラーが発生しました。", i])
-                            }
-                        } else {
-                            appWindow.webContents.send('message-from-main', ['promise_fill', "", i])
-                        }
-                    });
-                } else {
-                    appWindow.webContents.send('message-from-main', ['promise_fill', "", i])
-                }
-            }
-
-        })
-
-        promise_run.then(() => {
-            if (closeOnFinish === 'true') {
-                appWindow.close();
-            }
-        })
-    }
-
-
-    appWindow.on('closed', () => {
-        appWindow = null
-    })
+	appWindow.on('closed', () => {
+		appWindow = null;
+	})
 })
 
 app.on('window-all-closed', function() {
-    app.quit();
+	app.quit();
 });

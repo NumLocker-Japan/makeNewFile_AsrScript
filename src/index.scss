@@ -3,95 +3,95 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap');
 
 body{
-    background-color: #F0F0F0;
-    box-sizing: border-box;
-    display: flex;
-    font-size: 12px;
-    margin-top: 12px;
+	background-color: #F0F0F0;
+	box-sizing: border-box;
+	display: flex;
+	font-size: 12px;
+	margin-top: 12px;
 
-    &, #usr_input, #make{
-        font-family: 'Noto Sans JP', serif;
-    }
+	&, #usr_input, #make{
+		font-family: 'Noto Sans JP', serif;
+	}
 
-    p{
-        margin: 3px 0;
+	p{
+		margin: 3px 0;
 
-        &#textarea_descriptions{
-            margin: 0px 0px 5px 300px;
-        }
-    }
+		&#textarea_descriptions{
+			margin: 0px 0px 5px 300px;
+		}
+	}
 
-    #usr_input{
-        height: 200px;
-        margin-right: 10px;
-        width: 400px;
+	#usr_input{
+		height: 200px;
+		margin-right: 10px;
+		width: 400px;
 
-        &:focus{
-            border: 1px solid #0078D7;
-            outline: none;
-        }
-    }
+		&:focus{
+			border: 1px solid #0078D7;
+			outline: none;
+		}
+	}
 
-    #common_extension{
-        border: 1px solid #ADADAD;
-        margin-left: 10px;
-        padding: 1px 0;
+	#common_extension{
+		border: 1px solid #ADADAD;
+		margin-left: 10px;
+		padding: 1px 0;
 
-        &:focus{
-            border: 1px solid #0078D7;
-            outline: none;
-        }
-    }
+		&:focus{
+			border: 1px solid #0078D7;
+			outline: none;
+		}
+	}
 
-    em{
-        font-style: normal;
-        font-weight: bold;
-    }
+	em{
+		font-style: normal;
+		font-weight: bold;
+	}
 
-    #descriptions{
-        p{
-            margin: 7px 0;
-        }
+	#descriptions{
+		p{
+			margin: 7px 0;
+		}
 
-        h1 {
-            margin: 10px 0 0px 0;
-        }
+		h1 {
+			margin: 10px 0 0px 0;
+		}
 
-        dl{
-            margin: 0;
-        }
+		dl{
+			margin: 0;
+		}
 
-        dd{
-            margin-left: 10px;
-        }
-    }
+		dd{
+			margin-left: 10px;
+		}
+	}
 
-    #make{
-        background-color: #E1E1E1;
-        border: 1px solid #ADADAD;
-        padding: 2px 20px;
+	#make{
+		background-color: #E1E1E1;
+		border: 1px solid #ADADAD;
+		padding: 2px 20px;
 
-        &:hover, &:focus{
-            background-color: #E5F1FB;
-            border: 1px solid #0078D7;
-            outline: none;
-            transition: .5s;
-        }
-    }
+		&:hover, &:focus{
+			background-color: #E5F1FB;
+			border: 1px solid #0078D7;
+			outline: none;
+			transition: .5s;
+		}
+	}
 
-    .title{
-        font-size: 13px;
-    }
+	.title{
+		font-size: 13px;
+	}
 
-    // darkTheme
+	// darkTheme
 
-    &[darkTheme="true"]{
-        background-color: #222;
-        color: #fff;
+	&[darkTheme="true"]{
+		background-color: #222;
+		color: #fff;
 
-        textarea, input, #make {
-            background-color: #1a1a1a;
-            color: #fff;
-        }
-    }
+		textarea, input, #make {
+			background-color: #1a1a1a;
+			color: #fff;
+		}
+	}
 }
