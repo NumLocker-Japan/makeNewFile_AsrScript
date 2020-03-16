@@ -72,6 +72,7 @@ window.addEventListener('load', () => {
 									console.log('アップデートの確認 : 最新版あり');
 								} else {
 									console.log('アップデートの確認 : 最新版なし');
+									ipcRenderer.send('update-result', ['success', scriptPath, arg.split('\n')]);
 								}
 							} else {
 								if (parseInt(arg.split('\n')[3]) >= 10) {
