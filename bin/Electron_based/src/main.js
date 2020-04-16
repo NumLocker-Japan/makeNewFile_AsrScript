@@ -75,6 +75,10 @@ app.on('ready', function() {
 	// Rendererプロセスからこちらに処理が移る
 	const runInMain = (targetDirectory, closeOnFinish, common_extension, filePathList) => {
 
+		const applyNumbers = () => {
+			// 連番対応
+		}
+
 		const makeFiles = (x) => {
 			return new Promise((resolve, reject) => {
 				if (x.trim() !== ''){
