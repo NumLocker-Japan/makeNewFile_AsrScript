@@ -29,7 +29,7 @@
         <Label Content="デフォルトテキスト" HorizontalAlignment="Right" Margin="0,0,257,79" Grid.Row="1" VerticalAlignment="Bottom" Width="106" Height="26"/>
         <TextBox x:Name="DefaultText" HorizontalAlignment="Right" Height="26" Margin="0,0,21,79" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="231" Padding="5,0" VerticalContentAlignment="Center" KeyDown="DefaultText_KeyDown"/>
         <Label Content="エンコーディング" HorizontalAlignment="Right" Margin="0,0,257,52" Grid.Row="1" VerticalAlignment="Bottom" Width="106" Height="26"/>
-        <ComboBox x:Name="TextEncoding" HorizontalAlignment="Right" Margin="0,0,126,53" Grid.Row="1" VerticalAlignment="Bottom" Width="126" SelectedIndex="0" Height="23" Focusable="False">
+        <ComboBox x:Name="TextEncoding" HorizontalAlignment="Right" Margin="0,0,105,53" Grid.Row="1" VerticalAlignment="Bottom" Width="147" SelectedIndex="0" Height="23" Focusable="False">
             <ComboBoxItem Content="UTF-8" HorizontalAlignment="Left" Width="118"/>
             <ComboBoxItem Content="UTF-16 (Unicode)" HorizontalAlignment="Left" Width="118"/>
             <ComboBoxItem Content="ShiftJIS" HorizontalAlignment="Left" Width="118"/>

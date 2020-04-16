@@ -483,8 +483,8 @@ namespace makeFile
                 {
                     // 初期値の設定
                     config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeFile\config", true);
-                    config_reg_window.SetValue("WindowHeight", 400, RegistryValueKind.DWord);
-                    config_reg_window.SetValue("WindowWidth", 800, RegistryValueKind.DWord);
+                    config_reg_window.SetValue("WindowHeight", 600, RegistryValueKind.DWord);
+                    config_reg_window.SetValue("WindowWidth", 960, RegistryValueKind.DWord);
                     config_reg_window.SetValue("StartFromZero", "False", RegistryValueKind.String);
                     config_reg_window.SetValue("ZeroPadding", "True", RegistryValueKind.String);
                     config_reg_window.SetValue("UseReturnToMoveFocus", "False", RegistryValueKind.String);
@@ -563,16 +563,20 @@ namespace makeFile
             /// <summary>
             /// アップデートの確認
             /// </summary>
-            string GitHubAPI_token = "fake";  //ビルド時のみ設定
+            // 以下2項目はリリース用ビルド毎に設定
+            string GitHubAPI_token = "fake";  // ビルド時のみ設定
+            string version = "3.0.1";  // バージョン
             RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeFile\version", true);
             if (config_reg_version == null)
             {
                 config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeFile\version", true);
-                config_reg_version.SetValue("version", "3.0", RegistryValueKind.String);
+                config_reg_version.SetValue("version", version, RegistryValueKind.String);
                 config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
                 config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
             }
-            string version = (string)config_reg_version.GetValue("version");
+            else if ((string)config_reg_version.GetValue("version") != version){
+                config_reg_version.SetValue("version", version, RegistryValueKind.String);
+            }
 
             DateTime time = DateTime.Now;
             var time_offset = new DateTimeOffset(time.Ticks, new TimeSpan(+09, 00, 00));
