@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 
-namespace makeFile
+namespace makeNewFile
 {
     public class DataProperty   // Mainからもアクセス可能
     {
