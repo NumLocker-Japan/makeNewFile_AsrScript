@@ -194,7 +194,7 @@ namespace makeNewFile
         public static string ReplaceDate(string str, DateTime StartTime)
         {
             string[] deb_sam = str.Split('%');
-            for(int i = 0; i < deb_sam.Length; i++)
+            for (int i = 0; i < deb_sam.Length; i++)
             {
                 if (i % 2 == 1)
                 {
@@ -314,7 +314,7 @@ namespace makeNewFile
                     name_part__number_List.Sort();
                     int min_digit = name_part__number_List[0].Length;
 
-                    if (body_window.ZeroPadding.IsChecked==true && (number_part__offset + number_part__number).ToString().Length > min_digit)
+                    if (body_window.ZeroPadding.IsChecked == true && (number_part__offset + number_part__number).ToString().Length > min_digit)
                     {
                         AllErrors.Add("連番 - 桁の不足 - 数字が大きすぎます。 : " + FormattedPathList);
                         continue;
@@ -383,7 +383,7 @@ namespace makeNewFile
             string err = MakeFile(formatted, commonExtension, currentDirectory, showDetailsOfErrors, body_window);
             if (err != "")
             {
-                return(err);
+                return (err);
             }
             return "";
         }
@@ -417,11 +417,11 @@ namespace makeNewFile
                 {
                     if (showDetailsOfErrors)
                     {
-                        return("ディレクトリ : " + directoryPath + "\n詳細 : \n" + ex.ToString());
+                        return ("ディレクトリ : " + directoryPath + "\n詳細 : \n" + ex.ToString());
                     }
                     else
                     {
-                        return("ディレクトリ : " + directoryPath);
+                        return ("ディレクトリ : " + directoryPath);
                     }
                 }
             }
@@ -574,7 +574,8 @@ namespace makeNewFile
                 config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
                 config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
             }
-            else if ((string)config_reg_version.GetValue("version") != version){
+            else if ((string)config_reg_version.GetValue("version") != version)
+            {
                 config_reg_version.SetValue("version", version, RegistryValueKind.String);
             }
 
