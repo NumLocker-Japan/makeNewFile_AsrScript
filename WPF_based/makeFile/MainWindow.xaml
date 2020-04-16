@@ -1,0 +1,41 @@
+﻿<Window x:Name="Body" x:Class="makeFile.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:makeFile"
+        mc:Ignorable="d"
+        Title="MainWindow" Foreground="White" Background="{Binding WindowBackground}" Loaded="Body_Loaded" KeyDown="Body_KeyDown" FontSize="13" Height="663" Width="1043" FontFamily="Yu Gothic UI">
+
+    <Grid FocusManager.FocusedElement="{Binding ElementName=Txtbox}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="145*"/>
+            <RowDefinition Height="196*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="Txtbox" Margin="22,19,451,124" Text="" Background="{Binding InputBackground}" Foreground="{Binding WindowForeground}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.RowSpan="2" Padding="5,3,5,4" TextChanged="Txtbox_TextChanged" PreviewKeyDown="Txtbox_PreviewKeyDown"/>
+        <Label Content="共通拡張子" HorizontalAlignment="Left" Margin="22,0,0,77" VerticalAlignment="Bottom" Width="97" Foreground="{Binding WindowForeground}" Grid.Row="1" VerticalContentAlignment="Stretch" Height="26"/>
+        <TextBox x:Name="CmnExt" Height="26" Margin="132,0,451,77" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Background="{Binding InputBackground}" Foreground="{Binding WindowForeground}" Grid.Row="1" Padding="5,0" VerticalContentAlignment="Center" KeyDown="CmnExt_KeyDown"/>
+        <TextBlock Margin="22,0,451,10" Grid.Row="1" TextWrapping="Wrap"
+                   Text="一括で付与する拡張子を記入します。共通拡張子が入力されていない場合は、拡張子の一括付与は行われません。"
+                   VerticalAlignment="Bottom" Height="51" Foreground="{Binding WindowForeground}" Background="{Binding WindowBackground}"/>
+        <TextBlock x:Name="Description" HorizontalAlignment="Right" Margin="0,19,10,199" TextWrapping="Wrap"
+                   Text="作成するファイルの名前を入力します。必要に応じてフォルダも同時に作成されます。ファイルの拡張子が同じ場合は、共通拡張子を設定できます。&#10;ファイルの上書きは行われません。&#10;パスの区切り文字は、/ (スラッシュ) または、\ (バックスラッシュ・円マーク)を使用してください。(改行の入力はCtrl+Enter)&#10;&#10;-- 連番機能について ----&#10;記入例 : 資料$$.txt*3~8&#10;&#10;$記号は、1文字で1桁の数字を表し、末尾に*に続けて総数、~に続けて初期値を入力します。初期値を省略した場合、1が初期値になります。この場合、資料08.txt,資料09.txt,資料10.txtが作成されます。0埋めをする場合は、桁の不足に注意してください。任意の場所に複数の連番を入れる事が可能です。&#10;&#10;-- 日付・時刻挿入機能について ----&#10;記入例 : %yyyy年MM月dd日hh時mm分ss秒%&#10;&#10;%記号で置換フォーマットを囲うことで、日付・時刻を任意の場所に複数挿入できます。"
+                   Grid.RowSpan="2" Width="425" Foreground="{Binding WindowForeground}" Background="{Binding WindowBackground}"/>
+        <Button x:Name="DateFormat" Content="主な日付・時刻置換フォーマット" HorizontalAlignment="Right" Margin="0,0,234,173" Grid.Row="1" VerticalAlignment="Bottom" Width="201" Click="DateFormat_Click" Focusable="False"/>
+        <CheckBox x:Name="StartFromZero" Content="初期値省略時に0から連番を振る" HorizontalAlignment="Right" Margin="0,0,241,142" Grid.Row="1" VerticalAlignment="Bottom" Focusable="False"/>
+        <CheckBox x:Name="ZeroPadding" Content="0埋めする" HorizontalAlignment="Right" Margin="0,0,113,142" Grid.Row="1" VerticalAlignment="Bottom" RenderTransformOrigin="1.028,-1.133" Width="87" Focusable="False"/>
+        <CheckBox x:Name="UseReturnToMoveFocus" Content="Enterでフォーカス移動" HorizontalAlignment="Right" Margin="0,0,303,118" Grid.Row="1" VerticalAlignment="Bottom" Height="19" Focusable="False"/>
+        <CheckBox x:Name="CloseOnFinish" Content="終了時にウィンドウを閉じる" HorizontalAlignment="Right" Margin="0,0,43,121" Grid.Row="1" VerticalAlignment="Bottom" Focusable="False"/>
+        <Label Content="デフォルトテキスト" HorizontalAlignment="Right" Margin="0,0,257,79" Grid.Row="1" VerticalAlignment="Bottom" Width="106" Height="26"/>
+        <TextBox x:Name="DefaultText" HorizontalAlignment="Right" Height="26" Margin="0,0,21,79" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="231" Padding="5,0" VerticalContentAlignment="Center" KeyDown="DefaultText_KeyDown"/>
+        <Label Content="エンコーディング" HorizontalAlignment="Right" Margin="0,0,257,52" Grid.Row="1" VerticalAlignment="Bottom" Width="106" Height="26"/>
+        <ComboBox x:Name="TextEncoding" HorizontalAlignment="Right" Margin="0,0,126,53" Grid.Row="1" VerticalAlignment="Bottom" Width="126" SelectedIndex="0" Height="23" Focusable="False">
+            <ComboBoxItem Content="UTF-8" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem Content="UTF-16 (Unicode)" HorizontalAlignment="Left" Width="118"/>
+            <ComboBoxItem Content="ShiftJIS" HorizontalAlignment="Left" Width="118"/>
+        </ComboBox>
+
+        <Button x:Name="Btn" Content="OK" HorizontalAlignment="Right" Margin="0,0,162,10" VerticalAlignment="Bottom" Width="97" Click="Btn_Click" Background="{Binding ButtonBackground}" Foreground="{Binding WindowForeground}" Height="26" BorderBrush="#FF0078D7" BorderThickness="2" Grid.Row="1"/>
+        <Button x:Name="Btn_cancel" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,21,10" VerticalAlignment="Bottom" Width="101" Background="{Binding ButtonBackground}" Foreground="{Binding WindowForeground}" Height="26" Click="Btn_cancel_Click" Grid.Row="1"/>
+    </Grid>
+</Window>
