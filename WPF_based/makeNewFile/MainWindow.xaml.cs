@@ -478,11 +478,11 @@ namespace makeNewFile
             /// </summary>
             public void Launch(MainWindow window)
             {
-                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeFile\config", true);
+                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeNewFile\config", true);
                 if (config_reg_window == null)
                 {
                     // 初期値の設定
-                    config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeFile\config", true);
+                    config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeNewFile\config", true);
                     config_reg_window.SetValue("WindowHeight", 600, RegistryValueKind.DWord);
                     config_reg_window.SetValue("WindowWidth", 960, RegistryValueKind.DWord);
                     config_reg_window.SetValue("StartFromZero", "False", RegistryValueKind.String);
@@ -542,7 +542,7 @@ namespace makeNewFile
 
             public void Close(MainWindow window, bool close)
             {
-                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeFile\config", true);
+                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeNewFile\config", true);
                 config_reg_window.SetValue("WindowHeight", (int)window.Height, RegistryValueKind.DWord);
                 config_reg_window.SetValue("WindowWidth", (int)window.Width, RegistryValueKind.DWord);
                 config_reg_window.SetValue("StartFromZero", window.StartFromZero.IsChecked.ToString(), RegistryValueKind.String);
@@ -566,10 +566,10 @@ namespace makeNewFile
             // 以下2項目はリリース用ビルド毎に設定
             string GitHubAPI_token = "fake";  // ビルド時のみ設定
             string version = "3.0.1";  // バージョン
-            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeFile\version", true);
+            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeNewFile\version", true);
             if (config_reg_version == null)
             {
-                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeFile\version", true);
+                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeNewFile\version", true);
                 config_reg_version.SetValue("version", version, RegistryValueKind.String);
                 config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
                 config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
