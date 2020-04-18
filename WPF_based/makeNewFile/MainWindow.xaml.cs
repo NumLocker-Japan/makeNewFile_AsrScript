@@ -31,7 +31,7 @@ namespace makeNewFile
         private void Btn_cancel_Click(object sender, RoutedEventArgs e)
         {
             Config cfg = new Config();
-            cfg.Close(Body, true);
+            cfg.Close(Body, true, false);
         }
 
         private void Body_KeyDown(object sender, KeyEventArgs e)
@@ -40,7 +40,7 @@ namespace makeNewFile
             if (e.Key == Key.Escape)
             {
                 Config cfg = new Config();
-                cfg.Close(Body, true);
+                cfg.Close(Body, true, false);
             }
 
             if (e.Key == Key.F1)
@@ -225,6 +225,11 @@ namespace makeNewFile
 
         public static void StartProcess(MainWindow body_window)
         {
+            bool SaveSettings = true;
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+            {
+                SaveSettings = false;
+            }
             // コマンドライン引数を取得
             DataProperty dp = new DataProperty();
             string currentDirectory = dp.PropertyList["currentDirectory"];
@@ -270,11 +275,11 @@ namespace makeNewFile
             Config cfg = new Config();
             if (body_window.CloseOnFinish.IsChecked == true)
             {
-                cfg.Close(body_window, true);
+                cfg.Close(body_window, true, SaveSettings);
             }
             else
             {
-                cfg.Close(body_window, false);
+                cfg.Close(body_window, false, SaveSettings);
                 // ウインドウを閉じない場合は、次の入力に備えて変数を初期化。
                 body_window.txtbox_line = 1;
             }
@@ -314,7 +319,7 @@ namespace makeNewFile
                     name_part__number_List.Sort();
                     int min_digit = name_part__number_List[0].Length;
 
-                    if (body_window.ZeroPadding.IsChecked == true && (number_part__offset + number_part__number).ToString().Length > min_digit)
+                    if (body_window.ZeroPadding.IsChecked == true && (number_part__offset + number_part__number - 1).ToString().Length > min_digit)
                     {
                         AllErrors.Add("連番 - 桁の不足 - 数字が大きすぎます。 : " + FormattedPathList);
                         continue;
@@ -333,7 +338,7 @@ namespace makeNewFile
                     if (FirstTest != "")
                     {
                         AllErrors.Add("エラーを検知したため、次の連番処理は中止されました。" + splittedPathList[i]);  //整形済みのパスではなく、元の表現を表示
-                        break;
+                        continue;
                     }
 
                     int Counter = 1;  //作成済み項目数をカウント。テストとして1つ作成済みなので、カウンターは1スタート
@@ -378,7 +383,14 @@ namespace makeNewFile
                 }
 
                 // name_part__number_Arrayは、両端に必ず""を含むため、k+1にアクセスする事でこれを回避する。
-                formatted = formatted + name_part__name_Array[k] + number.ToString().PadLeft(name_part__number_Array[k + 1].Length, '0');
+                if (body_window.ZeroPadding.IsChecked == true)
+                {
+                    formatted = formatted + name_part__name_Array[k] + number.ToString().PadLeft(name_part__number_Array[k + 1].Length, '0');
+                }
+                else
+                {
+                    formatted = formatted + name_part__name_Array[k] + number.ToString();
+                }
             }
             string err = MakeFile(formatted, commonExtension, currentDirectory, showDetailsOfErrors, body_window);
             if (err != "")
@@ -478,11 +490,11 @@ namespace makeNewFile
             /// </summary>
             public void Launch(MainWindow window)
             {
-                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeNewFile\config", true);
+                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
                 if (config_reg_window == null)
                 {
                     // 初期値の設定
-                    config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeNewFile\config", true);
+                    config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
                     config_reg_window.SetValue("WindowHeight", 600, RegistryValueKind.DWord);
                     config_reg_window.SetValue("WindowWidth", 960, RegistryValueKind.DWord);
                     config_reg_window.SetValue("StartFromZero", "False", RegistryValueKind.String);
@@ -540,16 +552,22 @@ namespace makeNewFile
                 window.Left = (SystemParameters.PrimaryScreenWidth - Win_width) / 2;
             }
 
-            public void Close(MainWindow window, bool close)
+            public void Close(MainWindow window, bool close, bool saveSettings)
             {
-                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeNewFile\config", true);
+                // Shiftキーが押されていた場合は、設定類を保存しない。
+                RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
+
                 config_reg_window.SetValue("WindowHeight", (int)window.Height, RegistryValueKind.DWord);
                 config_reg_window.SetValue("WindowWidth", (int)window.Width, RegistryValueKind.DWord);
-                config_reg_window.SetValue("StartFromZero", window.StartFromZero.IsChecked.ToString(), RegistryValueKind.String);
-                config_reg_window.SetValue("ZeroPadding", window.ZeroPadding.IsChecked.ToString(), RegistryValueKind.String);
-                config_reg_window.SetValue("UseReturnToMoveFocus", window.UseReturnToMoveFocus.IsChecked.ToString(), RegistryValueKind.String);
-                config_reg_window.SetValue("CloseOnFinish", window.CloseOnFinish.IsChecked.ToString(), RegistryValueKind.String);
-                config_reg_window.SetValue("TextEncodingIndex", window.TextEncoding.SelectedIndex, RegistryValueKind.DWord);
+                if (saveSettings)
+                {
+                    config_reg_window.SetValue("StartFromZero", window.StartFromZero.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("ZeroPadding", window.ZeroPadding.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("UseReturnToMoveFocus", window.UseReturnToMoveFocus.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("CloseOnFinish", window.CloseOnFinish.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("TextEncodingIndex", window.TextEncoding.SelectedIndex, RegistryValueKind.DWord);
+                }
+                
                 if (close)
                 {
                     window.Close();
@@ -566,10 +584,10 @@ namespace makeNewFile
             // 以下2項目はリリース用ビルド毎に設定
             string GitHubAPI_token = "fake";  // ビルド時のみ設定
             string version = "beta-3.0.1";  // バージョン
-            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserScript\makeNewFile\version", true);
+            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\version", true);
             if (config_reg_version == null)
             {
-                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserScript\makeNewFile\version", true);
+                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\version", true);
                 config_reg_version.SetValue("version", version, RegistryValueKind.String);
                 config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
                 config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
