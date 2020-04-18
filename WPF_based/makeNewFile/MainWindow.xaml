@@ -12,7 +12,7 @@
             <RowDefinition Height="145*"/>
             <RowDefinition Height="196*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="Txtbox" Margin="22,19,451,124" Text="" Background="{Binding InputBackground}" Foreground="{Binding WindowForeground}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.RowSpan="2" Padding="5,3,5,4" TextChanged="Txtbox_TextChanged" PreviewKeyDown="Txtbox_PreviewKeyDown"/>
+        <TextBox x:Name="Txtbox" Margin="22,19,451,124" Text="" Background="{Binding InputBackground}" Foreground="{Binding WindowForeground}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Grid.RowSpan="2" Padding="5,3,5,4" PreviewKeyDown="Txtbox_PreviewKeyDown"/>
         <Label Content="共通拡張子" HorizontalAlignment="Left" Margin="22,0,0,77" VerticalAlignment="Bottom" Width="97" Foreground="{Binding WindowForeground}" Grid.Row="1" VerticalContentAlignment="Stretch" Height="26"/>
         <TextBox x:Name="CmnExt" Height="26" Margin="132,0,451,77" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Background="{Binding InputBackground}" Foreground="{Binding WindowForeground}" Grid.Row="1" Padding="5,0" VerticalContentAlignment="Center" KeyDown="CmnExt_KeyDown"/>
         <TextBlock Margin="22,0,451,10" Grid.Row="1" TextWrapping="Wrap"

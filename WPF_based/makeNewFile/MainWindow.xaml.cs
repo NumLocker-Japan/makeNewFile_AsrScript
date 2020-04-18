@@ -18,7 +18,6 @@ namespace makeNewFile
 {
     public partial class MainWindow : Window
     {
-        int txtbox_line = 1;
         public MainWindow()
         {
             InitializeComponent();
@@ -60,35 +59,27 @@ namespace makeNewFile
                     int caretIndex = Txtbox.CaretIndex;
                     Txtbox.Text = Txtbox.Text.Insert(caretIndex, Environment.NewLine);
                     Txtbox.CaretIndex = caretIndex + Environment.NewLine.Length;
-                    string[] separator = new string[] { "\r\n" };
-                    txtbox_line = Txtbox.Text.Split(separator, StringSplitOptions.None).Length;
                 }
-
-            }
-        }
-
-        private void Txtbox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            // TextChangedでとりあえず妥協
-            string[] separator = new string[] { "\r\n" };
-            if (txtbox_line != Txtbox.Text.Split(separator, StringSplitOptions.None).Length)
-            {
-                if ((Keyboard.Modifiers & ModifierKeys.Control) <= 0)
+                else
                 {
-                    // テキスト変更時、行が増加し、かつCtrlキーが押されていない場合は、Enterキーの入力として扱う。(IMEの確定には反応しない)
-                    if (UseReturnToMoveFocus.IsChecked == true)
+                    if (e.ImeProcessedKey.ToString() == "None")  // IME確定の場合は、e.ImeProcessedKey.ToString() == "Return"となる
                     {
-                        FocusNavigationDirection Direction = 0;
-                        TraversalRequest MoveFocusRequest = new TraversalRequest(Direction);
-                        UIElement ElementHavingFocus = Keyboard.FocusedElement as UIElement;  //フォーカス要素の取得
-                        if (ElementHavingFocus != null)
+                        // Enterキーの検知
+                        if (UseReturnToMoveFocus.IsChecked == true)
                         {
-                            ElementHavingFocus.MoveFocus(MoveFocusRequest);
+                            FocusNavigationDirection Direction = 0;
+                            TraversalRequest MoveFocusRequest = new TraversalRequest(Direction);
+                            UIElement ElementHavingFocus = Keyboard.FocusedElement as UIElement;  // フォーカス要素の取得
+                            if (ElementHavingFocus != null)
+                            {
+                                ElementHavingFocus.MoveFocus(MoveFocusRequest);
+                            }
                         }
-                    }
-                    else
-                    {
-                        StartProcess(Body);
+                        else
+                        {
+                            e.Handled = true;  // キー処理が終了したことを明示し、処理終了後に改行を挿入させない
+                            StartProcess(Body);
+                        }
                     }
                 }
             }
@@ -251,8 +242,6 @@ namespace makeNewFile
 
             string[] pathListSeparator = new string[] { "\r\n" };
             string[] splittedPathList = body_window.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
-            // テキストボックス取得後は空に
-            body_window.Txtbox.Text = "";
             // RunMakeFile()に処理を投げる。処理完了まで返らない。
             List<string> CatchedErrors = body_window.RunMakeFile(splittedPathList, StartTime, commonExtension, currentDirectory, showDetailsOfErrors, body_window, dp);
             // 取得したエラーをまとめて処理
@@ -282,7 +271,10 @@ namespace makeNewFile
             {
                 cfg.Close(body_window, false, SaveSettings);
                 // ウインドウを閉じない場合は、次の入力に備えて変数を初期化。
-                body_window.txtbox_line = 1;
+                // テキストボックスを空にし、終了の合図とする
+                body_window.Txtbox.Text = "";
+                body_window.CmnExt.Text = "";
+                body_window.DefaultText.Text = "";
             }
         }
 
