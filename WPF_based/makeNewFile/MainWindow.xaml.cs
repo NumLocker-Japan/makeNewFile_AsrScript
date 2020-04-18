@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -285,7 +286,8 @@ namespace makeNewFile
             }
         }
 
-        private List<string> RunMakeFile(string[] splittedPathList, DateTime StartTime, string commonExtension, string currentDirectory, bool showDetailsOfErrors, MainWindow body_window, DataProperty dp)
+        private List<string> RunMakeFile(string[] splittedPathList, DateTime StartTime, string commonExtension, string currentDirectory,
+                                         bool showDetailsOfErrors, MainWindow body_window, DataProperty dp)
         {
             var AllErrors = new List<string>();
             for (int i = 0; i < splittedPathList.Length; i++)
@@ -327,7 +329,8 @@ namespace makeNewFile
 
                     if (int.Parse(dp.PropertyList["alertManyItems"]) != 0 && int.Parse(dp.PropertyList["alertManyItems"]) <= number_part__number)
                     {
-                        if (MessageBox.Show("大量のファイルまたはフォルダを作成しようとしています。\n処理に時間がかかります。続けますか？\n\n対象 : " + FormattedPathList, "続行の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                        if (MessageBox.Show("大量のファイルまたはフォルダを作成しようとしています。\n処理に時間がかかります。続けますか？\n\n対象 : " + FormattedPathList,
+                            "続行の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                         {
                             continue;
                         }
@@ -370,7 +373,8 @@ namespace makeNewFile
             return AllErrors;
         }
 
-        private string CallMakeFile(int number, string[] name_part__name_Array, string[] name_part__number_Array, string commonExtension, string currentDirectory, bool showDetailsOfErrors, MainWindow body_window)
+        private string CallMakeFile(int number, string[] name_part__name_Array, string[] name_part__number_Array,
+                                    string commonExtension, string currentDirectory, bool showDetailsOfErrors, MainWindow body_window)
         {
             string formatted = "";
 
@@ -611,18 +615,15 @@ namespace makeNewFile
                     config_reg_version.SetValue("lastCheck", time_offset.ToUnixTimeSeconds(), RegistryValueKind.QWord);
                     config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
                     string responseText = await response.Content.ReadAsStringAsync();
-                    foreach (string v in responseText.Split(','))
+                    var responseResult_obj = JObject.Parse(responseText);
+
+                    // バージョン情報をキャッチ
+                    if (version != (string)responseResult_obj["name"])
                     {
-                        // バージョン情報をキャッチ
-                        if (Regex.IsMatch(v, "^\"name\":\".*\\d+.*\"$"))  // 数字が1つ以上入っている事が条件
+                        if (MessageBox.Show("更新があります。ダウンロードページを開きますか？\n使用中のバージョン : " + version + "\n最新のバージョン : " + (string)responseResult_obj["name"],
+                            "アップデートの通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                         {
-                            if (version != v.Split(':')[1].Replace("\"", ""))
-                            {
-                                if (MessageBox.Show("更新があります。ダウンロードページを開きますか？\n使用中のバージョン : " + version + "\n最新のバージョン : " + v.Split(':')[1].Replace("\"", ""), "アップデートの通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                                {
-                                    Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
-                                }
-                            }
+                            Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
                         }
                     }
                 }
@@ -633,7 +634,8 @@ namespace makeNewFile
                     {
                         config_reg_version.SetValue("lastCheck", time_offset.ToUnixTimeSeconds(), RegistryValueKind.QWord);
                         config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
-                        if (MessageBox.Show("10回以上連続でアップデートの確認に失敗しました。\n手動でアップデートの確認を行うことができます。\n確認を行いますか？\n使用中のバージョン : " + version, "アップデート手動確認の通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                        if (MessageBox.Show("10回以上連続でアップデートの確認に失敗しました。\n手動でアップデートの確認を行うことができます。\n確認を行いますか？\n使用中のバージョン : " + version,
+                            "アップデート手動確認の通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                         {
                             Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
                         }
