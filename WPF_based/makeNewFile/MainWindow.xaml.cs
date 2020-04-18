@@ -46,7 +46,7 @@ namespace makeNewFile
 
             if (e.Key == Key.F1)
             {
-                Process.Start("https://www.example.com/");  // ヘルプを用意していないので、サンプルURLに飛ばす
+                Process.Start("https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/Document_v3");  // GitHub Wikiのオンラインドキュメントに飛ばす
             }
         }
 
@@ -180,7 +180,7 @@ namespace makeNewFile
             }
 
             // フォントサイズ設定
-            if (dp.PropertyList["fontSize"] != "")
+            if (dp.PropertyList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
             {
                 Body.FontSize = int.Parse(dp.PropertyList["fontSize"]);
             }
