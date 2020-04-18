@@ -583,7 +583,7 @@ namespace makeNewFile
             /// </summary>
             // 以下2項目はリリース用ビルド毎に設定
             string GitHubAPI_token = "fake";  // ビルド時のみ設定
-            string version = "beta-3.0.1";  // バージョン
+            string version = "beta-3.0.4";  // バージョン
             RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\version", true);
             if (config_reg_version == null)
             {
@@ -614,7 +614,7 @@ namespace makeNewFile
                     foreach (string v in responseText.Split(','))
                     {
                         // バージョン情報をキャッチ
-                        if (Regex.IsMatch(v, "^\"name\":\"(\\d|\\.).+\"$"))
+                        if (Regex.IsMatch(v, "^\"name\":\".*\\d+.*\"$"))  // 数字が1つ以上入っている事が条件
                         {
                             if (version != v.Split(':')[1].Replace("\"", ""))
                             {
