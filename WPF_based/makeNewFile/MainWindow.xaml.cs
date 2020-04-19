@@ -160,16 +160,6 @@ namespace makeNewFile
 
             AccessArgs aa = new AccessArgs();
 
-            // カラーテーマ設定
-            if (aa.ArgsList["darkTheme"] == "true")
-            {
-                this.DataContext = new { WindowBackground = "#FF2C2C2C", WindowForeground = "White", InputBackground = "FF1C1C1C", ButtonBackground = "#FF3C3C3C" };
-            }
-            else
-            {
-                this.DataContext = new { WindowBackground = "#FFF0F0F0", WindowForeground = "Black", InputBackground = "White", ButtonBackground = "#FFE1E1E1" };
-            }
-
             // フォントサイズ設定
             if (aa.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
             {

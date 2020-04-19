@@ -22,7 +22,6 @@ namespace makeNewFile
             {
                 // 対応する引数一覧 : 初期値込み
                 {"currentDirectory", ""},
-                {"darkTheme", "false"},
                 {"showDetailsOfErrors", "false"},
                 {"alertManyItems", "1000"},
                 {"fontSize", ""},
