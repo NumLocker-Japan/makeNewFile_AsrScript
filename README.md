@@ -4,6 +4,8 @@
 
 [こちら](https://all.undo.jp/asr/Appendix_UserTools.html)で配布していただいております。詳しい使用方法等は同梱のドキュメントをご確認ください。
 
+その他詳しい使い方等は、[オンラインドキュメント](https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/Document_v3)をご覧ください。<br>
+
 ## 主な変更
 ### v3.x (WPFベース)
 すべてのコードをC#に移行。処理速度・起動速度の向上。連番機能・タイムスタンプ機能の搭載。
@@ -19,15 +21,14 @@ v3.xより搭載のGitHub API認証用トークンは、公開しているソー
 
 ---------------------
 
-## Authors
+## Author
 NumLocker (https://github.com/NumLocker-Japan)
 
 ## Credits
-This software was made using the following open source project.
+This software was made possible the following open source project.
 
-### [electron](https://github.com/electron/electron)
-Released under the MIT license<br>
-https://opensource.org/licenses/mit-license.php
+- [Json.NET](https://www.newtonsoft.com/json)<br>
+Released under the MIT license
 
 ## License
 *Copyright (c) 2020 NumLocker*<br>
