@@ -3,14 +3,14 @@ using System.Windows;
 
 namespace makeNewFile
 {
-    public class DataProperty   // Mainからもアクセス可能
+    public class AccessArgs   // Mainからもアクセス可能
     {
-        private static Dictionary<string, string> valueOfProperty;
+        private static Dictionary<string, string> valueOfArgs;
 
-        public Dictionary<string, string> PropertyList
+        public Dictionary<string, string> ArgsList
         {
-            set { valueOfProperty = value; }
-            get { return valueOfProperty; }
+            set { valueOfArgs = value; }
+            get { return valueOfArgs; }
         }
     }
 
@@ -28,7 +28,7 @@ namespace makeNewFile
                 {"fontSize", ""},
             };
 
-            DataProperty dp = new DataProperty();
+            AccessArgs aa = new AccessArgs();
             if (e.Args.Length > 0)
             {
                 // 引数の処理
@@ -45,7 +45,7 @@ namespace makeNewFile
                 }
             }
 
-            dp.PropertyList = argsList;
+            aa.ArgsList = argsList;
         }
     }
 }

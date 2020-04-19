@@ -158,10 +158,10 @@ namespace makeNewFile
 
             Body.Title = "新規ファイル作成";
 
-            DataProperty dp = new DataProperty();
+            AccessArgs aa = new AccessArgs();
 
             // カラーテーマ設定
-            if (dp.PropertyList["darkTheme"] == "true")
+            if (aa.ArgsList["darkTheme"] == "true")
             {
                 this.DataContext = new { WindowBackground = "#FF2C2C2C", WindowForeground = "White", InputBackground = "FF1C1C1C", ButtonBackground = "#FF3C3C3C" };
             }
@@ -171,9 +171,9 @@ namespace makeNewFile
             }
 
             // フォントサイズ設定
-            if (dp.PropertyList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
+            if (aa.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
             {
-                Body.FontSize = int.Parse(dp.PropertyList["fontSize"]);
+                Body.FontSize = int.Parse(aa.ArgsList["fontSize"]);
             }
 
             // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
@@ -223,11 +223,11 @@ namespace makeNewFile
                 SaveSettings = false;
             }
             // コマンドライン引数を取得
-            DataProperty dp = new DataProperty();
-            string currentDirectory = dp.PropertyList["currentDirectory"];
+            AccessArgs aa = new AccessArgs();
+            string currentDirectory = aa.ArgsList["currentDirectory"];
             // エラー処理の用意
             bool showDetailsOfErrors = false;
-            if (dp.PropertyList["showDetailsOfErrors"] == "true")
+            if (aa.ArgsList["showDetailsOfErrors"] == "true")
             {
                 showDetailsOfErrors = true;
             }
@@ -243,7 +243,7 @@ namespace makeNewFile
             string[] pathListSeparator = new string[] { "\r\n" };
             string[] splittedPathList = body_window.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
             // RunMakeFile()に処理を投げる。処理完了まで返らない。
-            List<string> CatchedErrors = body_window.RunMakeFile(splittedPathList, StartTime, commonExtension, currentDirectory, showDetailsOfErrors, body_window, dp);
+            List<string> CatchedErrors = body_window.RunMakeFile(splittedPathList, StartTime, commonExtension, currentDirectory, showDetailsOfErrors, body_window, aa);
             // 取得したエラーをまとめて処理
             if (CatchedErrors.Count() > 0)
             {
@@ -279,7 +279,7 @@ namespace makeNewFile
         }
 
         private List<string> RunMakeFile(string[] splittedPathList, DateTime StartTime, string commonExtension, string currentDirectory,
-                                         bool showDetailsOfErrors, MainWindow body_window, DataProperty dp)
+                                         bool showDetailsOfErrors, MainWindow body_window, AccessArgs aa)
         {
             var AllErrors = new List<string>();
             for (int i = 0; i < splittedPathList.Length; i++)
@@ -319,7 +319,7 @@ namespace makeNewFile
                         continue;
                     }
 
-                    if (int.Parse(dp.PropertyList["alertManyItems"]) != 0 && int.Parse(dp.PropertyList["alertManyItems"]) <= number_part__number)
+                    if (int.Parse(aa.ArgsList["alertManyItems"]) != 0 && int.Parse(aa.ArgsList["alertManyItems"]) <= number_part__number)
                     {
                         if (MessageBox.Show("大量のファイルまたはフォルダを作成しようとしています。\n処理に時間がかかります。続けますか？\n\n対象 : " + FormattedPathList,
                             "続行の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
