@@ -164,6 +164,7 @@ namespace makeNewFile
             if (aa.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
             {
                 Body.FontSize = int.Parse(aa.ArgsList["fontSize"]);
+                Body.TextEncoding.Width = int.Parse(aa.ArgsList["fontSize"]) * 12;
             }
 
             // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
@@ -481,7 +482,7 @@ namespace makeNewFile
                 {
                     // 初期値の設定
                     config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
-                    config_reg_window.SetValue("WindowHeight", 600, RegistryValueKind.DWord);
+                    config_reg_window.SetValue("WindowHeight", 660, RegistryValueKind.DWord);
                     config_reg_window.SetValue("WindowWidth", 960, RegistryValueKind.DWord);
                     config_reg_window.SetValue("StartFromZero", "False", RegistryValueKind.String);
                     config_reg_window.SetValue("ZeroPadding", "True", RegistryValueKind.String);
