@@ -101,9 +101,9 @@
                   HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Left"
                   Focusable="False"
                   SelectedIndex="0">
-            <ComboBoxItem Content="UTF-8" HorizontalAlignment="Left" Padding="10,2"/>
-            <ComboBoxItem Content="UTF-16 (Unicode)" HorizontalAlignment="Left" Padding="10,2"/>
-            <ComboBoxItem Content="Shift_JIS" HorizontalAlignment="Left" Padding="10,2"/>
+            <ComboBoxItem x:Name="TextEncoding_utf8" Content="UTF-8" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
+            <ComboBoxItem x:Name="TextEncoding_utf16" Content="UTF-16 (Unicode)" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
+            <ComboBoxItem x:Name="TextEncoding_sjis" Content="Shift_JIS" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
         </ComboBox>
 
         <Button x:Name="Btn"

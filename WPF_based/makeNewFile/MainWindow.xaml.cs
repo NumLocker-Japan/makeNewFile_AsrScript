@@ -164,6 +164,9 @@ namespace makeNewFile
             {
                 Body.FontSize = int.Parse(accessArgs.ArgsList["fontSize"]);
                 Body.TextEncoding.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                Body.TextEncoding_utf8.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                Body.TextEncoding_utf16.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                Body.TextEncoding_sjis.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
             }
 
             // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
