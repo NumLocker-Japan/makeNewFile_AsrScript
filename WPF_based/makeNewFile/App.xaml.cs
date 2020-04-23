@@ -25,6 +25,7 @@ namespace makeNewFile
                 {"showDetailsOfErrors", "false"},
                 {"alertManyItems", "1000"},
                 {"fontSize", ""},
+                {"disableCheckForUpdate", "false"},
             };
 
             AccessArgs aa = new AccessArgs();

@@ -587,6 +587,13 @@ namespace makeNewFile
             DateTime time = DateTime.Now;
             var time_offset = new DateTimeOffset(time.Ticks, new TimeSpan(+09, 00, 00));
             // 約1週間毎にアップデートを確認
+            AccessArgs accessArgs = new AccessArgs();
+            if (accessArgs.ArgsList["disableCheckForUpdate"] == "true")
+            {
+                // アップデート確認を行わない事を明示的に示されている場合はパス
+                return;
+            }
+
             if (time_offset.ToUnixTimeSeconds() > (long)((long)config_reg_version.GetValue(@"lastCheck") + 600000))
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, @"https://api.github.com/repos/NumLocker-Japan/makeNewFile_AsrScript/releases/latest");
