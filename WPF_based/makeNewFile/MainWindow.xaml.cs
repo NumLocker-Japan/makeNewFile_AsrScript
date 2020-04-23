@@ -52,18 +52,18 @@ namespace makeNewFile
         {
             if (Keyboard.IsKeyDown(Key.Return))
             {
+                // Ctrl+Enterで改行
                 if ((Keyboard.Modifiers & ModifierKeys.Control) > 0)
                 {
-                    // Ctrl+Enterで改行
                     int caretIndex = Txtbox.CaretIndex;
                     Txtbox.Text = Txtbox.Text.Insert(caretIndex, Environment.NewLine);
                     Txtbox.CaretIndex = caretIndex + Environment.NewLine.Length;
                 }
                 else
                 {
+                    // Enterキーの検知
                     if (e.ImeProcessedKey.ToString() == "None")  // IME確定の場合は、e.ImeProcessedKey.ToString() == "Return"となる
                     {
-                        // Enterキーの検知
                         if (UseReturnToMoveFocus.IsChecked == true)
                         {
                             FocusNavigationDirection Direction = 0;
@@ -566,11 +566,11 @@ namespace makeNewFile
         }
 
         private static HttpClient client = new HttpClient();
+        /// <summary>
+        /// アップデートの確認
+        /// </summary>
         private async Task CheckForUpdate()
         {
-            /// <summary>
-            /// アップデートの確認
-            /// </summary>
             // 以下2項目はリリース用ビルド毎に設定
             string GitHubAPI_token = "fake";  // ビルド時のみ設定
             string version = "beta-3.0.5";  // バージョン
