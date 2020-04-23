@@ -5,12 +5,12 @@ namespace makeNewFile
 {
     public class AccessArgs   // Mainからもアクセス可能
     {
-        private static Dictionary<string, string> valueOfArgs;
+        private static Dictionary<string, string> _value;
 
         public Dictionary<string, string> ArgsList
         {
-            set { valueOfArgs = value; }
-            get { return valueOfArgs; }
+            set { _value = value; }
+            get { return _value; }
         }
     }
 
