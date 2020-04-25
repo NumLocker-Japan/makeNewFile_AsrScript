@@ -30,7 +30,7 @@ namespace makeNewFile
         private void Btn_cancel_Click(object sender, RoutedEventArgs e)
         {
             Config cfg = new Config();
-            cfg.Close(Body, true, false);
+            cfg.Close(Body, true, false, false);
         }
 
         private void Body_KeyDown(object sender, KeyEventArgs e)
@@ -39,13 +39,20 @@ namespace makeNewFile
             if (e.Key == Key.Escape)
             {
                 Config cfg = new Config();
-                cfg.Close(Body, true, false);
+                cfg.Close(Body, true, false, false);
             }
 
             if (e.Key == Key.F1)
             {
                 Process.Start("https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/Document_v3");  // GitHub Wikiのオンラインドキュメントに飛ばす
             }
+        }
+
+        // ×ボタンでの終了
+        private void Body_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Config cfg = new Config();
+            cfg.Close(Body, true, false, true);
         }
 
         private void Txtbox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -258,11 +265,11 @@ namespace makeNewFile
             Config cfg = new Config();
             if (body_window.CloseOnFinish.IsChecked == true)
             {
-                cfg.Close(body_window, true, SaveSettings);
+                cfg.Close(body_window, true, SaveSettings, false);
             }
             else
             {
-                cfg.Close(body_window, false, SaveSettings);
+                cfg.Close(body_window, false, SaveSettings, false);
                 // ウインドウを閉じない場合は、次の入力に備えて変数を初期化。
                 // テキストボックスを空にし、終了の合図とする
                 body_window.Txtbox.Text = "";
@@ -542,7 +549,7 @@ namespace makeNewFile
                 window.Left = (SystemParameters.PrimaryScreenWidth - Win_width) / 2;
             }
 
-            public void Close(MainWindow window, bool close, bool saveSettings)
+            public void Close(MainWindow window, bool close, bool saveSettings, bool closing)
             {
                 // Shiftキーが押されていた場合は、設定類を保存しない。
                 RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
@@ -558,7 +565,7 @@ namespace makeNewFile
                     config_reg_window.SetValue("TextEncodingIndex", window.TextEncoding.SelectedIndex, RegistryValueKind.DWord);
                 }
                 
-                if (close)
+                if (close && !closing)
                 {
                     window.Close();
                 }

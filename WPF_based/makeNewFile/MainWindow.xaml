@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
         Title="MainWindow" Foreground="White" Background="#FFF0F0F0" Height="663" Width="1043" FontFamily="Yu Gothic UI" FontSize="13"
-        Loaded="Body_Loaded" KeyDown="Body_KeyDown">
+        Loaded="Body_Loaded" KeyDown="Body_KeyDown" Closing="Body_Closing">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=Txtbox}">
         <Grid.ColumnDefinitions>
@@ -49,11 +49,11 @@
                    Text="作成するファイルの名前を入力します。必要に応じてフォルダも同時に作成されます。ファイルの拡張子が同じ場合は、共通拡張子を設定できます。&#10;ファイルの上書きは行われません。&#10;パスの区切り文字は、/ (スラッシュ) または、\ (バックスラッシュ・円マーク)を使用してください。(改行の入力はCtrl+Enter)&#10;&#10;-- 連番機能について ----&#10;記入例 : 資料$$.txt*10~51&#10;&#10;$記号は、1文字で1桁の数字を表し、末尾に*に続けて総数、~に続けて初期値を入力します。初期値を省略した場合、1が初期値になります。0埋めをする場合は、桁の不足に注意してください。任意の場所に複数の連番を入れる事が可能です。&#10;&#10;-- 日付・時刻挿入機能について ----&#10;記入例 : %yyyy年MM月dd日hh時mm分ss秒%&#10;&#10;%記号で置換フォーマットを囲うことで、日付・時刻を任意の場所に複数挿入できます。"
                    Foreground="Black" Background="#FFF0F0F0" TextWrapping="Wrap"
                    Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
-                   Margin="0,15,15,35"/>
+                   Margin="0,15,15,35" Padding="5,2"/>
         <Button x:Name="DateFormat"
                 Content="主な日付・時刻置換フォーマット"
                 Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
-                Margin="0,5,0,5" Padding="5,2"
+                Margin="0,5,0,5" Padding="15,2"
                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
                 Click="DateFormat_Click" Focusable="False"/>
         <CheckBox x:Name="StartFromZero"
