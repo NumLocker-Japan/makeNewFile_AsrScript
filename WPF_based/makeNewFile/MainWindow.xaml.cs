@@ -156,7 +156,7 @@ namespace makeNewFile
                 , "主な日付・時刻置換フォーマット");
         }
 
-        private void Body_Loaded(object sender, RoutedEventArgs e)
+        private void Body_Activated(object sender, EventArgs e)
         {
             // 保存された設定の読み込み
             Config cfg = new Config();

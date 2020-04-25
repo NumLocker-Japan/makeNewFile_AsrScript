@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
         Title="MainWindow" Foreground="White" Background="#FFF0F0F0" Height="663" Width="1043" FontFamily="Yu Gothic UI" FontSize="13"
-        Loaded="Body_Loaded" KeyDown="Body_KeyDown" Closing="Body_Closing">
+        Activated="Body_Activated" KeyDown="Body_KeyDown" Closing="Body_Closing">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=Txtbox}">
         <Grid.ColumnDefinitions>
@@ -97,7 +97,7 @@
                 HorizontalAlignment="Left"  VerticalAlignment="Center"/>
         <ComboBox x:Name="TextEncoding"
                   Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Width="150"
-                  Margin="120,0,0,0" Padding="10,2"
+                  Margin="120,0,0,0" Padding="10,3"
                   HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Left"
                   Focusable="False"
                   SelectedIndex="0">
