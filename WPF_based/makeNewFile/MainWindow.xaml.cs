@@ -33,7 +33,7 @@ namespace makeNewFile
             cfg.Close(Body, true, false, false);
         }
 
-        private void Body_KeyDown(object sender, KeyEventArgs e)
+        private void Body_KeyUp(object sender, KeyEventArgs e)
         {
             // Escキーで終了
             if (e.Key == Key.Escape)
@@ -135,25 +135,10 @@ namespace makeNewFile
             }
         }
 
-        private void DateFormat_Click(object sender, RoutedEventArgs e)
+        private void Sub1_Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-                "大文字・小文字は区別されます。\n\n" +
-                "西暦(年) : yyyy\n" +
-                "月 : MM\n" +
-                "日 : dd\n" +
-                "曜日 : ddd\n" +
-                "時刻(時) : hh\n" +
-                "時刻(分) : mm\n" +
-                "時刻(秒) : ss\n" +
-                "時刻(ミリ秒) : fff\n" +
-                "午前/午後 : tt\n" +
-                "世界標準時からの時差(日本標準時は+09) : zz\n\n" +
-                "これらは、.NET Framework 4.7.2 DateTimeFormatInfo クラスに準拠しています。\n" +
-                "その他のフォーマットおよび、より詳しい情報は、こちらをご覧ください。\n" +
-                @"https://docs.microsoft.com/ja-jp/dotnet/api/system.globalization.datetimeformatinfo?view=netframework-4.7.2" +
-                "\n\nまた、置換フォーマットの展開方法は、地域設定に基づいているため、環境により展開される内容が異なる場合があります。"
-                , "主な日付・時刻置換フォーマット");
+            Sub1 sub1 = new Sub1();
+            sub1.Show();
         }
 
         private void Body_Activated(object sender, EventArgs e)
