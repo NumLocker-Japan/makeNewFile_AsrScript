@@ -29,5 +29,10 @@ namespace makeNewFile
         {
             Process.Start(@"https://docs.microsoft.com/ja-jp/dotnet/api/system.globalization.datetimeformatinfo?view=netframework-4.7.2");
         }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

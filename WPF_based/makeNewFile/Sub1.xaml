@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
-        Title="置換機能について" Height="600" Width="700" WindowStartupLocation="CenterScreen" FontSize="12">
+        Title="置換機能について" Height="600" Width="700" WindowStartupLocation="CenterScreen" FontSize="12"
+        KeyUp="Window_KeyUp">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
