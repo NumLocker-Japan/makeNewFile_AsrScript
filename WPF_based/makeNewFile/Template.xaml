@@ -1,0 +1,165 @@
+﻿<Window x:Class="makeNewFile.Template"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="テンプレートの編集" Height="700" Width="960" WindowStartupLocation="CenterScreen"
+        KeyUp="Window_KeyUp">
+    <Window.Resources>
+        <ControlTemplate TargetType="Button" x:Key="delButton">
+            <Grid>
+                <Rectangle Fill="#FFEEEEEE" x:Name="ColorSample__FillColor"/>
+                <Border BorderBrush="#FFE04B4B" BorderThickness="2"></Border>
+                <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+            </Grid>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Fill" Value="#FFF3DEDE" TargetName="ColorSample__FillColor"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <ControlTemplate TargetType="Button" x:Key="colorButton">
+            <Border BorderBrush="Black" BorderThickness="1" x:Name="ColorSample__Border">
+                <Grid>
+                    <Rectangle Fill="{TemplateBinding Background}" x:Name="ColorSample__FillColor"/>
+                    <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="2"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+
+
+
+        <Label Content="拡張子ごとに、テンプレートを作成できます。" Grid.Column="0" Grid.Row="0" Margin="20,15,0,0"/>
+
+        <ScrollViewer Grid.Column="0" Grid.Row="1" Margin="20,0,20,20">
+            <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
+
+                <GroupBox Header="HTMLテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Label Content="種類 : " VerticalAlignment="Center"/>
+                            <Label Content="テキスト"/>
+                            <CheckBox Content="有効" Margin="50,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Label Content="対象拡張子" VerticalAlignment="Center"/>
+                            <TextBox Width="200" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <TextBox AcceptsReturn="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Padding="5,2" Height="120"></TextBox>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Label Content="文字コード" VerticalAlignment="Center"/>
+                            <ComboBox SelectedIndex="0" Width="100" Margin="10,0,0,0" VerticalAlignment="Center">
+                                <ComboBoxItem Content="UFT-8"></ComboBoxItem>
+                                <ComboBoxItem Content="UFT-16"></ComboBoxItem>
+                                <ComboBoxItem Content="Shift_JIS"></ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <Button Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="5,2" Width="120" Height="25"></Button>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="画像フォーマットテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Label Content="種類 : " VerticalAlignment="Center"/>
+                            <Label Content="画像"/>
+                            <CheckBox Content="有効" Margin="50,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0">
+                            <Label Content="対象拡張子" Width="90" VerticalAlignment="Center"/>
+                            <TextBox Width="200" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0">
+                            <Label Content="サイズ" Width="90" VerticalAlignment="Center"/>
+                            <TextBox Width="60" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="x" VerticalAlignment="Center"/>
+                            <TextBox Width="60" Margin="0,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Label Content="背景色" VerticalAlignment="Center"/>
+                            <Label Content="{Binding ElementName=T001_ColorSample, Path=Background}" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                            <Button x:Name="T001_ColorSample" Content="" Background="Blue" Margin="5,0,0,0" Width="40" Template="{StaticResource ResourceKey=colorButton}" VerticalAlignment="Center" Click="ChangeColor"/>
+                        </StackPanel>
+                        <Button Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="5,2" Width="120" Height="25"></Button>
+                    </StackPanel>
+                </GroupBox>
+
+                <Button Content="テンプレートを追加" Margin="25,10" Padding="7,5"></Button>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right">
+            <Button x:Name="OK_Button" Content="OK" Width="100" Padding="5,3" Margin="10,0" VerticalAlignment="Center" Click="OK_Button_Click"></Button>
+            <Button x:Name="Cancel_Button" Content="キャンセル" Width="100" Padding="5,3" Margin="10,0" VerticalAlignment="Center" Click="Cancel_Button_Click"></Button>
+        </StackPanel>
+
+
+        <Label Grid.Column="1" Grid.Row="1" Background="#FFD5DFE5" Margin="0,15"></Label>
+
+        <Label Content="フォーマットと拡張子の関連付けを設定します。" Grid.Column="2" Grid.Row="0" Margin="20,15,0,0"/>
+
+        <ScrollViewer Grid.Column="2" Grid.Row="1">
+            <StackPanel HorizontalAlignment="Center">
+                <GroupBox Header="画像" Margin="0,0,0,10">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="90">Bitmap</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="90">JPEG</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="90">PNG</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="90">TIFF</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="90">WMA</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="その他">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="90">Office Calc</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        
+    </Grid>
+</Window>

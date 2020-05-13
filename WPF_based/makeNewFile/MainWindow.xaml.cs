@@ -141,6 +141,12 @@ namespace makeNewFile
             sub1.Show();
         }
 
+        private void EditTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            Template template = new Template();
+            template.Show();
+        }
+
         private void Body_Activated(object sender, EventArgs e)
         {
             // 保存された設定の読み込み
