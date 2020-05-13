@@ -22,15 +22,17 @@ namespace makeNewFile
             InitializeComponent();
         }
 
+        // クリックイベント処理
         private void Btn_Click(object sender, RoutedEventArgs e)
         {
-            StartProcess(Body);
+            Exec exec = new Exec(this);
+            exec.Start();
         }
 
         private void Btn_cancel_Click(object sender, RoutedEventArgs e)
         {
-            Config cfg = new Config();
-            cfg.Close(Body, true, false, false);
+            Config cfg = new Config(this);
+            cfg.Close(true, false, false);
         }
 
         private void Body_KeyUp(object sender, KeyEventArgs e)
@@ -38,8 +40,8 @@ namespace makeNewFile
             // Escキーで終了
             if (e.Key == Key.Escape)
             {
-                Config cfg = new Config();
-                cfg.Close(Body, true, false, false);
+                Config cfg = new Config(this);
+                cfg.Close(true, false, false);
             }
 
             if (e.Key == Key.F1)
@@ -51,8 +53,8 @@ namespace makeNewFile
         // ×ボタンでの終了
         private void Body_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Config cfg = new Config();
-            cfg.Close(Body, true, false, true);
+            Config cfg = new Config(this);
+            cfg.Close(true, false, true);
         }
 
         private void Txtbox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -84,7 +86,8 @@ namespace makeNewFile
                         else
                         {
                             e.Handled = true;  // キー処理が終了したことを明示し、処理終了後に改行を挿入させない
-                            StartProcess(Body);
+                            Exec exec = new Exec(this);
+                            exec.Start();
                         }
                     }
                 }
@@ -108,7 +111,8 @@ namespace makeNewFile
                 }
                 else
                 {
-                    StartProcess(Body);
+                    Exec exec = new Exec(this);
+                    exec.Start();
                 }
             }
         }
@@ -130,7 +134,8 @@ namespace makeNewFile
                 }
                 else
                 {
-                    StartProcess(Body);
+                    Exec exec = new Exec(this);
+                    exec.Start();
                 }
             }
         }
@@ -150,333 +155,360 @@ namespace makeNewFile
         private void Body_Activated(object sender, EventArgs e)
         {
             // 保存された設定の読み込み
-            Config cfg = new Config();
-            cfg.Launch(Body);
+            Config cfg = new Config(this);
+            cfg.Launch();
 
-            Body.Title = "新規ファイル作成";
+            this.Title = "新規ファイル作成";
 
             AccessArgs accessArgs = new AccessArgs();
 
             // フォントサイズ設定
             if (accessArgs.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
             {
-                Body.FontSize = int.Parse(accessArgs.ArgsList["fontSize"]);
-                Body.TextEncoding.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-                Body.TextEncoding_utf8.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-                Body.TextEncoding_utf16.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-                Body.TextEncoding_sjis.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                this.FontSize = int.Parse(accessArgs.ArgsList["fontSize"]);
+                this.TextEncoding.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                this.TextEncoding_utf8.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                this.TextEncoding_utf16.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                this.TextEncoding_sjis.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
             }
 
             // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
             _ = Task.Run(() => CheckForUpdate());
         }
 
-        /// <summary>
-        /// 日付・時刻を指定フォーマットで置換
-        /// </summary>
-        public static string ReplaceDate(string str, DateTime StartTime)
-        {
-            string[] deb_sam = str.Split('%');
-            for (int i = 0; i < deb_sam.Length; i++)
-            {
-                if (i % 2 == 1)
-                {
-                    string TimeFormat = deb_sam[i];
-                    deb_sam[i] = StartTime.ToString(TimeFormat);
-                }
-            }
-            return String.Join("", deb_sam);
-        }
 
         /// <summary>
-        /// タイプを指定し、パスが存在するかを確認
+        /// メイン処理を行うクラス
         /// </summary>
-        public static bool PathIsExsist(string path, string type)
-        {
-            if (type == "directory")
-            {
-                return (Directory.Exists(path));
+        public class Exec{
+            private MainWindow mw;
+            private string currentDirectory;
+            private bool showDetailsOfErrors;
+            private string commonExtension;
+            private DateTime StartTime;
+            private string[] splittedPathList;
+
+            public Exec(MainWindow mainWindow){
+                mw = mainWindow;
             }
 
-            if (type == "file")
+            /// <summary>
+            /// 日付・時刻を指定フォーマットで置換
+            /// </summary>
+            public static string ReplaceDate(string str, DateTime StartTime)
             {
-                return (File.Exists(path));
-            }
-
-            return false;
-        }
-
-        public static void StartProcess(MainWindow body_window)
-        {
-            bool SaveSettings = true;
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
-            {
-                SaveSettings = false;
-            }
-            // コマンドライン引数を取得
-            AccessArgs accessArgs = new AccessArgs();
-            string currentDirectory = accessArgs.ArgsList["currentDirectory"];
-            // エラー処理の用意
-            bool showDetailsOfErrors = false;
-            if (accessArgs.ArgsList["showDetailsOfErrors"] == "true")
-            {
-                showDetailsOfErrors = true;
-            }
-            // 共通拡張子の設定
-            string commonExtension = "";
-            if (!Regex.IsMatch(body_window.CmnExt.Text, @"^ *$"))
-            {
-                commonExtension = '.' + body_window.CmnExt.Text;
-            }
-            // 日付・時刻の取得
-            DateTime StartTime = DateTime.Now;
-
-            string[] pathListSeparator = new string[] { "\r\n" };
-            string[] splittedPathList = body_window.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
-            // RunMakeFile()に処理を投げる。処理完了まで返らない。
-            List<string> CatchedErrors = body_window.RunMakeFile(splittedPathList, StartTime, commonExtension, currentDirectory, showDetailsOfErrors, body_window);
-            // 取得したエラーをまとめて処理
-            if (CatchedErrors.Count() > 0)
-            {
-                string allErrors = "";
-                for (int i = 0; i < CatchedErrors.Count(); i++)
+                string[] deb_sam = str.Split('%');
+                for (int i = 0; i < deb_sam.Length; i++)
                 {
-                    if (showDetailsOfErrors)
+                    if (i % 2 == 1)
                     {
-                        allErrors = allErrors + "\n> ( " + (i + 1).ToString() + " ) --- --- --- --- --- --- --- --- ---\n" + CatchedErrors[i];
-                    }
-                    else
-                    {
-                        allErrors = allErrors + "\n" + CatchedErrors[i];
+                        string TimeFormat = deb_sam[i];
+                        deb_sam[i] = StartTime.ToString(TimeFormat);
                     }
                 }
-                MessageBox.Show("以下の場所でエラーが発生しました。\n" + allErrors, "エラーの通知");
+                return String.Join("", deb_sam);
             }
 
-            Config cfg = new Config();
-            if (body_window.CloseOnFinish.IsChecked == true)
+            /// <summary>
+            /// タイプを指定し、パスが存在するかを確認
+            /// </summary>
+            public static bool PathIsExsist(string path, string type)
             {
-                cfg.Close(body_window, true, SaveSettings, false);
-            }
-            else
-            {
-                cfg.Close(body_window, false, SaveSettings, false);
-                // ウインドウを閉じない場合は、次の入力に備えて変数を初期化。
-                // テキストボックスを空にし、終了の合図とする
-                body_window.Txtbox.Text = "";
-                body_window.CmnExt.Text = "";
-                body_window.DefaultText.Text = "";
-            }
-        }
-
-        private List<string> RunMakeFile(string[] splittedPathList, DateTime StartTime, string commonExtension, string currentDirectory,
-                                         bool showDetailsOfErrors, MainWindow body_window)
-        {
-            AccessArgs accessArgs = new AccessArgs();
-            var AllErrors = new List<string>();
-            for (int i = 0; i < splittedPathList.Length; i++)
-            {
-                string FormattedPathList = ReplaceDate(splittedPathList[i], StartTime);
-                if (Regex.IsMatch(FormattedPathList, @"^([^$*~]*\$+)+[^$*~]*\*[1-9]\d*(|~[1-9]\d*)$"))
+                if (type == "directory")
                 {
-                    string name_part = FormattedPathList.Split('*')[0];
-                    string number_part = FormattedPathList.Split('*')[1];
-                    int number_part__number = int.Parse(number_part.Split('~')[0]);
-                    int number_part__offset;
-                    if (number_part.Split('~').Length == 1)
+                    return (Directory.Exists(path));
+                }
+
+                if (type == "file")
+                {
+                    return (File.Exists(path));
+                }
+
+                return false;
+            }
+
+            public void Start(){
+                bool SaveSettings = true;   // 設定をレジストリに残すかどうか
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+                {
+                    SaveSettings = false;
+                }
+                // コマンドライン引数を取得
+                AccessArgs accessArgs = new AccessArgs();
+                currentDirectory = accessArgs.ArgsList["currentDirectory"];
+                // エラー処理の用意
+                showDetailsOfErrors = false;
+                if (accessArgs.ArgsList["showDetailsOfErrors"] == "true")
+                {
+                    showDetailsOfErrors = true;
+                }
+                // 共通拡張子の設定
+                commonExtension = "";
+                if (!Regex.IsMatch(mw.CmnExt.Text, @"^ *$"))
+                {
+                    commonExtension = '.' + mw.CmnExt.Text;
+                }
+                // 日付・時刻の取得
+                StartTime = DateTime.Now;
+
+                string[] pathListSeparator = new string[] { "\r\n" };
+                splittedPathList = mw.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+
+
+                // RunMakeFile()に処理を投げる。処理完了まで返らない。
+                List<string> CatchedErrors = RunMakeFile();
+                // 取得したエラーをまとめて処理
+                if (CatchedErrors.Count() > 0)
+                {
+                    string allErrors = "";
+                    for (int i = 0; i < CatchedErrors.Count(); i++)
                     {
-                        if (body_window.StartFromZero.IsChecked == true)
+                        if (showDetailsOfErrors)
                         {
-                            number_part__offset = 0;
+                            allErrors = allErrors + "\n> ( " + (i + 1).ToString() + " ) --- --- --- --- --- --- --- --- ---\n" + CatchedErrors[i];
                         }
                         else
                         {
-                            number_part__offset = 1;
+                            allErrors = allErrors + "\n" + CatchedErrors[i];
                         }
                     }
-                    else
-                    {
-                        number_part__offset = int.Parse(number_part.Split('~')[1]);
-                    }
-                    string[] name_part__name_Array = Regex.Split(name_part, @"\$+");
-                    string[] name_part__number_Array = Regex.Split(name_part, @"[^$]+");
-                    List<string> name_part__number_List = new List<string>(name_part__number_Array);
-                    name_part__number_List.RemoveAll(x => x == "");
-                    name_part__number_List.Sort();
-                    int min_digit = name_part__number_List[0].Length;
+                    MessageBox.Show("以下の場所でエラーが発生しました。\n" + allErrors, "エラーの通知");
+                }
 
-                    if (body_window.ZeroPadding.IsChecked == true && (number_part__offset + number_part__number - 1).ToString().Length > min_digit)
-                    {
-                        AllErrors.Add("連番 - 桁の不足 - 数字が大きすぎます。 : " + FormattedPathList);
-                        continue;
-                    }
-
-                    if (int.Parse(accessArgs.ArgsList["alertManyItems"]) != 0 && int.Parse(accessArgs.ArgsList["alertManyItems"]) <= number_part__number)
-                    {
-                        if (MessageBox.Show("大量のファイルまたはフォルダを作成しようとしています。\n処理に時間がかかります。続けますか？\n\n対象 : " + FormattedPathList,
-                            "続行の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-                        {
-                            continue;
-                        }
-                    }
-
-                    // 1つめの項目でエラーが出た場合、残る要素もエラーが出ることが必至なため、エラーを検知した場合はbreak
-                    string FirstTest = CallMakeFile(number_part__offset, name_part__name_Array, name_part__number_Array, commonExtension, currentDirectory, showDetailsOfErrors, body_window);
-                    if (FirstTest != "")
-                    {
-                        AllErrors.Add("エラーを検知したため、次の連番処理は中止されました。" + splittedPathList[i]);  //整形済みのパスではなく、元の表現を表示
-                        continue;
-                    }
-
-                    int Counter = 1;  //作成済み項目数をカウント。テストとして1つ作成済みなので、カウンターは1スタート
-                    int StartNumber = number_part__offset + 1;
-                    while (true)
-                    {
-                        string result = "";
-
-                        if (Counter >= number_part__number)
-                        {
-                            break;
-                        }
-
-                        result = CallMakeFile(StartNumber, name_part__name_Array, name_part__number_Array, commonExtension, currentDirectory, showDetailsOfErrors, body_window); ;
-
-                        Counter += 1;
-                        StartNumber += 1;
-                    }
+                Config cfg = new Config(mw);
+                if (mw.CloseOnFinish.IsChecked == true)
+                {
+                    cfg.Close(true, SaveSettings, false);
                 }
                 else
                 {
-                    string err = MakeFile(FormattedPathList, commonExtension, currentDirectory, showDetailsOfErrors, body_window);
-                    if (err != "")
+                    cfg.Close(false, SaveSettings, false);
+                    // ウインドウを閉じない場合は、次の入力に備えて変数を初期化。
+                    // テキストボックスを空にし、終了の合図とする
+                    mw.Txtbox.Text = "";
+                    mw.CmnExt.Text = "";
+                    mw.DefaultText.Text = "";
+                }
+            }
+
+            private List<string> RunMakeFile()
+            {
+                AccessArgs accessArgs = new AccessArgs();
+                var AllErrors = new List<string>();
+                for (int i = 0; i < splittedPathList.Length; i++)
+                {
+                    string FormattedPathList = ReplaceDate(splittedPathList[i], StartTime);
+                    if (Regex.IsMatch(FormattedPathList, @"^([^$*~]*\$+)+[^$*~]*\*[1-9]\d*(|~[1-9]\d*)$"))
                     {
-                        AllErrors.Add(err);
-                    }
-                }
-            }
-            return AllErrors;
-        }
-
-        private string CallMakeFile(int number, string[] name_part__name_Array, string[] name_part__number_Array,
-                                    string commonExtension, string currentDirectory, bool showDetailsOfErrors, MainWindow body_window)
-        {
-            string formatted = "";
-
-            for (int k = 0; k < name_part__name_Array.Length; k++)
-            {
-                if (k + 1 == name_part__name_Array.Length)
-                {
-                    formatted += name_part__name_Array[k];
-                    break;
-                }
-
-                // name_part__number_Arrayは、両端に必ず""を含むため、k+1にアクセスする事でこれを回避する。
-                if (body_window.ZeroPadding.IsChecked == true)
-                {
-                    formatted = formatted + name_part__name_Array[k] + number.ToString().PadLeft(name_part__number_Array[k + 1].Length, '0');
-                }
-                else
-                {
-                    formatted = formatted + name_part__name_Array[k] + number.ToString();
-                }
-            }
-            string err = MakeFile(formatted, commonExtension, currentDirectory, showDetailsOfErrors, body_window);
-            if (err != "")
-            {
-                return (err);
-            }
-            return "";
-        }
-
-        private string MakeFile(string path, string commonExtension, string currentDirectory, bool showDetailsOfErrors, MainWindow body_window)
-        {
-            string targetPath = currentDirectory + "\\" + path;
-            string[] splittedPath = Regex.Split(targetPath, @"(\\|\/)");
-            int len = splittedPath.Length;
-            string fileName = splittedPath[len - 1];
-            string fullPath = String.Join("\\", splittedPath);
-            string directoryPath;
-            if (fullPath != fileName)
-            {
-                directoryPath = fullPath.Substring(0, fullPath.Length - (1 + fileName.Length));
-            }
-            else
-            {
-                directoryPath = "";
-            }
-
-            // ディレクトリ部分とファイル部分を分割
-            if (directoryPath != "" && !PathIsExsist(directoryPath, "directory"))
-            {
-                try
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                catch (Exception ex)
-                {
-                    if (showDetailsOfErrors)
-                    {
-                        return ("ディレクトリ : " + directoryPath + "\n詳細 : \n" + ex.ToString());
-                    }
-                    else
-                    {
-                        return ("ディレクトリ : " + directoryPath);
-                    }
-                }
-            }
-
-            // ディレクトリのみの作成も可能にする。(\で終わるパスを許可)
-            if (fileName != "")
-            {
-                if (!PathIsExsist(fullPath + commonExtension, "file"))
-                {
-                    try
-                    {
-                        using (FileStream fs = File.Create(fullPath + commonExtension))
+                        string name_part = FormattedPathList.Split('*')[0];
+                        string number_part = FormattedPathList.Split('*')[1];
+                        int number_part__number = int.Parse(number_part.Split('~')[0]);
+                        int number_part__offset;
+                        if (number_part.Split('~').Length == 1)
                         {
-                            byte[] contents;
-                            if (body_window.TextEncoding.SelectedIndex == 0)
+                            if (mw.StartFromZero.IsChecked == true)
                             {
-                                contents = new UTF8Encoding().GetBytes(body_window.DefaultText.Text);
-                            }
-                            else if (body_window.TextEncoding.SelectedIndex == 1)
-                            {
-                                contents = new UnicodeEncoding().GetBytes(body_window.DefaultText.Text);
+                                number_part__offset = 0;
                             }
                             else
                             {
-                                Encoding s_jis = Encoding.GetEncoding(932);
-                                contents = s_jis.GetBytes(body_window.DefaultText.Text);
+                                number_part__offset = 1;
+                            }
+                        }
+                        else
+                        {
+                            number_part__offset = int.Parse(number_part.Split('~')[1]);
+                        }
+                        string[] name_part__name_Array = Regex.Split(name_part, @"\$+");
+                        string[] name_part__number_Array = Regex.Split(name_part, @"[^$]+");
+                        List<string> name_part__number_List = new List<string>(name_part__number_Array);
+                        name_part__number_List.RemoveAll(x => x == "");
+                        name_part__number_List.Sort();
+                        int min_digit = name_part__number_List[0].Length;
+
+                        if (mw.ZeroPadding.IsChecked == true && (number_part__offset + number_part__number - 1).ToString().Length > min_digit)
+                        {
+                            AllErrors.Add("連番 - 桁の不足 - 数字が大きすぎます。 : " + FormattedPathList);
+                            continue;
+                        }
+
+                        if (int.Parse(accessArgs.ArgsList["alertManyItems"]) != 0 && int.Parse(accessArgs.ArgsList["alertManyItems"]) <= number_part__number)
+                        {
+                            if (MessageBox.Show("大量のファイルまたはフォルダを作成しようとしています。\n処理に時間がかかります。続けますか？\n\n対象 : " + FormattedPathList,
+                                "続行の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                            {
+                                continue;
+                            }
+                        }
+
+                        // 1つめの項目でエラーが出た場合、残る要素もエラーが出ることが必至なため、エラーを検知した場合はbreak
+                        string FirstTest = CallMakeFile(number_part__offset, name_part__name_Array, name_part__number_Array);
+                        if (FirstTest != "")
+                        {
+                            AllErrors.Add("エラーを検知したため、次の連番処理は中止されました。" + splittedPathList[i]);  //整形済みのパスではなく、元の表現を表示
+                            continue;
+                        }
+
+                        int Counter = 1;  //作成済み項目数をカウント。テストとして1つ作成済みなので、カウンターは1スタート
+                        int StartNumber = number_part__offset + 1;
+                        while (true)
+                        {
+                            string result = "";
+
+                            if (Counter >= number_part__number)
+                            {
+                                break;
                             }
 
-                            fs.Write(contents, 0, contents.Length);
+                            result = CallMakeFile(StartNumber, name_part__name_Array, name_part__number_Array); ;
+
+                            Counter += 1;
+                            StartNumber += 1;
                         }
+                    }
+                    else
+                    {
+                        string err = MakeFile(FormattedPathList);
+                        if (err != "")
+                        {
+                            AllErrors.Add(err);
+                        }
+                    }
+                }
+                return AllErrors;
+            }
+
+            private string CallMakeFile(int number, string[] name_part__name_Array, string[] name_part__number_Array)
+            {
+                string formatted = "";
+
+                for (int k = 0; k < name_part__name_Array.Length; k++)
+                {
+                    if (k + 1 == name_part__name_Array.Length)
+                    {
+                        formatted += name_part__name_Array[k];
+                        break;
+                    }
+
+                    // name_part__number_Arrayは、両端に必ず""を含むため、k+1にアクセスする事でこれを回避する。
+                    if (mw.ZeroPadding.IsChecked == true)
+                    {
+                        formatted = formatted + name_part__name_Array[k] + number.ToString().PadLeft(name_part__number_Array[k + 1].Length, '0');
+                    }
+                    else
+                    {
+                        formatted = formatted + name_part__name_Array[k] + number.ToString();
+                    }
+                }
+                string err = MakeFile(formatted);
+                if (err != "")
+                {
+                    return (err);
+                }
+                return "";
+            }
+
+            private string MakeFile(string path)
+            {
+                string targetPath = currentDirectory + "\\" + path;
+                string[] splittedPath = Regex.Split(targetPath, @"(\\|\/)");
+                int len = splittedPath.Length;
+                string fileName = splittedPath[len - 1];
+                string fullPath = String.Join("\\", splittedPath);
+                string directoryPath;
+                if (fullPath != fileName)
+                {
+                    directoryPath = fullPath.Substring(0, fullPath.Length - (1 + fileName.Length));
+                }
+                else
+                {
+                    directoryPath = "";
+                }
+
+                // ディレクトリ部分とファイル部分を分割
+                if (directoryPath != "" && !PathIsExsist(directoryPath, "directory"))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(directoryPath);
                     }
 
                     catch (Exception ex)
                     {
                         if (showDetailsOfErrors)
                         {
-                            return ("ファイル : " + fullPath + commonExtension + "\n詳細 : \n" + ex.ToString());
+                            return ("ディレクトリ : " + directoryPath + "\n詳細 : \n" + ex.ToString());
                         }
                         else
                         {
-                            return ("ファイル : " + fullPath + commonExtension);
+                            return ("ディレクトリ : " + directoryPath);
                         }
                     }
                 }
-            }
 
-            return "";
+                // ディレクトリのみの作成も可能にする。(\で終わるパスを許可)
+                if (fileName != "")
+                {
+                    if (!PathIsExsist(fullPath + commonExtension, "file"))
+                    {
+                        try
+                        {
+                            using (FileStream fs = File.Create(fullPath + commonExtension))
+                            {
+                                byte[] contents;
+                                if (mw.TextEncoding.SelectedIndex == 0)
+                                {
+                                    contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
+                                }
+                                else if (mw.TextEncoding.SelectedIndex == 1)
+                                {
+                                    contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
+                                }
+                                else
+                                {
+                                    Encoding s_jis = Encoding.GetEncoding(932);
+                                    contents = s_jis.GetBytes(mw.DefaultText.Text);
+                                }
+
+                                fs.Write(contents, 0, contents.Length);
+                            }
+                        }
+
+                        catch (Exception ex)
+                        {
+                            if (showDetailsOfErrors)
+                            {
+                                return ("ファイル : " + fullPath + commonExtension + "\n詳細 : \n" + ex.ToString());
+                            }
+                            else
+                            {
+                                return ("ファイル : " + fullPath + commonExtension);
+                            }
+                        }
+                    }
+                }
+
+                return "";
+            }
         }
 
+
+
+        /// <summary>
+        /// 設定に関わる
+        /// </summary>
         public class Config
         {
+            private MainWindow mw;
+            public Config(MainWindow mainWindow){
+                mw = mainWindow;
+            }
+
             ///  <summary>
             /// レジストリ関連の設定を行う
             /// </summary>
-            public void Launch(MainWindow window)
+            public void Launch()
             {
                 RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
                 if (config_reg_window == null)
@@ -529,36 +561,36 @@ namespace makeNewFile
                 int TextEncodingIndex = (int)config_reg_window.GetValue("TextEncodingIndex");
 
                 config_reg_window.Close();
-                window.Height = Win_height;
-                window.Width = Win_width;
-                window.StartFromZero.IsChecked = StartFromZero;
-                window.ZeroPadding.IsChecked = ZeroPadding;
-                window.UseReturnToMoveFocus.IsChecked = UseReturnToMoveFocus;
-                window.CloseOnFinish.IsChecked = CloseOnFinish;
-                window.TextEncoding.SelectedIndex = TextEncodingIndex;
-                window.Top = (SystemParameters.PrimaryScreenHeight - Win_height) / 2;
-                window.Left = (SystemParameters.PrimaryScreenWidth - Win_width) / 2;
+                mw.Height = Win_height;
+                mw.Width = Win_width;
+                mw.StartFromZero.IsChecked = StartFromZero;
+                mw.ZeroPadding.IsChecked = ZeroPadding;
+                mw.UseReturnToMoveFocus.IsChecked = UseReturnToMoveFocus;
+                mw.CloseOnFinish.IsChecked = CloseOnFinish;
+                mw.TextEncoding.SelectedIndex = TextEncodingIndex;
+                mw.Top = (SystemParameters.PrimaryScreenHeight - Win_height) / 2;
+                mw.Left = (SystemParameters.PrimaryScreenWidth - Win_width) / 2;
             }
 
-            public void Close(MainWindow window, bool close, bool saveSettings, bool closing)
+            public void Close(bool close, bool saveSettings, bool closing)
             {
                 // Shiftキーが押されていた場合は、設定類を保存しない。
                 RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
 
-                config_reg_window.SetValue("WindowHeight", (int)window.Height, RegistryValueKind.DWord);
-                config_reg_window.SetValue("WindowWidth", (int)window.Width, RegistryValueKind.DWord);
+                config_reg_window.SetValue("WindowHeight", (int)mw.Height, RegistryValueKind.DWord);
+                config_reg_window.SetValue("WindowWidth", (int)mw.Width, RegistryValueKind.DWord);
                 if (saveSettings)
                 {
-                    config_reg_window.SetValue("StartFromZero", window.StartFromZero.IsChecked.ToString(), RegistryValueKind.String);
-                    config_reg_window.SetValue("ZeroPadding", window.ZeroPadding.IsChecked.ToString(), RegistryValueKind.String);
-                    config_reg_window.SetValue("UseReturnToMoveFocus", window.UseReturnToMoveFocus.IsChecked.ToString(), RegistryValueKind.String);
-                    config_reg_window.SetValue("CloseOnFinish", window.CloseOnFinish.IsChecked.ToString(), RegistryValueKind.String);
-                    config_reg_window.SetValue("TextEncodingIndex", window.TextEncoding.SelectedIndex, RegistryValueKind.DWord);
+                    config_reg_window.SetValue("StartFromZero", mw.StartFromZero.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("ZeroPadding", mw.ZeroPadding.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("UseReturnToMoveFocus", mw.UseReturnToMoveFocus.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("CloseOnFinish", mw.CloseOnFinish.IsChecked.ToString(), RegistryValueKind.String);
+                    config_reg_window.SetValue("TextEncodingIndex", mw.TextEncoding.SelectedIndex, RegistryValueKind.DWord);
                 }
                 
                 if (close && !closing)
                 {
-                    window.Close();
+                    mw.Close();
                 }
             }
         }
