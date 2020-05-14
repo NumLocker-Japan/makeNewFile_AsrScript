@@ -1,0 +1,34 @@
+﻿<Window x:Class="makeNewFile.TemplateSub"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:makeNewFile"
+        mc:Ignorable="d"
+        Title="テンプレートの追加" Height="180" Width="500" WindowStartupLocation="CenterScreen">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=TemplateTitle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0">
+            <StackPanel Orientation="Horizontal" Margin="0,3">
+                <Label Content="テンプレートのタイトル" Width="180"></Label>
+                <TextBox x:Name="TemplateTitle" Width="200" Margin="20,0,0,0" Padding="5,2" VerticalAlignment="Center"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,3">
+                <Label Content="テンプレートの種類" Width="180"></Label>
+                <ComboBox x:Name="TemplateType" Margin="20,0,0,0" SelectedIndex="0" VerticalAlignment="Center">
+                    <ComboBoxItem Content="テキスト"></ComboBoxItem>
+                    <ComboBoxItem Content="画像"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,10">
+            <Button x:Name="OK" Content="OK" Width="90" Margin="0,0,10,0" Click="OK_Click"></Button>
+            <Button x:Name="Cancel" Content="キャンセル" Width="90" Margin="0,0,15,0" Click="Cancel_Click"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
