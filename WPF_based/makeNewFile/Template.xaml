@@ -56,7 +56,7 @@
 
 
 
-        <Label Content="拡張子ごとに、テンプレートを作成できます。" Grid.Column="0" Grid.Row="0" Margin="20,15,0,0"/>
+        <Label Content="拡張子ごとに、テンプレートを作成できます。(上から適用)" Grid.Column="0" Grid.Row="0" Margin="20,15,0,0"/>
 
         <ScrollViewer Grid.Column="0" Grid.Row="1" Margin="20,0,20,20">
             <StackPanel x:Name="TemplatesField" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
@@ -139,31 +139,35 @@
                 <GroupBox Header="画像" Margin="0,0,0,10">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="90">Bitmap</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="70">Bitmap</Label>
+                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="90">JPEG</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="70">JPEG</Label>
+                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="90">PNG</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="70">PNG</Label>
+                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="90">TIFF</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="70">TIFF</Label>
+                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="90">WMA</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="70">WMA</Label>
+                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="その他">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="90">Office Calc</Label>
+                            <Label Width="140">Office Document</Label>
+                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="140">Office Spreadsheet</Label>
                             <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
