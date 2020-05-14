@@ -761,19 +761,7 @@ namespace makeNewFile
 
         public List<List<string>> Load()
         {
-            RegistryKey regTemplates = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
-            if (regTemplates == null)
-            {
-                regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
-                // ここで初期値の代入
-                regTemplates.SetValue("count", 1);
-                regTemplates.SetValue("tagList", 0);
-                regTemplates.SetValue("headerTitle_0", "HTMLテンプレート");
-                regTemplates.SetValue("isEnabled_0", "False");
-                regTemplates.SetValue("targetExtension_0", "htm,html");
-                regTemplates.SetValue("defaultText_0", "<!DOCTYPE html>");
-                regTemplates.SetValue("charasetIndex_0", 0);
-            }
+            RegistryKey regTemplates = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", false);
 
             // レジストリから情報を取得
             int count = (int)regTemplates.GetValue("count");
