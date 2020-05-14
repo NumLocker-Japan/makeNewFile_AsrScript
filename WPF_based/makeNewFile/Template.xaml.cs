@@ -26,7 +26,9 @@ namespace makeNewFile
     /// </summary>
     public partial class Template : Window
     {
-        int templateCount = 2;
+        int totalCount = 0;
+        List<System.Windows.Controls.GroupBox> allTemplatesList = new List<System.Windows.Controls.GroupBox>();     // テンプレートは、GroupBoxのリストとして状態を管理
+        List<int> visualAllTemplatesListIndex = new List<int>();    // 見た目順にテンプレートの通し番号が並びます。
 
         public Template()
         {
@@ -83,9 +85,65 @@ namespace makeNewFile
                 }
             }
 
-            if (System.Windows.MessageBox.Show("テンプレート「" + allTemplatesTitle[int.Parse(senderElement.Name.Substring(10)) - 1] + "」を削除しますか？", "削除の確認", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (System.Windows.MessageBox.Show("テンプレート「" + allTemplatesTitle[visualAllTemplatesListIndex.FindIndex(x => x == int.Parse(senderElement.Name.Substring(10)))] + "」を削除してもよろしいですか？", "削除の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                Console.WriteLine("del");
+                visualAllTemplatesListIndex.Remove(int.Parse(senderElement.Name.Substring(10)));
+                RefreshTemplates();
+            }
+        }
+
+
+        /// <summary>
+        /// 要素を1つ上に移動
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MoveToUp(object sender, RoutedEventArgs e)
+        {
+            var senderElement = (System.Windows.Controls.Button)sender;
+            int itemindex = visualAllTemplatesListIndex.FindIndex(x => x == int.Parse(senderElement.Name.Substring(9)));
+            // 既に一番上にある場合は、return
+            if (itemindex == 0)
+            {
+                return;
+            }
+            visualAllTemplatesListIndex.RemoveAt(itemindex);
+            visualAllTemplatesListIndex.Insert(itemindex - 1, int.Parse(senderElement.Name.Substring(9)));
+
+            RefreshTemplates();
+        }
+
+        private void MoveToBottom(object sender, RoutedEventArgs e)
+        {
+            var senderElement = (System.Windows.Controls.Button)sender;
+            int itemindex = visualAllTemplatesListIndex.FindIndex(x => x == int.Parse(senderElement.Name.Substring(13)));
+            // 既に一番下にある場合は、return
+            if (itemindex == visualAllTemplatesListIndex.Count() - 1)
+            {
+                return;
+            }
+
+            // 下から2番目にあるときは、末尾に追加(エラー回避)
+            if (itemindex == visualAllTemplatesListIndex.Count() - 2)
+            {
+                visualAllTemplatesListIndex.RemoveAt(itemindex);
+                visualAllTemplatesListIndex.Add(int.Parse(senderElement.Name.Substring(13)));
+            }
+            else
+            {
+                visualAllTemplatesListIndex.RemoveAt(itemindex);
+                visualAllTemplatesListIndex.Insert(itemindex + 1, int.Parse(senderElement.Name.Substring(13)));
+            }
+
+            RefreshTemplates();
+        }
+
+        private void RefreshTemplates()
+        {
+            TemplatesField.Children.Clear();
+            foreach (int templateIndex in visualAllTemplatesListIndex)
+            {
+                TemplatesField.Children.Add(allTemplatesList[templateIndex]);
             }
         }
 
@@ -95,18 +153,24 @@ namespace makeNewFile
 
         private void AddTemplateItem()
         {
-            templateCount += 1;
-
             NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
             List<string> info = newTemplateInfo.Get();
+            System.Windows.Controls.GroupBox addingItem;
             if (int.Parse(info[1]) == 0)
             {
-                TemplatesField.Children.Add(AddTextTemplate(info[0], templateCount));
+                addingItem = AddTextTemplate(info[0], totalCount);
+                
             }
             else
             {
-                TemplatesField.Children.Add(AddImageTemplate(info[0], templateCount));
+                addingItem = AddImageTemplate(info[0], totalCount);
             }
+
+            TemplatesField.Children.Add(addingItem);
+            allTemplatesList.Add(addingItem);
+            visualAllTemplatesListIndex.Add(totalCount);
+
+            totalCount += 1;
         }
 
         private System.Windows.Controls.GroupBox AddTextTemplate(string title, int count)
@@ -149,6 +213,7 @@ namespace makeNewFile
 
             System.Windows.Controls.Label extLabel = new System.Windows.Controls.Label();
             extLabel.Content = "対象拡張子";
+            extLabel.Width = 90;
             extLabel.VerticalAlignment = VerticalAlignment.Center;
 
             System.Windows.Controls.TextBox extTextBox = new System.Windows.Controls.TextBox();
@@ -176,6 +241,7 @@ namespace makeNewFile
 
             System.Windows.Controls.Label charasetLabel = new System.Windows.Controls.Label();
             charasetLabel.Content = "文字コード";
+            charasetLabel.Width = 90;
             charasetLabel.VerticalAlignment = VerticalAlignment.Center;
 
             System.Windows.Controls.ComboBox comboBox = new System.Windows.Controls.ComboBox();
@@ -199,6 +265,10 @@ namespace makeNewFile
             childStackPanel_03.Children.Add(comboBox);
 
 
+            StackPanel childStackPanel_04 = new StackPanel();
+            childStackPanel_04.Orientation = System.Windows.Controls.Orientation.Horizontal;
+            childStackPanel_04.Margin = (Thickness)thicknessConverter.ConvertFromString("0,15,0,0");
+
             System.Windows.Controls.Button delButton = new System.Windows.Controls.Button();
             delButton.Content = "テンプレートを削除";
             delButton.Name = "delButton_" + count.ToString();
@@ -206,18 +276,38 @@ namespace makeNewFile
             delButton.SetResourceReference(System.Windows.Controls.Control.TemplateProperty, "delButton");
 
             delButton.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            delButton.Margin = (Thickness)thicknessConverter.ConvertFromString("0,15,0,0");
-            delButton.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             delButton.Width = 120;
             delButton.Height = 25;
             delButton.Click += DeleteTemplate_Click;
+
+            System.Windows.Controls.Button moveUpButton = new System.Windows.Controls.Button();
+            moveUpButton.Name = "moveToUp_" + count.ToString();
+            moveUpButton.Content = "↑";
+            moveUpButton.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            moveUpButton.Margin = (Thickness)thicknessConverter.ConvertFromString("90,0,0,0");
+            moveUpButton.Width = 40;
+            moveUpButton.Height = 25;
+            moveUpButton.Click += MoveToUp;
+
+            System.Windows.Controls.Button moveBottomButton = new System.Windows.Controls.Button();
+            moveBottomButton.Name = "moveToBottom_" + count.ToString();
+            moveBottomButton.Content = "↓";
+            moveBottomButton.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            moveBottomButton.Margin = (Thickness)thicknessConverter.ConvertFromString("10,0,0,0");
+            moveBottomButton.Width = 40;
+            moveBottomButton.Height = 25;
+            moveBottomButton.Click += MoveToBottom;
+
+            childStackPanel_04.Children.Add(delButton);
+            childStackPanel_04.Children.Add(moveUpButton);
+            childStackPanel_04.Children.Add(moveBottomButton);
 
 
             parentStackPanel.Children.Add(childStackPanel_01);
             parentStackPanel.Children.Add(childStackPanel_02);
             parentStackPanel.Children.Add(textBox);
             parentStackPanel.Children.Add(childStackPanel_03);
-            parentStackPanel.Children.Add(delButton);
+            parentStackPanel.Children.Add(childStackPanel_04);
 
             groupBox.Content = parentStackPanel;
 
@@ -345,6 +435,9 @@ namespace makeNewFile
             //childStackPanel_04.Children.Add(colorNameLabel);
             childStackPanel_04.Children.Add(colorChangeButton);
 
+            StackPanel childStackPanel_05 = new StackPanel();
+            childStackPanel_05.Orientation = System.Windows.Controls.Orientation.Horizontal;
+            childStackPanel_05.Margin = (Thickness)thicknessConverter.ConvertFromString("0,15,0,0");
 
             System.Windows.Controls.Button delButton = new System.Windows.Controls.Button();
             delButton.Content = "テンプレートを削除";
@@ -353,18 +446,38 @@ namespace makeNewFile
             delButton.SetResourceReference(System.Windows.Controls.Control.TemplateProperty, "delButton");
 
             delButton.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            delButton.Margin = (Thickness)thicknessConverter.ConvertFromString("0,15,0,0");
-            delButton.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             delButton.Width = 120;
             delButton.Height = 25;
             delButton.Click += DeleteTemplate_Click;
+
+            System.Windows.Controls.Button moveUpButton = new System.Windows.Controls.Button();
+            moveUpButton.Name = "moveToUp_" + count.ToString();
+            moveUpButton.Content = "↑";
+            moveUpButton.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            moveUpButton.Margin = (Thickness)thicknessConverter.ConvertFromString("90,0,0,0");
+            moveUpButton.Width = 40;
+            moveUpButton.Height = 25;
+            moveUpButton.Click += MoveToUp;
+
+            System.Windows.Controls.Button moveBottomButton = new System.Windows.Controls.Button();
+            moveBottomButton.Name = "moveToBottom_" + count.ToString();
+            moveBottomButton.Content = "↓";
+            moveBottomButton.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            moveBottomButton.Margin = (Thickness)thicknessConverter.ConvertFromString("10,0,0,0");
+            moveBottomButton.Width = 40;
+            moveBottomButton.Height = 25;
+            moveBottomButton.Click += MoveToBottom;
+
+            childStackPanel_05.Children.Add(delButton);
+            childStackPanel_05.Children.Add(moveUpButton);
+            childStackPanel_05.Children.Add(moveBottomButton);
 
 
             parentStackPanel.Children.Add(childStackPanel_01);
             parentStackPanel.Children.Add(childStackPanel_02);
             parentStackPanel.Children.Add(childStackPanel_03);
             parentStackPanel.Children.Add(childStackPanel_04);
-            parentStackPanel.Children.Add(delButton);
+            parentStackPanel.Children.Add(childStackPanel_05);
 
             groupBox.Content = parentStackPanel;
 
