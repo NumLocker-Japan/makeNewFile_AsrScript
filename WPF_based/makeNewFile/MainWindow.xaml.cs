@@ -147,7 +147,7 @@ namespace makeNewFile
         private void EditTemplate_Click(object sender, RoutedEventArgs e)
         {
             Template template = new Template();
-            template.Show();
+            template.ShowDialog();
         }
 
         private void Body_Activated(object sender, EventArgs e)
