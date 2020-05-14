@@ -60,8 +60,8 @@
 
         <ScrollViewer Grid.Column="0" Grid.Row="1" Margin="20,0,20,20">
             <StackPanel x:Name="TemplatesField" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
-                <!--
-                <GroupBox Header="HTMLテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10">
+                <!-- -->
+                <GroupBox Header="HTMLテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10" Tag="Text">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Label Content="種類 : " VerticalAlignment="Center"/>
@@ -89,7 +89,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Header="画像フォーマットテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10">
+                <GroupBox Header="画像フォーマットテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10" Tag="Image">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <Label Content="種類 : " VerticalAlignment="Center"/>
@@ -101,7 +101,7 @@
                             <TextBox Width="200" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0">
-                            <Label Content="サイズ" Width="90" VerticalAlignment="Center"/>
+                            <Label Content="サイズ (x:y)" Width="90" VerticalAlignment="Center"/>
                             <TextBox Width="60" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                             <Label Content="x" VerticalAlignment="Center"/>
                             <TextBox Width="60" Margin="0,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
@@ -118,7 +118,7 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                -->
+                <!-- -->
             </StackPanel>
         </ScrollViewer>
 

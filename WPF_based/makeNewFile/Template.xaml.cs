@@ -45,8 +45,11 @@ namespace makeNewFile
 
         private void OK_Button_Click(object sender, RoutedEventArgs e)
         {
-            //Config config = new Config(ttt.Text);
-            //config.Save();
+            TemplateConfigs templateConfigs = new TemplateConfigs(this);
+            if (templateConfigs.Export() == 0)
+            {
+                this.Close();
+            }
         }
 
         private void Cancel_Button_Click(object sender, RoutedEventArgs e)
@@ -181,6 +184,7 @@ namespace makeNewFile
             groupBox.Header = title;
             groupBox.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             groupBox.Margin = (Thickness)thicknessConverter.ConvertFromString("0,0,0,10");
+            groupBox.Tag = "Text";
 
             StackPanel parentStackPanel = new StackPanel();
             parentStackPanel.Margin = (Thickness)thicknessConverter.ConvertFromString("15");
@@ -323,6 +327,7 @@ namespace makeNewFile
             groupBox.Header = title;
             groupBox.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             groupBox.Margin = (Thickness)thicknessConverter.ConvertFromString("0,0,0,10");
+            groupBox.Tag = "Image";
 
             StackPanel parentStackPanel = new StackPanel();
             parentStackPanel.Margin = (Thickness)thicknessConverter.ConvertFromString("15");
@@ -374,7 +379,7 @@ namespace makeNewFile
             childStackPanel_03.Margin = (Thickness)thicknessConverter.ConvertFromString("0");
 
             System.Windows.Controls.Label sizeLabel = new System.Windows.Controls.Label();
-            sizeLabel.Content = "サイズ";
+            sizeLabel.Content = "サイズ (x:y)";
             sizeLabel.Width = 90;
             sizeLabel.VerticalAlignment = VerticalAlignment.Center;
 
@@ -485,18 +490,160 @@ namespace makeNewFile
         }
     }
 
-    public class Config{
+    public class TemplateConfigs{
 
-        private MainWindow tt;
-
-        public void Save()
+        private Template tp;
+        
+        public TemplateConfigs(Template template)
         {
-            Console.WriteLine(tt);
+            tp = template;
         }
 
-        public Config(MainWindow mainWindow)
+        public int Export()
         {
-            tt = mainWindow;
+            List<List<string>> regInfo = new List<List<string>>();
+            string tagList = "";    // タイプの種類を2進数で表す
+            bool isOK = true;
+
+            foreach (var childGroupBox in LogicalTreeHelper.GetChildren(tp.TemplatesField))
+            {
+                if (childGroupBox is DependencyObject)
+                {
+                    if (isOK && (string)((System.Windows.Controls.GroupBox)childGroupBox).Tag == "Text")
+                    {
+                        List<string> result = new List<string>();
+                        result = GetTextGropBoxInfo((System.Windows.Controls.GroupBox)childGroupBox);
+                        if (result.Count() != 0)
+                        {
+                            regInfo.Add(result);
+                            tagList += "0";
+                        }
+                        else
+                        {
+                            isOK = false;
+                        }
+                        
+                    }
+                    else if (isOK && (string)((System.Windows.Controls.GroupBox)childGroupBox).Tag == "Image")
+                    {
+                        List<string> result = new List<string>();
+                        result = GetImageGropBoxInfo((System.Windows.Controls.GroupBox)childGroupBox);
+                        if (result.Count() != 0)
+                        {
+                            regInfo.Add(result);
+                            tagList += "1";
+                        }
+                        else
+                        {
+                            isOK = false;
+                        }
+                    }
+                }
+            }
+
+            if (isOK == false)
+            {
+                System.Windows.MessageBox.Show("エラーが発生したため、処理を中止しました。\nデータが正しく入力されていることを確認してください。", "エラー通知", MessageBoxButton.OK, MessageBoxImage.Error);
+                return 1;
+            }
+
+            int tagListNum = int.Parse(tagList);
+            ExportToReg(regInfo, tagListNum);
+            return 0;
+        }
+
+        private List<string> GetTextGropBoxInfo(System.Windows.Controls.GroupBox groupBoxItem)
+        {
+            List<string> _return = new List<string>();
+            bool isOK = true;
+
+            try
+            {
+                StackPanel parentStackPanel = (StackPanel)GetChildrenElements(groupBoxItem)[0];
+                List<Object> childrenObject = new List<Object>(GetChildrenElements(parentStackPanel));
+
+                bool isEnabled = (bool)((System.Windows.Controls.CheckBox)GetChildrenElements(childrenObject[0])[2]).IsChecked;
+                string targetExtension = ((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[1])[1]).Text;
+                string defaultText = ((System.Windows.Controls.TextBox)childrenObject[2]).Text;
+                int charasetIndex = ((System.Windows.Controls.ComboBox)GetChildrenElements(childrenObject[3])[1]).SelectedIndex;
+
+                _return.Add(isEnabled.ToString());
+                _return.Add(targetExtension);
+                _return.Add(defaultText);
+                _return.Add(charasetIndex.ToString());
+            }
+            catch (Exception)
+            {
+                isOK = false;
+            }
+            
+            if (isOK)
+            {
+                return _return;
+            }
+            else
+            {
+                _return.Clear();
+                return _return;
+            }
+        }
+
+        private List<string> GetImageGropBoxInfo(System.Windows.Controls.GroupBox groupBoxItem)
+        {
+            List<string> _return = new List<string>();
+            bool isOK = true;
+
+            try
+            {
+                StackPanel parentStackPanel = (StackPanel)GetChildrenElements(groupBoxItem)[0];
+                List<Object> childrenObject = new List<Object>(GetChildrenElements(parentStackPanel));
+
+                bool isEnabled = (bool)((System.Windows.Controls.CheckBox)GetChildrenElements(childrenObject[0])[2]).IsChecked;
+                string targetExtension = ((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[1])[1]).Text;
+                int sizeX = int.Parse(((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[2])[1]).Text);
+                int sizeY = int.Parse(((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[2])[3]).Text);
+                string backgroundColor = ((System.Windows.Controls.Label)GetChildrenElements(childrenObject[3])[1]).Background.ToString();
+
+                _return.Add(isEnabled.ToString());
+                _return.Add(targetExtension);
+                _return.Add(sizeX.ToString());
+                _return.Add(sizeY.ToString());
+                _return.Add(backgroundColor);
+            }
+            catch (Exception)
+            {
+                isOK = false;
+            }
+
+            if (isOK)
+            {
+                return _return;
+            }
+            else
+            {
+                _return.Clear();
+                return _return;
+            }
+        }
+
+        private List<object> GetChildrenElements(object element)
+        {
+            List<object> _return = new List<object>();
+
+            foreach (var childItem in LogicalTreeHelper.GetChildren((DependencyObject)element))
+            {
+                if (childItem is DependencyObject)
+                {
+                    _return.Add(childItem);
+                }
+            }
+
+            return _return;
+        }
+
+        private void ExportToReg(List<List<string>> infoList, int tagList)
+        {
+            
         }
     }
 
@@ -504,6 +651,7 @@ namespace makeNewFile
 
     /// <summary>
     /// テンプレートの追加
+    /// TemplateSubクラスから情報を受け渡しする目的で使用
     /// </summary>
     public class NewTemplateInfo
     {
