@@ -102,7 +102,12 @@ namespace makeNewFile
         {
             TemplateSub templateSub = new TemplateSub();
             _ = templateSub.ShowDialog();
-            AddTemplateItem();
+
+            NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
+            if (newTemplateInfo.GetStatus())
+            {
+                AddTemplateItem();
+            }
         }
 
         private void DeleteTemplate_Click(object sender, RoutedEventArgs e)
@@ -843,6 +848,7 @@ namespace makeNewFile
     {
         private static string templateTitle;
         private static int templateType;
+        private static bool status;
 
         public void Set(string title, int type)
         {
@@ -856,6 +862,20 @@ namespace makeNewFile
             _return.Add(templateTitle);
             _return.Add(templateType.ToString());
             return _return;
+        }
+
+        public void SetStatus(bool st)
+        {
+            status = st;
+        }
+
+        /// <summary>
+        /// TO DO : テンプレート追加が正常に終了したかを確認する
+        /// </summary>
+        /// <returns></returns>
+        public bool GetStatus()
+        {
+            return status;
         }
     }
 }

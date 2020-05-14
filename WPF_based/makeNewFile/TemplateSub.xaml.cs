@@ -22,6 +22,9 @@ namespace makeNewFile
         public TemplateSub()
         {
             InitializeComponent();
+
+            NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
+            newTemplateInfo.SetStatus(false);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -37,6 +40,7 @@ namespace makeNewFile
                 return;
             }
             NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
+            newTemplateInfo.SetStatus(true);
             newTemplateInfo.Set(TemplateTitle.Text, TemplateType.SelectedIndex);
             this.Close();
         }
