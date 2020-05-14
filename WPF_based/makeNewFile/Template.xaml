@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="テンプレートの編集" Height="700" Width="960" WindowStartupLocation="CenterScreen"
-        KeyUp="Window_KeyUp">
+        KeyUp="Window_KeyUp" Loaded="Window_Loaded">
     
     <Window.Resources>
         <ControlTemplate TargetType="Button" x:Key="delButton">

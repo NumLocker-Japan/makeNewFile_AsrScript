@@ -36,6 +36,24 @@ namespace makeNewFile
             InitializeComponent();
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            TemplateConfigs templateConfigs = new TemplateConfigs(this);
+            List<List<string>> setupInfo = new List<List<string>>(templateConfigs.Load());
+
+            foreach(var templateInfo in setupInfo)
+            {
+                if (templateInfo.Count() == 5)
+                {
+                    AddTemplateItem(true, "Text", templateInfo[0], templateInfo[1], templateInfo[2], templateInfo[3], templateInfo[4]);
+                }
+                else
+                {
+                    AddTemplateItem(true, "Image", templateInfo[0], templateInfo[1], templateInfo[2], templateInfo[3], templateInfo[4], templateInfo[5]);
+                }
+            }
+        }
+
         private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -155,19 +173,46 @@ namespace makeNewFile
 
         // テンプレート追加
 
-        private void AddTemplateItem()
+        private void AddTemplateItem(bool setup = false, string type = "", string p0 = "", string p1 = "",
+                                                string p2 = "", string p3 = "", string p4 = "", string p5 = "")
         {
-            NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
-            List<string> info = newTemplateInfo.Get();
             System.Windows.Controls.GroupBox addingItem;
-            if (int.Parse(info[1]) == 0)
+
+            if (setup)
             {
-                addingItem = AddTextTemplate(info[0], totalCount);
-                
+                if (type == "Text")
+                {
+                    // p0 = headerTitle
+                    // p1 = isEnabled
+                    // p2 = targetExtension
+                    // p3 = defaultText
+                    // p4 = charasetIndex
+                    addingItem = AddTextTemplate(p0, totalCount, p1, p2, p3, int.Parse(p4));
+                }
+                else
+                {
+                    // p0 = headerTitle
+                    // p1 = isEnabled
+                    // p2 = targetExtension
+                    // p3 = sizeX
+                    // p4 = sizeY
+                    // p5 = backgroundColor
+                    addingItem = AddImageTemplate(p0, totalCount, p1, p2, int.Parse(p3), int.Parse(p4), p5);
+                }
             }
             else
             {
-                addingItem = AddImageTemplate(info[0], totalCount);
+                NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
+                List<string> info = newTemplateInfo.Get();
+                if (int.Parse(info[1]) == 0)
+                {
+                    addingItem = AddTextTemplate(info[0], totalCount);
+
+                }
+                else
+                {
+                    addingItem = AddImageTemplate(info[0], totalCount);
+                }
             }
 
             TemplatesField.Children.Add(addingItem);
@@ -177,7 +222,8 @@ namespace makeNewFile
             totalCount += 1;
         }
 
-        private System.Windows.Controls.GroupBox AddTextTemplate(string title, int count)
+        private System.Windows.Controls.GroupBox AddTextTemplate(string title, int count, string isEnabled = "False",
+                                                                     string targetExtension = "", string defaultText = "", int charasetIndex = 0)
         {
             ThicknessConverter thicknessConverter = new ThicknessConverter();
 
@@ -207,6 +253,15 @@ namespace makeNewFile
             isEnabledCheckbox.Margin = (Thickness)thicknessConverter.ConvertFromString("50,0,0,0");
             isEnabledCheckbox.VerticalAlignment = VerticalAlignment.Center;
 
+            if (isEnabled == "True")
+            {
+                isEnabledCheckbox.IsChecked = true;
+            }
+            else
+            {
+                isEnabledCheckbox.IsChecked = false;
+            }
+
             childStackPanel_01.Children.Add(typeLabel);
             childStackPanel_01.Children.Add(textLabel);
             childStackPanel_01.Children.Add(isEnabledCheckbox);
@@ -227,6 +282,7 @@ namespace makeNewFile
             extTextBox.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             extTextBox.VerticalAlignment = VerticalAlignment.Center;
             extTextBox.VerticalContentAlignment = VerticalAlignment.Center;
+            extTextBox.Text = targetExtension;
 
             childStackPanel_02.Children.Add(extLabel);
             childStackPanel_02.Children.Add(extTextBox);
@@ -238,6 +294,7 @@ namespace makeNewFile
             textBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             textBox.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             textBox.Height = 120;
+            textBox.Text = defaultText;
 
 
             StackPanel childStackPanel_03 = new StackPanel();
@@ -265,6 +322,8 @@ namespace makeNewFile
             comboBox.Items.Add(comboBoxItem_01);
             comboBox.Items.Add(comboBoxItem_02);
             comboBox.Items.Add(comboBoxItem_03);
+
+            comboBox.SelectedIndex = charasetIndex;
 
             childStackPanel_03.Children.Add(charasetLabel);
             childStackPanel_03.Children.Add(comboBox);
@@ -319,7 +378,8 @@ namespace makeNewFile
             return groupBox;
         }
 
-        private System.Windows.Controls.GroupBox AddImageTemplate(string title, int count)
+        private System.Windows.Controls.GroupBox AddImageTemplate(string title, int count, string isEnabled = "False", string targetExtension = "",
+                                                                     int sizeX = 100, int sizeY = 100, string backgroundColor = "#FFFFFFFF")
         {
             ThicknessConverter thicknessConverter = new ThicknessConverter();
             BrushConverter brushConverter = new BrushConverter();
@@ -350,6 +410,15 @@ namespace makeNewFile
             isEnabledCheckbox.Margin = (Thickness)thicknessConverter.ConvertFromString("50,0,0,0");
             isEnabledCheckbox.VerticalAlignment = VerticalAlignment.Center;
 
+            if (isEnabled == "True")
+            {
+                isEnabledCheckbox.IsChecked = true;
+            }
+            else
+            {
+                isEnabledCheckbox.IsChecked = false;
+            }
+
             childStackPanel_01.Children.Add(typeLabel);
             childStackPanel_01.Children.Add(textLabel);
             childStackPanel_01.Children.Add(isEnabledCheckbox);
@@ -370,6 +439,7 @@ namespace makeNewFile
             extTextBox.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             extTextBox.VerticalAlignment = VerticalAlignment.Center;
             extTextBox.VerticalContentAlignment = VerticalAlignment.Center;
+            extTextBox.Text = targetExtension;
 
             childStackPanel_02.Children.Add(extLabel);
             childStackPanel_02.Children.Add(extTextBox);
@@ -390,6 +460,7 @@ namespace makeNewFile
             width_1TextBox.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             width_1TextBox.VerticalAlignment = VerticalAlignment.Center;
             width_1TextBox.VerticalContentAlignment = VerticalAlignment.Center;
+            width_1TextBox.Text = sizeX.ToString();
 
             System.Windows.Controls.Label width_Label = new System.Windows.Controls.Label();
             width_Label.Content = "x";
@@ -401,6 +472,7 @@ namespace makeNewFile
             width_2TextBox.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             width_2TextBox.VerticalAlignment = VerticalAlignment.Center;
             width_2TextBox.VerticalContentAlignment = VerticalAlignment.Center;
+            width_2TextBox.Text = sizeY.ToString();
 
             childStackPanel_03.Children.Add(sizeLabel);
             childStackPanel_03.Children.Add(width_1TextBox);
@@ -430,7 +502,7 @@ namespace makeNewFile
             System.Windows.Controls.Button colorChangeButton = new System.Windows.Controls.Button();
             colorChangeButton.Name = "T" + count.ToString() + "_ColorSample";
             colorChangeButton.Content = "";
-            colorChangeButton.Background = (Brush)brushConverter.ConvertFromString("Blue");
+            colorChangeButton.Background = (Brush)brushConverter.ConvertFromString(backgroundColor);
             colorChangeButton.Margin = (Thickness)thicknessConverter.ConvertFromString("10,0,0,0");
             colorChangeButton.Width = 40;
             colorChangeButton.SetResourceReference(System.Windows.Controls.Control.TemplateProperty, "colorButton");
@@ -653,13 +725,14 @@ namespace makeNewFile
             {
                 RegistryKey parentRegTree = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\", true);
                 parentRegTree.DeleteSubKeyTree("Templates");
+                parentRegTree.Close();
             }
 
             RegistryKey regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
 
             int count = infoList.Count();
-            regTemplates.SetValue("Count", count);
-            regTemplates.SetValue("TagList", tagList);
+            regTemplates.SetValue("count", count);
+            regTemplates.SetValue("tagList", tagList);
 
             for (int i = 0; i < count; i++)
             {
@@ -670,21 +743,72 @@ namespace makeNewFile
                     regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
                     regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
                     regTemplates.SetValue("defaultText_" + i.ToString(), infoList[i][3]);
-                    regTemplates.SetValue("charasetIndex_" + i.ToString(), infoList[i][4]);
+                    regTemplates.SetValue("charasetIndex_" + i.ToString(), int.Parse(infoList[i][4]));
                 }
                 else
                 {
                     regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
                     regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
                     regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
-                    regTemplates.SetValue("sizeX_" + i.ToString(), infoList[i][3]);
-                    regTemplates.SetValue("sizeY_" + i.ToString(), infoList[i][4]);
+                    regTemplates.SetValue("sizeX_" + i.ToString(), int.Parse(infoList[i][3]));
+                    regTemplates.SetValue("sizeY_" + i.ToString(), int.Parse(infoList[i][4]));
                     regTemplates.SetValue("backgroundColor_" + i.ToString(), infoList[i][5]);
                 }
             }
+
+            regTemplates.Close();
+        }
+
+        public List<List<string>> Load()
+        {
+            RegistryKey regTemplates = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
+            if (regTemplates == null)
+            {
+                regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
+                // ここで初期値の代入
+                regTemplates.SetValue("count", 1);
+                regTemplates.SetValue("tagList", 0);
+                regTemplates.SetValue("headerTitle_0", "HTMLテンプレート");
+                regTemplates.SetValue("isEnabled_0", "False");
+                regTemplates.SetValue("targetExtension_0", "htm,html");
+                regTemplates.SetValue("defaultText_0", "<!DOCTYPE html>");
+                regTemplates.SetValue("charasetIndex_0", 0);
+            }
+
+            // レジストリから情報を取得
+            int count = (int)regTemplates.GetValue("count");
+            int tagList = (int)regTemplates.GetValue("tagList");
+            List<List<string>> _return = new List<List<string>>();
+
+            for (int i = 0; i < count; i++)
+            {
+                List<string> _return_child = new List<string>();
+
+                string tagList_2 = Convert.ToString(tagList, 2).PadLeft(count, '0');
+                if (tagList_2.Substring(i, 1) == "0")
+                {
+                    _return_child.Add((string)regTemplates.GetValue("headerTitle_" + i.ToString()));
+                    _return_child.Add((string)regTemplates.GetValue("isEnabled_" + i.ToString()));
+                    _return_child.Add((string)regTemplates.GetValue("targetExtension_" + i.ToString()));
+                    _return_child.Add((string)regTemplates.GetValue("defaultText_" + i.ToString()));
+                    _return_child.Add(regTemplates.GetValue("charasetIndex_" + i.ToString()).ToString());
+                }
+                else
+                {
+                    _return_child.Add((string)regTemplates.GetValue("headerTitle_" + i.ToString()));
+                    _return_child.Add((string)regTemplates.GetValue("isEnabled_" + i.ToString()));
+                    _return_child.Add((string)regTemplates.GetValue("targetExtension_" + i.ToString()));
+                    _return_child.Add(regTemplates.GetValue("sizeX_" + i.ToString()).ToString());
+                    _return_child.Add(regTemplates.GetValue("sizeY_"+ i.ToString()).ToString());
+                    _return_child.Add((string)regTemplates.GetValue("backgroundColor_" + i.ToString()));
+                }
+
+                _return.Add(_return_child);
+            }
+
+            return _return;
         }
     }
-
 
 
     /// <summary>
