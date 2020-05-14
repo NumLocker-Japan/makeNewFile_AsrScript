@@ -139,7 +139,11 @@
                 <GroupBox Header="画像" Margin="0,0,0,10">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="70">Bitmap</Label>
+                            <Label Width="70">BMP</Label>
+                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,3">
+                            <Label Width="70">GIF</Label>
                             <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
@@ -155,12 +159,12 @@
                             <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="70">WMA</Label>
+                            <Label Width="70">WMP</Label>
                             <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox Header="その他">
+                <GroupBox Header="Office">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="140">Office Document</Label>
