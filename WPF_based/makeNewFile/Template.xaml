@@ -81,7 +81,7 @@
                                 <ComboBoxItem Content="Shift_JIS"></ComboBoxItem>
                             </ComboBox>
                         </StackPanel>
-                        <Button Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="5,2" Width="120" Height="25"></Button>
+                        <Button x:Name="delButton_1" Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="5,2" Width="120" Height="25" Click="DeleteTemplate_Click"></Button>
                     </StackPanel>
                 </GroupBox>
 
@@ -107,7 +107,7 @@
                             <!--<Label Content="{Binding ElementName=T2_ColorSample, Path=Background}" Margin="15,0,0,0" VerticalAlignment="Center"/>-->
                             <Button x:Name="T2_ColorSample" Content="" Background="Blue" Margin="10,0,0,0" Width="40" Template="{StaticResource ResourceKey=colorButton}" VerticalAlignment="Center" Click="ChangeColor"/>
                         </StackPanel>
-                        <Button Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="5,2" Width="120" Height="25"></Button>
+                        <Button x:Name="delButton_2" Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Margin="0,15,0,0" Padding="5,2" Width="120" Height="25" Click="DeleteTemplate_Click"></Button>
                     </StackPanel>
                 </GroupBox>
 

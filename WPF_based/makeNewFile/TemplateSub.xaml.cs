@@ -31,6 +31,11 @@ namespace makeNewFile
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
+            if (TemplateTitle.Text == "")
+            {
+                MessageBox.Show("テンプレートのタイトルを入力してください。");
+                return;
+            }
             NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
             newTemplateInfo.Set(TemplateTitle.Text, TemplateType.SelectedIndex);
             this.Close();

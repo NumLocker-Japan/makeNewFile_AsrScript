@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -70,6 +71,28 @@ namespace makeNewFile
             AddTemplateItem();
         }
 
+        private void DeleteTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            var senderElement = (System.Windows.Controls.Button)sender;
+            List<string> allTemplatesTitle = new List<string>();
+            foreach (var child in LogicalTreeHelper.GetChildren(TemplatesField))
+            {
+                if (child is DependencyObject)
+                {
+                    allTemplatesTitle.Add(((System.Windows.Controls.GroupBox)child).Header.ToString());
+                }
+            }
+
+            if (System.Windows.MessageBox.Show("テンプレート「" + allTemplatesTitle[int.Parse(senderElement.Name.Substring(10)) - 1] + "」を削除しますか？", "削除の確認", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Console.WriteLine("del");
+            }
+        }
+
+
+
+        // テンプレート追加
+
         private void AddTemplateItem()
         {
             templateCount += 1;
@@ -86,8 +109,6 @@ namespace makeNewFile
             }
         }
 
-
-        // テンプレート追加
         private System.Windows.Controls.GroupBox AddTextTemplate(string title, int count)
         {
             ThicknessConverter thicknessConverter = new ThicknessConverter();
@@ -180,6 +201,7 @@ namespace makeNewFile
 
             System.Windows.Controls.Button delButton = new System.Windows.Controls.Button();
             delButton.Content = "テンプレートを削除";
+            delButton.Name = "delButton_" + count.ToString();
 
             delButton.SetResourceReference(System.Windows.Controls.Control.TemplateProperty, "delButton");
 
@@ -188,6 +210,7 @@ namespace makeNewFile
             delButton.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             delButton.Width = 120;
             delButton.Height = 25;
+            delButton.Click += DeleteTemplate_Click;
 
 
             parentStackPanel.Children.Add(childStackPanel_01);
@@ -325,6 +348,7 @@ namespace makeNewFile
 
             System.Windows.Controls.Button delButton = new System.Windows.Controls.Button();
             delButton.Content = "テンプレートを削除";
+            delButton.Name = "delButton_" + count.ToString();
 
             delButton.SetResourceReference(System.Windows.Controls.Control.TemplateProperty, "delButton");
 
@@ -333,6 +357,7 @@ namespace makeNewFile
             delButton.Padding = (Thickness)thicknessConverter.ConvertFromString("5,2");
             delButton.Width = 120;
             delButton.Height = 25;
+            delButton.Click += DeleteTemplate_Click;
 
 
             parentStackPanel.Children.Add(childStackPanel_01);
