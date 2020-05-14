@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
@@ -547,7 +548,7 @@ namespace makeNewFile
                 return 1;
             }
 
-            int tagListNum = int.Parse(tagList);
+            int tagListNum = Convert.ToInt32(tagList, 2);
             ExportToReg(regInfo, tagListNum);
             return 0;
         }
@@ -562,11 +563,13 @@ namespace makeNewFile
                 StackPanel parentStackPanel = (StackPanel)GetChildrenElements(groupBoxItem)[0];
                 List<Object> childrenObject = new List<Object>(GetChildrenElements(parentStackPanel));
 
+                string headerTitle = (string)groupBoxItem.Header;
                 bool isEnabled = (bool)((System.Windows.Controls.CheckBox)GetChildrenElements(childrenObject[0])[2]).IsChecked;
                 string targetExtension = ((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[1])[1]).Text;
                 string defaultText = ((System.Windows.Controls.TextBox)childrenObject[2]).Text;
                 int charasetIndex = ((System.Windows.Controls.ComboBox)GetChildrenElements(childrenObject[3])[1]).SelectedIndex;
 
+                _return.Add(headerTitle.ToString());
                 _return.Add(isEnabled.ToString());
                 _return.Add(targetExtension);
                 _return.Add(defaultText);
@@ -598,12 +601,14 @@ namespace makeNewFile
                 StackPanel parentStackPanel = (StackPanel)GetChildrenElements(groupBoxItem)[0];
                 List<Object> childrenObject = new List<Object>(GetChildrenElements(parentStackPanel));
 
+                string headerTitle = (string)groupBoxItem.Header;
                 bool isEnabled = (bool)((System.Windows.Controls.CheckBox)GetChildrenElements(childrenObject[0])[2]).IsChecked;
                 string targetExtension = ((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[1])[1]).Text;
                 int sizeX = int.Parse(((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[2])[1]).Text);
                 int sizeY = int.Parse(((System.Windows.Controls.TextBox)GetChildrenElements(childrenObject[2])[3]).Text);
-                string backgroundColor = ((System.Windows.Controls.Label)GetChildrenElements(childrenObject[3])[1]).Background.ToString();
+                string backgroundColor = ((System.Windows.Controls.Button)GetChildrenElements(childrenObject[3])[1]).Background.ToString();
 
+                _return.Add(headerTitle.ToString());
                 _return.Add(isEnabled.ToString());
                 _return.Add(targetExtension);
                 _return.Add(sizeX.ToString());
@@ -643,7 +648,40 @@ namespace makeNewFile
 
         private void ExportToReg(List<List<string>> infoList, int tagList)
         {
-            
+            // Templatesキーを一度削除
+            if (Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", false) != null)
+            {
+                RegistryKey parentRegTree = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\", true);
+                parentRegTree.DeleteSubKeyTree("Templates");
+            }
+
+            RegistryKey regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
+
+            int count = infoList.Count();
+            regTemplates.SetValue("Count", count);
+            regTemplates.SetValue("TagList", tagList);
+
+            for (int i = 0; i < count; i++)
+            {
+                string tagList_2 = Convert.ToString(tagList, 2).PadLeft(count, '0');
+                if (tagList_2.Substring(i, 1) == "0")
+                {
+                    regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
+                    regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
+                    regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
+                    regTemplates.SetValue("defaultText_" + i.ToString(), infoList[i][3]);
+                    regTemplates.SetValue("charasetIndex_" + i.ToString(), infoList[i][4]);
+                }
+                else
+                {
+                    regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
+                    regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
+                    regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
+                    regTemplates.SetValue("sizeX_" + i.ToString(), infoList[i][3]);
+                    regTemplates.SetValue("sizeY_" + i.ToString(), infoList[i][4]);
+                    regTemplates.SetValue("backgroundColor_" + i.ToString(), infoList[i][5]);
+                }
+            }
         }
     }
 

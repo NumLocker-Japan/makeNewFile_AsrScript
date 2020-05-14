@@ -60,7 +60,7 @@
 
         <ScrollViewer Grid.Column="0" Grid.Row="1" Margin="20,0,20,20">
             <StackPanel x:Name="TemplatesField" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
-                <!-- -->
+                <!-- 
                 <GroupBox Header="HTMLテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10" Tag="Text">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
@@ -118,7 +118,7 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                <!-- -->
+                 -->
             </StackPanel>
         </ScrollViewer>
 
