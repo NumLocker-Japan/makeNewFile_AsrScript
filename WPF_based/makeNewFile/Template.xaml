@@ -140,27 +140,27 @@
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="70">BMP</Label>
-                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="BMP_Extensions" Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="70">GIF</Label>
-                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="GIF_Extensions" Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="70">JPEG</Label>
-                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="JPEG_Extensions" Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="70">PNG</Label>
-                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="PNG_Extensions" Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="70">TIFF</Label>
-                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="TIFF_Extensions" Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="70">WMP</Label>
-                            <TextBox Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="WMP_Extensions" Width="270" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
@@ -168,11 +168,11 @@
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="140">Office Document</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="OfficeDocument_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
                             <Label Width="140">Office Spreadsheet</Label>
-                            <TextBox Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <TextBox x:Name="OfficeSpreadsheet_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

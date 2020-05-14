@@ -52,6 +52,16 @@ namespace makeNewFile
                     AddTemplateItem(true, "Image", templateInfo[0], templateInfo[1], templateInfo[2], templateInfo[3], templateInfo[4], templateInfo[5]);
                 }
             }
+
+            List<string> setupExtensionsInfo = templateConfigs.LoadExtensions();
+            BMP_Extensions.Text = setupExtensionsInfo[0];
+            GIF_Extensions.Text = setupExtensionsInfo[1];
+            JPEG_Extensions.Text = setupExtensionsInfo[2];
+            PNG_Extensions.Text = setupExtensionsInfo[3];
+            TIFF_Extensions.Text = setupExtensionsInfo[4];
+            WMP_Extensions.Text = setupExtensionsInfo[5];
+            OfficeDocument_Extensions.Text = setupExtensionsInfo[6];
+            OfficeSpreadsheet_Extensions.Text = setupExtensionsInfo[7];
         }
 
         private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
@@ -756,6 +766,15 @@ namespace makeNewFile
                 }
             }
 
+            regTemplates.SetValue("BmpExtensions", tp.BMP_Extensions.Text);
+            regTemplates.SetValue("GifExtensions", tp.GIF_Extensions.Text);
+            regTemplates.SetValue("JpegExtensions", tp.JPEG_Extensions.Text);
+            regTemplates.SetValue("PngExtensions", tp.PNG_Extensions.Text);
+            regTemplates.SetValue("TiffExtensions", tp.TIFF_Extensions.Text);
+            regTemplates.SetValue("WmpExtensions", tp.WMP_Extensions.Text);
+            regTemplates.SetValue("OfficeDocumentExtensions", tp.OfficeDocument_Extensions.Text);
+            regTemplates.SetValue("OfficeSpreadSheetExtensions", tp.OfficeSpreadsheet_Extensions.Text);
+
             regTemplates.Close();
         }
 
@@ -793,6 +812,23 @@ namespace makeNewFile
 
                 _return.Add(_return_child);
             }
+
+            return _return;
+        }
+
+        public List<string> LoadExtensions()
+        {
+            List<string> _return = new List<string>();
+            RegistryKey regTemplates = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", false);
+
+            _return.Add((string)regTemplates.GetValue("BmpExtensions"));
+            _return.Add((string)regTemplates.GetValue("GifExtensions"));
+            _return.Add((string)regTemplates.GetValue("JpegExtensions"));
+            _return.Add((string)regTemplates.GetValue("PngExtensions"));
+            _return.Add((string)regTemplates.GetValue("TiffExtensions"));
+            _return.Add((string)regTemplates.GetValue("WmpExtensions"));
+            _return.Add((string)regTemplates.GetValue("OfficeDocumentExtensions"));
+            _return.Add((string)regTemplates.GetValue("OfficeSpreadSheetExtensions"));
 
             return _return;
         }

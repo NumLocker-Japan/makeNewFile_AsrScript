@@ -641,8 +641,17 @@ namespace makeNewFile
                 regTemplates.SetValue("headerTitle_0", "HTMLテンプレート");
                 regTemplates.SetValue("isEnabled_0", "False");
                 regTemplates.SetValue("targetExtension_0", "htm,html");
-                regTemplates.SetValue("defaultText_0", "<!DOCTYPE html>");
+                regTemplates.SetValue("defaultText_0", "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Document</title>\n</head>\n<body>\n    \n</body>\n</html>");
                 regTemplates.SetValue("charasetIndex_0", 0);
+
+                regTemplates.SetValue("BmpExtensions", "bmp");
+                regTemplates.SetValue("GifExtensions", "gif");
+                regTemplates.SetValue("JpegExtensions", "jpg,jpeg");
+                regTemplates.SetValue("PngExtensions", "png");
+                regTemplates.SetValue("TiffExtensions", "tif,tiff");
+                regTemplates.SetValue("WmpExtensions", "wmp");
+                regTemplates.SetValue("OfficeDocumentExtensions", "doc,docx");
+                regTemplates.SetValue("OfficeSpreadSheetExtensions", "xls,xlsx");
             }
             regTemplates.Close();
 
