@@ -220,10 +220,10 @@ namespace makeNewFile
             // 以下2項目はリリース用ビルド毎に設定
             string GitHubAPI_token = "fake";  // ビルド時のみ設定
             string version = "beta-3.0.6";  // バージョン
-            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\version", true);
+            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Version", true);
             if (config_reg_version == null)
             {
-                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\version", true);
+                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Version", true);
                 config_reg_version.SetValue("version", version, RegistryValueKind.String);
                 config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
                 config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
@@ -617,11 +617,11 @@ namespace makeNewFile
         /// </summary>
         public void Launch()
         {
-            RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
+            RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Config", true);
             if (config_reg_window == null)
             {
                 // 初期値の設定
-                config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
+                config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Config", true);
                 config_reg_window.SetValue("WindowHeight", 660, RegistryValueKind.DWord);
                 config_reg_window.SetValue("WindowWidth", 960, RegistryValueKind.DWord);
                 config_reg_window.SetValue("StartFromZero", "False", RegistryValueKind.String);
@@ -681,7 +681,7 @@ namespace makeNewFile
 
         public void Close(bool saveSettings)
         {
-            RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\config", true);
+            RegistryKey config_reg_window = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Config", true);
 
             config_reg_window.SetValue("WindowHeight", (int)mw.Height, RegistryValueKind.DWord);
             config_reg_window.SetValue("WindowWidth", (int)mw.Width, RegistryValueKind.DWord);
