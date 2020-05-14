@@ -17,6 +17,8 @@ namespace makeNewFile
 {
     public partial class MainWindow : Window
     {
+        bool StartUp = true;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -152,26 +154,31 @@ namespace makeNewFile
 
         private void Body_Activated(object sender, EventArgs e)
         {
-            // 保存された設定の読み込み
-            Configs cfg = new Configs(this);
-            cfg.Launch();
-
-            this.Title = "新規ファイル作成";
-
-            AccessArgs accessArgs = new AccessArgs();
-
-            // フォントサイズ設定
-            if (accessArgs.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
+            if (StartUp == true)
             {
-                this.FontSize = int.Parse(accessArgs.ArgsList["fontSize"]);
-                this.TextEncoding.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-                this.TextEncoding_utf8.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-                this.TextEncoding_utf16.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-                this.TextEncoding_sjis.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
-            }
+                // 保存された設定の読み込み
+                Configs cfg = new Configs(this);
+                cfg.Launch();
 
-            // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
-            _ = Task.Run(() => CheckForUpdate());
+                this.Title = "新規ファイル作成";
+
+                AccessArgs accessArgs = new AccessArgs();
+
+                // フォントサイズ設定
+                if (accessArgs.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
+                {
+                    this.FontSize = int.Parse(accessArgs.ArgsList["fontSize"]);
+                    this.TextEncoding.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                    this.TextEncoding_utf8.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                    this.TextEncoding_utf16.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                    this.TextEncoding_sjis.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
+                }
+
+                StartUp = false;
+
+                // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
+                _ = Task.Run(() => CheckForUpdate());
+            }
         }
 
         /// <summary>
