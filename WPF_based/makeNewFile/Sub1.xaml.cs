@@ -32,7 +32,10 @@ namespace makeNewFile
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
-            this.Close();
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
     }
 }

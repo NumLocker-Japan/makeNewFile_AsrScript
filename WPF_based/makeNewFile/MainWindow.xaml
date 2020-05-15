@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
         Title="MainWindow" Foreground="White" Background="#FFF0F0F0" Height="663" Width="1043" FontSize="13"
-        Activated="Body_Activated" KeyUp="Body_KeyUp" Closing="Body_Closing">
+        Activated="Body_Activated" PreviewKeyUp="Body_PreviewKeyUp" PreviewKeyDown="Body_PreviewKeyDown" Closing="Body_Closing">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=Txtbox}">
         <Grid.ColumnDefinitions>
@@ -51,7 +51,7 @@
                    Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
                    Margin="0,15,15,35" Padding="5,2"/>
         <Button x:Name="Sub1_Button"
-                Content="置換機能について"
+                Content="置換機能について (R)"
                 Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
                 Margin="0,5,0,10" Padding="15,2"
                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
@@ -105,7 +105,7 @@
             <ComboBoxItem x:Name="TextEncoding_utf16" Content="UTF-16 (Unicode)" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
             <ComboBoxItem x:Name="TextEncoding_sjis" Content="Shift_JIS" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
         </ComboBox>
-        <Button x:Name="EditTemplate" Grid.Column="1" Grid.Row="4" Padding="15,2" Content="テンプレートの編集" HorizontalAlignment="Left" VerticalAlignment="Center"
+        <Button x:Name="EditTemplate" Grid.Column="1" Grid.Row="4" Padding="15,2" Content="テンプレートの編集 (T)" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="False"
                 Click="EditTemplate_Click"></Button>
 
         <Button x:Name="Btn"

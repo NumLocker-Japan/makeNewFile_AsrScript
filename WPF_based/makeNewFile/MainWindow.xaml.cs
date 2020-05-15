@@ -37,7 +37,7 @@ namespace makeNewFile
             this.Close();
         }
 
-        private void Body_KeyUp(object sender, KeyEventArgs e)
+        private void Body_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             // Escキーで終了
             if (e.Key == Key.Escape)
@@ -50,6 +50,23 @@ namespace makeNewFile
             if (e.Key == Key.F1)
             {
                 Process.Start("https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/Document_v3");  // GitHub Wikiのオンラインドキュメントに飛ばす
+            }
+        }
+
+        private void Body_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // 置換機能
+            if (Keyboard.IsKeyDown(Key.R) && (Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+            {
+                Sub1 sub1 = new Sub1();
+                sub1.Show();
+            }
+
+            // テンプレート編集
+            if (Keyboard.IsKeyDown(Key.T) && (Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+            {
+                Template template = new Template();
+                template.ShowDialog();
             }
         }
 
