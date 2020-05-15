@@ -500,13 +500,29 @@ namespace makeNewFile
                         // name_part__name_List.Last()は""である可能性があるので、回避する
                         if (name_part__name_List.Last() == "")
                         {
-                            index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List[name_part__name_List.Count() - 2]).Substring(1));
-                            template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List[name_part__name_List.Count() - 2]).Substring(1));
+                            index = -1;
+                            template = new List<string>();
                         }
                         else
                         {
-                            index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
-                            template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                            if (name_part__name_List.Last().Count() <= 1)
+                            {
+                                index = -1;
+                                template = new List<string>();
+                            }
+                            else
+                            {
+                                if (Path.GetExtension(name_part__name_List.Last()).Length <= 1)
+                                {
+                                    index = -1;
+                                    template = new List<string>();
+                                }
+                                else
+                                {
+                                    index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                                    template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                                }
+                            }
                         }
                     }
                     else
@@ -561,8 +577,16 @@ namespace makeNewFile
                     int index;
                     if (commonExtension == "")
                     {
-                        index = availableTemplates.GetFormats(Path.GetExtension(FormattedPathList).Substring(1));
-                        template = availableTemplates.GetAvailableTemplates(Path.GetExtension(FormattedPathList).Substring(1));
+                        if (Path.GetExtension(FormattedPathList).Length <= 1)
+                        {
+                            index = -1;
+                            template = new List<string>();
+                        }
+                        else
+                        {
+                            index = availableTemplates.GetFormats(Path.GetExtension(FormattedPathList).Substring(1));
+                            template = availableTemplates.GetAvailableTemplates(Path.GetExtension(FormattedPathList).Substring(1));
+                        }
                     }
                     else
                     {
