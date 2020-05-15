@@ -238,7 +238,7 @@ namespace makeNewFile
             totalCount += 1;
         }
 
-        private System.Windows.Controls.GroupBox AddTextTemplate(string title, int count, string isEnabled = "False",
+        private System.Windows.Controls.GroupBox AddTextTemplate(string title, int count, string isEnabled = "True",
                                                                      string targetExtension = "", string defaultText = "", int charasetIndex = 0)
         {
             ThicknessConverter thicknessConverter = new ThicknessConverter();
@@ -394,7 +394,7 @@ namespace makeNewFile
             return groupBox;
         }
 
-        private System.Windows.Controls.GroupBox AddImageTemplate(string title, int count, string isEnabled = "False", string targetExtension = "",
+        private System.Windows.Controls.GroupBox AddImageTemplate(string title, int count, string isEnabled = "True", string targetExtension = "",
                                                                      int sizeX = 100, int sizeY = 100, string backgroundColor = "#FFFFFFFF")
         {
             ThicknessConverter thicknessConverter = new ThicknessConverter();
