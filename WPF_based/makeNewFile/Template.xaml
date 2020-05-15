@@ -167,11 +167,11 @@
                 <GroupBox Header="Office">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="140">Spreadsheet (BIFF)</Label>
+                            <Label Width="140" Content="Spreadsheet (BIFF)" ToolTip="バイナリベースのスプレッドシートデータ形式"></Label>
                             <TextBox x:Name="OfficeSpreadsheet_BIFF_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="140">Spreadsheet (OOXML)</Label>
+                            <Label Content="Spreadsheet (OOXML)" Width="140" ToolTip="XMLベースのスプレッドシートデータ形式"></Label>
                             <TextBox x:Name="OfficeSpreadsheet_OOXML_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
