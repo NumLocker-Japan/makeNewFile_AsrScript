@@ -925,6 +925,16 @@ namespace makeNewFile
         {
             List<string> unfair = new List<string>();
 
+            // imageFormatExtは、各要素が,区切りで送られてくるので、先に整形を行う。
+            List<string> imageFormatExt__formatted = new List<string>();
+            foreach(string extLine in imageFormatExt)
+            {
+                foreach(string ext in extLine.Split(','))
+                {
+                    imageFormatExt__formatted.Add(ext);
+                }
+            }
+
             for (int i = 0; i < templateList.Count(); i++)
             {
                 // 有効化されているもののみ
@@ -934,11 +944,11 @@ namespace makeNewFile
                     for (int j = 0; j < targetExtList.Count(); j++)
                     {
                         // テキストベースでかつ画像フォーマットである場合
-                        if (templateList[i].Count() == 5 && imageFormatExt.Contains(targetExtList[j]))
+                        if (templateList[i].Count() == 5 && imageFormatExt__formatted.Contains(targetExtList[j]))
                         {
                             unfair.Add(templateList[i][0]);
                         }
-                        else if (templateList[i].Count() == 6 && !imageFormatExt.Contains(targetExtList[j]))
+                        else if (templateList[i].Count() == 6 && !imageFormatExt__formatted.Contains(targetExtList[j]))
                         {
                             unfair.Add(templateList[i][0]);
                         }
