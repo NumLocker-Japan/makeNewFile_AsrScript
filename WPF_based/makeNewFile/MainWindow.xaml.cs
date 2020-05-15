@@ -1,5 +1,8 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -754,7 +757,20 @@ namespace makeNewFile
                         }
                         else
                         {
-                            MakeFileNotTextBased(fullPath + commonExtension, index);
+                            string err = "";
+                            err = MakeFileNotTextBased(fullPath + commonExtension, index);
+
+                            if (err != "")
+                            {
+                                if (showDetailsOfErrors)
+                                {
+                                    return ("ファイル : " + fullPath + commonExtension + "\n詳細 : \n" + err);
+                                }
+                                else
+                                {
+                                    return ("ファイル : " + fullPath + commonExtension);
+                                }
+                            }
                         }
                     }
 
@@ -775,8 +791,9 @@ namespace makeNewFile
             return "";
         }
 
-        private void MakeFileNotTextBased(string path, int index)
+        private string MakeFileNotTextBased(string path, int index)
         {
+            string err = "";
             switch (index)
             {
                 case 0:
@@ -785,24 +802,69 @@ namespace makeNewFile
                 case 3:
                 case 4:
                 case 5:
-                    ImageFormatEncoder(path, index);
+                    err = ImageFormatEncoder(path, index);
                     break;
 
                 case 6:
                 case 7:
-                    SpreadsheetFormatEncoder(path, index);
+                    err = SpreadsheetFormatEncoder(path, index);
                     break;
             }
+
+            return err;
         }
 
-        private void ImageFormatEncoder(string path, int index)
+        private string ImageFormatEncoder(string path, int index)
         {
+            string err = "";
             Console.WriteLine("image, size : " + subInfo);
+            return err;
         }
 
-        private void SpreadsheetFormatEncoder(string path, int index)
+        /// <summary>
+        /// スプレッドシートデータを出力
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="index"></param>
+        private string SpreadsheetFormatEncoder(string path, int index)
         {
-            Console.WriteLine("spreadsheet, sheetname : " + subInfo);
+            string err = "";
+            try
+            {
+                // 新規ブック作成
+                IWorkbook book;
+                if (index == 6)
+                {
+                    book = new HSSFWorkbook();
+                }
+                else
+                {
+                    book = new XSSFWorkbook();
+                }
+
+                if (subInfo == "")
+                {
+                    book.CreateSheet("Sheet1");
+                }
+                else
+                {
+                    foreach(string sheet in subInfo.Split(','))
+                    {
+                        book.CreateSheet(sheet);
+                    }
+                }
+
+                using (var fs = new FileStream(path, FileMode.Create))
+                {
+                    book.Write(fs);
+                }
+            }
+            catch (Exception ex)
+            {
+                err = ex.ToString();
+            }
+
+            return err;
         }
     }
 
