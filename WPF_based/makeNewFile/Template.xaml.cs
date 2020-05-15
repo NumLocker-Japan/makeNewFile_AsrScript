@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -38,8 +38,8 @@ namespace makeNewFile
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            TemplateConfigs templateConfigs = new TemplateConfigs(this);
-            List<List<string>> setupInfo = new List<List<string>>(templateConfigs.Load());
+            LoadTemplateConfigs loadTemplateConfigs = new LoadTemplateConfigs();
+            List<List<string>> setupInfo = new List<List<string>>(loadTemplateConfigs.Load());
 
             foreach(var templateInfo in setupInfo)
             {
@@ -53,8 +53,7 @@ namespace makeNewFile
                 }
             }
 
-            TemplateRegConfigs templateRegConfigs = new TemplateRegConfigs();
-            List<string> setupExtensionsInfo = templateRegConfigs.LoadExtensions();
+            List<string> setupExtensionsInfo = loadTemplateConfigs.LoadExtensions();
             BMP_Extensions.Text = setupExtensionsInfo[0];
             GIF_Extensions.Text = setupExtensionsInfo[1];
             JPEG_Extensions.Text = setupExtensionsInfo[2];
@@ -75,8 +74,8 @@ namespace makeNewFile
 
         private void OK_Button_Click(object sender, RoutedEventArgs e)
         {
-            TemplateConfigs templateConfigs = new TemplateConfigs(this);
-            if (templateConfigs.Export() == 0)
+            SetTemplateConfigs setTemplateConfigs = new SetTemplateConfigs(this);
+            if (setTemplateConfigs.Export() == 0)
             {
                 this.Close();
             }
@@ -579,15 +578,23 @@ namespace makeNewFile
         }
     }
 
-    public class TemplateConfigs{
+
+    /// <summary>
+    /// テンプレートのレジストリへの書き出しに対応
+    /// </summary>
+    public class SetTemplateConfigs{
 
         private Template tp;
         
-        public TemplateConfigs(Template template)
+        public SetTemplateConfigs(Template template)
         {
             tp = template;
         }
 
+        /// <summary>
+        /// エラーがなくレジストリへの書き込みまで終了した場合に0を返す。その他は1を返す。
+        /// </summary>
+        /// <returns></returns>
         public int Export()
         {
             List<List<string>> regInfo = new List<List<string>>();
@@ -821,6 +828,12 @@ namespace makeNewFile
 
             regTemplates.Close();
         }
+    }
+
+    /// <summary>
+    /// テンプレートのレジストリからの読み込みに対応
+    /// </summary>
+    public class LoadTemplateConfigs {
 
         public List<List<string>> Load()
         {
@@ -850,7 +863,7 @@ namespace makeNewFile
                     _return_child.Add((string)regTemplates.GetValue("isEnabled_" + i.ToString()));
                     _return_child.Add((string)regTemplates.GetValue("targetExtension_" + i.ToString()));
                     _return_child.Add(regTemplates.GetValue("sizeX_" + i.ToString()).ToString());
-                    _return_child.Add(regTemplates.GetValue("sizeY_"+ i.ToString()).ToString());
+                    _return_child.Add(regTemplates.GetValue("sizeY_" + i.ToString()).ToString());
                     _return_child.Add((string)regTemplates.GetValue("backgroundColor_" + i.ToString()));
                 }
 
@@ -859,12 +872,7 @@ namespace makeNewFile
 
             return _return;
         }
-    }
 
-    /// <summary>
-    /// 外部からの呼び出しに対応するためにクラスを分ける
-    /// </summary>
-    public class TemplateRegConfigs {
         public List<string> LoadExtensions()
         {
             List<string> _return = new List<string>();

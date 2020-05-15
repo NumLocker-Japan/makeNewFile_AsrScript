@@ -330,6 +330,7 @@ namespace makeNewFile
         private DateTime StartTime;
         private string[] splittedPathList;
         private string subInfo;     // 画像サイズ・シート名
+        private List<string> template;
 
         public Exec(MainWindow mainWindow){
             mw = mainWindow;
@@ -500,10 +501,12 @@ namespace makeNewFile
                         if (name_part__name_List.Last() == "")
                         {
                             index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List[name_part__name_List.Count() - 2]).Substring(1));
+                            template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List[name_part__name_List.Count() - 2]).Substring(1));
                         }
                         else
                         {
                             index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                            template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
                         }
                     }
                     else
@@ -559,10 +562,12 @@ namespace makeNewFile
                     if (commonExtension == "")
                     {
                         index = availableTemplates.GetFormats(Path.GetExtension(FormattedPathList).Substring(1));
+                        template = availableTemplates.GetAvailableTemplates(Path.GetExtension(FormattedPathList).Substring(1));
                     }
                     else
                     {
                         index = availableTemplates.GetFormats(commonExtension.Substring(1));
+                        template = availableTemplates.GetAvailableTemplates(commonExtension.Substring(1));
                     }
 
                     if (index == -1)
@@ -674,26 +679,53 @@ namespace makeNewFile
                 {
                     try
                     {
+                        // テキストベースかどうかでファイル作成処理を分ける
                         if (isTextBased)
                         {
-                            using (FileStream fs = File.Create(fullPath + commonExtension))
+                            // テンプレートが設定されているかどうかで処理を分ける
+                            if (template.Count() == 0)
                             {
-                                byte[] contents;
-                                if (mw.TextEncoding.SelectedIndex == 0)
+                                using (FileStream fs = File.Create(fullPath + commonExtension))
                                 {
-                                    contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
-                                }
-                                else if (mw.TextEncoding.SelectedIndex == 1)
-                                {
-                                    contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
-                                }
-                                else
-                                {
-                                    Encoding s_jis = Encoding.GetEncoding(932);
-                                    contents = s_jis.GetBytes(mw.DefaultText.Text);
-                                }
+                                    byte[] contents;
+                                    if (mw.TextEncoding.SelectedIndex == 0)
+                                    {
+                                        contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
+                                    }
+                                    else if (mw.TextEncoding.SelectedIndex == 1)
+                                    {
+                                        contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
+                                    }
+                                    else
+                                    {
+                                        Encoding s_jis = Encoding.GetEncoding(932);
+                                        contents = s_jis.GetBytes(mw.DefaultText.Text);
+                                    }
 
-                                fs.Write(contents, 0, contents.Length);
+                                    fs.Write(contents, 0, contents.Length);
+                                }
+                            }
+                            else
+                            {
+                                using (FileStream fs = File.Create(fullPath + commonExtension))
+                                {
+                                    byte[] contents;
+                                    if (int.Parse(template[4]) == 0)
+                                    {
+                                        contents = new UTF8Encoding().GetBytes(template[3]);
+                                    }
+                                    else if (int.Parse(template[4]) == 1)
+                                    {
+                                        contents = new UnicodeEncoding().GetBytes(template[3]);
+                                    }
+                                    else
+                                    {
+                                        Encoding s_jis = Encoding.GetEncoding(932);
+                                        contents = s_jis.GetBytes(template[3]);
+                                    }
+
+                                    fs.Write(contents, 0, contents.Length);
+                                }
                             }
                         }
                         else
@@ -762,8 +794,8 @@ namespace makeNewFile
         /// <returns></returns>
         public int GetFormats(string ext)
         {
-            TemplateRegConfigs templateConfigs = new TemplateRegConfigs();
-            List<string> allFormats = templateConfigs.LoadExtensions();
+            LoadTemplateConfigs loadTemplateConfigs = new LoadTemplateConfigs();
+            List<string> allFormats = loadTemplateConfigs.LoadExtensions();
             
             int index = -1;
             for (int i = 0; i < allFormats.Count(); i++)
@@ -776,6 +808,31 @@ namespace makeNewFile
             }
 
             return index;
+        }
+
+        /// <summary>
+        /// 指定した拡張子にヒットした最初のテンプレート情報をを返す。
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetAvailableTemplates(string ext)
+        {
+            LoadTemplateConfigs loadTemplateConfigs = new LoadTemplateConfigs();
+            List<List<string>> availableTemplates = loadTemplateConfigs.Load();
+            List<string> _return = new List<string>();
+
+            for (int i = 0; i < availableTemplates.Count(); i++)
+            {
+                if (availableTemplates[i][1] == "True")
+                {
+                    if (availableTemplates[i][2].Split(',').Contains(ext))
+                    {
+                        _return = availableTemplates[i];
+                        break;
+                    }
+                }
+            }
+
+            return _return;
         }
     }
 
