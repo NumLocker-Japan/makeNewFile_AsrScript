@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -15,6 +16,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace makeNewFile
 {
@@ -817,6 +820,94 @@ namespace makeNewFile
         private string ImageFormatEncoder(string path, int index)
         {
             string err = "";
+            try
+            {
+                int width;
+                int height;
+                string colorText;
+
+                // テンプレートの存在をチェック
+                if (template.Count() != 0)
+                {
+                    width = int.Parse(template[3]);
+                    height = int.Parse(template[4]);
+                    colorText = template[5];
+                }
+                else
+                {
+                    // 規定のテンプレート
+                    width = 100;
+                    height = 100;
+                    colorText = "#FFFFFFFF";
+                }
+
+                // subInfoの形式をチェック、あればテンプレートを上書き
+                if (subInfo != "" && Regex.IsMatch(subInfo, @"[1-9]\d*x[1-9]\d*"))
+                {
+                    width = int.Parse(subInfo.Split('x')[0]);
+                    height = int.Parse(subInfo.Split('x')[1]);
+                }
+
+                byte[] imageData = new byte[width * height * 4];
+
+                for (int i = 0; i < width * height; i++)
+                {
+
+                    imageData[i * 4] = (byte)Convert.ToInt32(colorText.Substring(7, 2), 16);          // B
+                    imageData[i * 4 + 1] = (byte)Convert.ToInt32(colorText.Substring(5, 2), 16);      // G
+                    imageData[i * 4 + 2] = (byte)Convert.ToInt32(colorText.Substring(3, 2), 16);      // R
+                    imageData[i * 4 + 3] = (byte)Convert.ToInt32(colorText.Substring(1, 2), 16);      // A
+                }
+
+                // BitmapSourceを作成
+                int stride = (width * PixelFormats.Bgra32.BitsPerPixel + 7) / 8;
+
+                BitmapSource bitmap = BitmapSource.Create(width, height, 96, 96, PixelFormats.Bgra32, null, imageData, stride);
+
+                FileStream stream = new FileStream(path, FileMode.Create);
+
+                switch (index)
+                {
+                    case 0:
+                        BmpBitmapEncoder bmpBitmapEncoder = new BmpBitmapEncoder();
+                        bmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        bmpBitmapEncoder.Save(stream);
+                        break;
+                    case 1:
+                        GifBitmapEncoder gifBitmapEncoder = new GifBitmapEncoder();
+                        gifBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        gifBitmapEncoder.Save(stream);
+                        break;
+                    case 2:
+                        JpegBitmapEncoder jpegBitmapEncoder = new JpegBitmapEncoder();
+                        jpegBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        jpegBitmapEncoder.Save(stream);
+                        break;
+                    case 3:
+                        PngBitmapEncoder pngBitmapEncoder = new PngBitmapEncoder();
+                        pngBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        pngBitmapEncoder.Save(stream);
+                        break;
+                    case 4:
+                        TiffBitmapEncoder tiffBitmapEncoder = new TiffBitmapEncoder();
+                        tiffBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        tiffBitmapEncoder.Save(stream);
+                        break;
+                    case 5:
+                        WmpBitmapEncoder wmpBitmapEncoder = new WmpBitmapEncoder();
+                        wmpBitmapEncoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        wmpBitmapEncoder.Save(stream);
+                        break;
+                }
+                
+                stream.Close();
+            }
+            catch (Exception ex)
+            {
+                err = ex.ToString();
+            }
+
+            // Set image source.
             Console.WriteLine("image, size : " + subInfo);
             return err;
         }
