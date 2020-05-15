@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -323,6 +323,7 @@ namespace makeNewFile
         private string commonExtension;
         private DateTime StartTime;
         private string[] splittedPathList;
+        private string subInfo;     // 画像サイズ・シート名
 
         public Exec(MainWindow mainWindow){
             mw = mainWindow;
@@ -385,10 +386,9 @@ namespace makeNewFile
             string[] pathListSeparator = new string[] { "\r\n" };
             splittedPathList = mw.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
 
-
-
             // RunMakeFile()に処理を投げる。処理完了まで返らない。
             List<string> CatchedErrors = RunMakeFile();
+
             // 取得したエラーをまとめて処理
             if (CatchedErrors.Count() > 0)
             {
@@ -474,8 +474,39 @@ namespace makeNewFile
                         }
                     }
 
+                    // フォーマット判別
+                    if (name_part__name_List.Last().Split('@').Length == 1)
+                    {
+                        subInfo = "";
+                    }
+                    else
+                    {
+                        subInfo = name_part__name_List.Last().Split('@')[1];
+                        name_part__name_List[name_part__name_List.Count() - 1] = name_part__name_List.Last().Split('@')[0];
+                    }
+
+                    // 拡張子で呼び出しを場合分け
+                    AvailableTemplates availableTemplates = new AvailableTemplates();
+                    int index;
+                    if (commonExtension == "")
+                    {
+                        // name_part__name_List.Last()は""である可能性があるので、回避する
+                        if (name_part__name_List.Last() == "")
+                        {
+                            index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List[name_part__name_List.Count() - 2]).Substring(1));
+                        }
+                        else
+                        {
+                            index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                        }
+                    }
+                    else
+                    {
+                        index = availableTemplates.GetFormats(commonExtension.Substring(1));
+                    }
+
                     // 1つめの項目でエラーが出た場合、残る要素もエラーが出ることが必至なため、エラーを検知した場合はbreak
-                    string FirstTest = CallMakeFile(number_part__offset, name_part__name_List, name_part__number_List);
+                    string FirstTest = CallMakeFile(number_part__offset, name_part__name_List, name_part__number_List, index);
                     if (FirstTest != "")
                     {
                         AllErrors.Add("エラーを検知したため、次の連番処理は中止されました。" + splittedPathList[i]);  //整形済みのパスではなく、元の表現を表示
@@ -493,7 +524,11 @@ namespace makeNewFile
                             break;
                         }
 
-                        result = CallMakeFile(StartNumber, name_part__name_List, name_part__number_List); ;
+                        result = CallMakeFile(StartNumber, name_part__name_List, name_part__number_List, index);
+                        if (result != "")
+                        {
+                            AllErrors.Add(result);
+                        }
 
                         Counter += 1;
                         StartNumber += 1;
@@ -501,7 +536,38 @@ namespace makeNewFile
                 }
                 else
                 {
-                    string err = MakeFile(FormattedPathList);
+                    if (FormattedPathList.Split('@').Length == 1)
+                    {
+                        subInfo = "";
+                    }
+                    else
+                    {
+                        subInfo = FormattedPathList.Split('@')[1];
+                        FormattedPathList = FormattedPathList.Split('@')[0];
+                    }
+
+                    string err;
+                    // 拡張子で呼び出しを場合分け
+                    AvailableTemplates availableTemplates = new AvailableTemplates();
+                    int index;
+                    if (commonExtension == "")
+                    {
+                        index = availableTemplates.GetFormats(Path.GetExtension(FormattedPathList).Substring(1));
+                    }
+                    else
+                    {
+                        index = availableTemplates.GetFormats(commonExtension.Substring(1));
+                    }
+
+                    if (index == -1)
+                    {
+                        err = MakeFile(FormattedPathList);
+                    }
+                    else
+                    {
+                        err = MakeFile(FormattedPathList, false, index);
+                    }
+
                     if (err != "")
                     {
                         AllErrors.Add(err);
@@ -511,7 +577,14 @@ namespace makeNewFile
             return AllErrors;
         }
 
-        private string CallMakeFile(int number, List<string> name_part__name_List, List<string> name_part__number_List)
+        /// <summary>
+        /// 連番形式のパスに対して、数値代入・整形する。
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="name_part__name_List"></param>
+        /// <param name="name_part__number_List"></param>
+        /// <returns></returns>
+        private string CallMakeFile(int number, List<string> name_part__name_List, List<string> name_part__number_List, int index)
         {
             string formatted = "";
 
@@ -523,7 +596,6 @@ namespace makeNewFile
                     break;
                 }
 
-                // name_part__number_Listは、両端に必ず""を含むため、k+1にアクセスする事でこれを回避する。
                 if (mw.ZeroPadding.IsChecked == true)
                 {
                     formatted = formatted + name_part__name_List[k] + number.ToString().PadLeft(name_part__number_List[k].Length, '0');
@@ -533,7 +605,17 @@ namespace makeNewFile
                     formatted = formatted + name_part__name_List[k] + number.ToString();
                 }
             }
-            string err = MakeFile(formatted);
+            string err;
+
+            if (index == -1)
+            {
+                err = MakeFile(formatted, true);
+            }
+            else
+            {
+                err = MakeFile(formatted, false, index);
+            }
+
             if (err != "")
             {
                 return (err);
@@ -541,7 +623,7 @@ namespace makeNewFile
             return "";
         }
 
-        private string MakeFile(string path)
+        private string MakeFile(string path, bool isTextBased = true, int index = -1)
         {
             string targetPath = currentDirectory + "\\" + path;
             string[] splittedPath = Regex.Split(targetPath, @"(\\|\/)");
@@ -586,24 +668,31 @@ namespace makeNewFile
                 {
                     try
                     {
-                        using (FileStream fs = File.Create(fullPath + commonExtension))
+                        if (isTextBased)
                         {
-                            byte[] contents;
-                            if (mw.TextEncoding.SelectedIndex == 0)
+                            using (FileStream fs = File.Create(fullPath + commonExtension))
                             {
-                                contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
-                            }
-                            else if (mw.TextEncoding.SelectedIndex == 1)
-                            {
-                                contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
-                            }
-                            else
-                            {
-                                Encoding s_jis = Encoding.GetEncoding(932);
-                                contents = s_jis.GetBytes(mw.DefaultText.Text);
-                            }
+                                byte[] contents;
+                                if (mw.TextEncoding.SelectedIndex == 0)
+                                {
+                                    contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
+                                }
+                                else if (mw.TextEncoding.SelectedIndex == 1)
+                                {
+                                    contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
+                                }
+                                else
+                                {
+                                    Encoding s_jis = Encoding.GetEncoding(932);
+                                    contents = s_jis.GetBytes(mw.DefaultText.Text);
+                                }
 
-                            fs.Write(contents, 0, contents.Length);
+                                fs.Write(contents, 0, contents.Length);
+                            }
+                        }
+                        else
+                        {
+                            MakeFileNotTextBased(fullPath + commonExtension, index);
                         }
                     }
 
@@ -622,6 +711,65 @@ namespace makeNewFile
             }
 
             return "";
+        }
+
+        private void MakeFileNotTextBased(string path, int index)
+        {
+            switch (index)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    ImageFormatEncoder(path, index);
+                    break;
+
+                case 6:
+                case 7:
+                    SpreadsheetFormatEncoder(path, index);
+                    break;
+            }
+        }
+
+        private void ImageFormatEncoder(string path, int index)
+        {
+            Console.WriteLine("image, size : " + subInfo);
+        }
+
+        private void SpreadsheetFormatEncoder(string path, int index)
+        {
+            Console.WriteLine("spreadsheet, sheetname : " + subInfo);
+        }
+    }
+
+    /// <summary>
+    /// 利用可能なテンプレートを参照
+    /// </summary>
+    public class AvailableTemplates
+    {
+        /// <summary>
+        /// 指定した拡張子が属するフォーマットのインデックス番号を返す
+        /// </summary>
+        /// <param name="ext"></param>
+        /// <returns></returns>
+        public int GetFormats(string ext)
+        {
+            TemplateRegConfigs templateConfigs = new TemplateRegConfigs();
+            List<string> allFormats = templateConfigs.LoadExtensions();
+            
+            int index = -1;
+            for (int i = 0; i < allFormats.Count(); i++)
+            {
+                if (allFormats[i].Split(',').Contains(ext))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
         }
     }
 
