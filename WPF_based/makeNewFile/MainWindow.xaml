@@ -89,7 +89,7 @@
                  Text="" TextWrapping="Wrap"
                  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
                  Margin="160,2,15,2" Padding="5,3,5,3"
-                HorizontalAlignment="Stretch"  VerticalAlignment="Center"
+                 HorizontalAlignment="Stretch"  VerticalAlignment="Center"
                  KeyDown="DefaultText_KeyDown"/>
         <Label
                 Content="エンコーディング"

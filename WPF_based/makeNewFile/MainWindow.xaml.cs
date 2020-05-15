@@ -95,7 +95,9 @@ namespace makeNewFile
                     {
                         if (UseReturnToMoveFocus.IsChecked == true)
                         {
-                            FocusNavigationDirection Direction = 0;
+                            e.Handled = true;   // キー処理を明示的に終了
+
+                            FocusNavigationDirection Direction = FocusNavigationDirection.Next;
                             TraversalRequest MoveFocusRequest = new TraversalRequest(Direction);
                             UIElement ElementHavingFocus = Keyboard.FocusedElement as UIElement;  // フォーカス要素の取得
                             if (ElementHavingFocus != null)
@@ -120,7 +122,9 @@ namespace makeNewFile
                 // 改行はない
                 if (UseReturnToMoveFocus.IsChecked == true)
                 {
-                    FocusNavigationDirection Direction = 0;
+                    e.Handled = true;
+
+                    FocusNavigationDirection Direction = FocusNavigationDirection.Next;
                     TraversalRequest MoveFocusRequest = new TraversalRequest(Direction);
                     UIElement ElementHavingFocus = Keyboard.FocusedElement as UIElement;
                     if (ElementHavingFocus != null)
@@ -142,7 +146,9 @@ namespace makeNewFile
             {
                 if (UseReturnToMoveFocus.IsChecked == true)
                 {
-                    FocusNavigationDirection Direction = 0;
+                    e.Handled = true;
+
+                    FocusNavigationDirection Direction = FocusNavigationDirection.Next;
                     TraversalRequest MoveFocusRequest = new TraversalRequest(Direction);
                     UIElement ElementHavingFocus = Keyboard.FocusedElement as UIElement;
                     if (ElementHavingFocus != null)
