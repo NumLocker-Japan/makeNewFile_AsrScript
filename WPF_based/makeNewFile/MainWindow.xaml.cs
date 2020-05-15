@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -657,8 +657,8 @@ namespace makeNewFile
                 regTemplates.SetValue("PngExtensions", "png");
                 regTemplates.SetValue("TiffExtensions", "tif,tiff");
                 regTemplates.SetValue("WmpExtensions", "wmp");
-                regTemplates.SetValue("OfficeDocumentExtensions", "doc,docx");
-                regTemplates.SetValue("OfficeSpreadSheetExtensions", "xls,xlsx");
+                regTemplates.SetValue("OfficeSpreadsheetBIFFExtensions", "xls");
+                regTemplates.SetValue("OfficeSpreadsheetOOXMLExtensions", "xlsx");
             }
             regTemplates.Close();
 

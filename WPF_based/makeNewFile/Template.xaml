@@ -167,12 +167,12 @@
                 <GroupBox Header="Office">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="140">Office Document</Label>
-                            <TextBox x:Name="OfficeDocument_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="140">Spreadsheet (BIFF)</Label>
+                            <TextBox x:Name="OfficeSpreadsheet_BIFF_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,3">
-                            <Label Width="140">Office Spreadsheet</Label>
-                            <TextBox x:Name="OfficeSpreadsheet_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
+                            <Label Width="140">Spreadsheet (OOXML)</Label>
+                            <TextBox x:Name="OfficeSpreadsheet_OOXML_Extensions" Width="200" Margin="20,0,0,0" VerticalAlignment="Center" Padding="5,2"></TextBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

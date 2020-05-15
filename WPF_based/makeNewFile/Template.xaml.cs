@@ -53,15 +53,16 @@ namespace makeNewFile
                 }
             }
 
-            List<string> setupExtensionsInfo = templateConfigs.LoadExtensions();
+            TemplateRegConfigs templateRegConfigs = new TemplateRegConfigs();
+            List<string> setupExtensionsInfo = templateRegConfigs.LoadExtensions();
             BMP_Extensions.Text = setupExtensionsInfo[0];
             GIF_Extensions.Text = setupExtensionsInfo[1];
             JPEG_Extensions.Text = setupExtensionsInfo[2];
             PNG_Extensions.Text = setupExtensionsInfo[3];
             TIFF_Extensions.Text = setupExtensionsInfo[4];
             WMP_Extensions.Text = setupExtensionsInfo[5];
-            OfficeDocument_Extensions.Text = setupExtensionsInfo[6];
-            OfficeSpreadsheet_Extensions.Text = setupExtensionsInfo[7];
+            OfficeSpreadsheet_BIFF_Extensions.Text = setupExtensionsInfo[6];
+            OfficeSpreadsheet_OOXML_Extensions.Text = setupExtensionsInfo[7];
         }
 
         private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
@@ -777,8 +778,8 @@ namespace makeNewFile
             regTemplates.SetValue("PngExtensions", tp.PNG_Extensions.Text);
             regTemplates.SetValue("TiffExtensions", tp.TIFF_Extensions.Text);
             regTemplates.SetValue("WmpExtensions", tp.WMP_Extensions.Text);
-            regTemplates.SetValue("OfficeDocumentExtensions", tp.OfficeDocument_Extensions.Text);
-            regTemplates.SetValue("OfficeSpreadSheetExtensions", tp.OfficeSpreadsheet_Extensions.Text);
+            regTemplates.SetValue("OfficeSpreadsheetBIFFExtensions", tp.OfficeSpreadsheet_BIFF_Extensions.Text);
+            regTemplates.SetValue("OfficeSpreadsheetOOXMLExtensions", tp.OfficeSpreadsheet_OOXML_Extensions.Text);
 
             regTemplates.Close();
         }
@@ -820,7 +821,12 @@ namespace makeNewFile
 
             return _return;
         }
+    }
 
+    /// <summary>
+    /// 外部からの呼び出しに対応するためにクラスを分ける
+    /// </summary>
+    public class TemplateRegConfigs {
         public List<string> LoadExtensions()
         {
             List<string> _return = new List<string>();
@@ -832,13 +838,12 @@ namespace makeNewFile
             _return.Add((string)regTemplates.GetValue("PngExtensions"));
             _return.Add((string)regTemplates.GetValue("TiffExtensions"));
             _return.Add((string)regTemplates.GetValue("WmpExtensions"));
-            _return.Add((string)regTemplates.GetValue("OfficeDocumentExtensions"));
-            _return.Add((string)regTemplates.GetValue("OfficeSpreadSheetExtensions"));
+            _return.Add((string)regTemplates.GetValue("OfficeSpreadsheetBIFFExtensions"));
+            _return.Add((string)regTemplates.GetValue("OfficeSpreadsheetOOXMLExtensions"));
 
             return _return;
         }
     }
-
 
     /// <summary>
     /// テンプレートの追加
