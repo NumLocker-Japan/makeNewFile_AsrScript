@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -636,6 +636,44 @@ namespace makeNewFile
                 return 1;
             }
 
+            // 入力の整合性を確認する。
+            List<string> formatExtList = new List<string>();
+            formatExtList.Add(tp.BMP_Extensions.Text);
+            formatExtList.Add(tp.GIF_Extensions.Text);
+            formatExtList.Add(tp.JPEG_Extensions.Text);
+            formatExtList.Add(tp.PNG_Extensions.Text);
+            formatExtList.Add(tp.TIFF_Extensions.Text);
+            formatExtList.Add(tp.WMP_Extensions.Text);
+            formatExtList.Add(tp.OfficeSpreadsheet_BIFF_Extensions.Text);
+            formatExtList.Add(tp.OfficeSpreadsheet_OOXML_Extensions.Text);
+
+            CheckValue checkValue = new CheckValue();
+            // フォーマットに対応する拡張子の登録に二重登録されているものがないか確認
+            List<string> res_01 = checkValue.CheckFormatRegistration(formatExtList);
+            if (res_01.Count() != 0)
+            {
+                System.Windows.MessageBox.Show("同一の拡張子が複数のフォーマットに登録されています。\nデータを正しく修正してください。\n対象の拡張子 : " + string.Join(",", res_01), "エラー通知", MessageBoxButton.OK, MessageBoxImage.Error);
+                return 1;
+            }
+
+            // テンプレートの拡張子の整合性確認(有効化されているもののみ)
+            // 画像フォーマットに関連付けられた拡張子は、テキストテンプレートとして登録されていてはならない。
+            // その逆があってもならない。
+            List<string> imageFormatExtList = new List<string>();
+            imageFormatExtList.Add(tp.BMP_Extensions.Text);
+            imageFormatExtList.Add(tp.GIF_Extensions.Text);
+            imageFormatExtList.Add(tp.JPEG_Extensions.Text);
+            imageFormatExtList.Add(tp.PNG_Extensions.Text);
+            imageFormatExtList.Add(tp.TIFF_Extensions.Text);
+            imageFormatExtList.Add(tp.WMP_Extensions.Text);
+
+            List<string> res_02 = checkValue.CheckFormatsOfTemplates(regInfo, imageFormatExtList);
+            if (res_02.Count() != 0)
+            {
+                System.Windows.MessageBox.Show("有効化されているテンプレートに登録されている拡張子と、フォーマットに登録されている拡張子の情報に差異があります。\nデータを正しく修正してください。\n対象のテンプレート : " + string.Join(",", res_02), "エラー通知", MessageBoxButton.OK, MessageBoxImage.Error);
+                return 1;
+            }
+
             int tagListNum = Convert.ToInt32(tagList, 2);
             ExportToReg(regInfo, tagListNum);
             return 0;
@@ -842,6 +880,65 @@ namespace makeNewFile
             _return.Add((string)regTemplates.GetValue("OfficeSpreadsheetOOXMLExtensions"));
 
             return _return;
+        }
+    }
+
+    public class CheckValue
+    {
+        /// <summary>
+        /// フォーマットと拡張子のペアの登録を検証
+        /// </summary>
+        public List<string> CheckFormatRegistration(List<string> extList)
+        {
+            List<string> _registeredExtension = new List<string>();
+            List<string> unfairExt = new List<string>();
+
+            for (int i = 0; i < extList.Count(); i++)
+            {
+                List<string> extList__childList = new List<string>(extList[i].Split(','));
+                for (int j = 0; j < extList__childList.Count(); j++)
+                {
+                    if (_registeredExtension.Contains(extList__childList[j]))
+                    {
+                        unfairExt.Add(extList__childList[j]);
+                    }
+                    else
+                    {
+                        _registeredExtension.Add(extList__childList[j]);
+                    }
+                }
+            }
+
+            return unfairExt;
+        }
+
+        
+        public List<string> CheckFormatsOfTemplates(List<List<string>> templateList, List<string> imageFormatExt)
+        {
+            List<string> unfair = new List<string>();
+
+            for (int i = 0; i < templateList.Count(); i++)
+            {
+                // 有効化されているもののみ
+                if (templateList[i][1] == "True")
+                {
+                    List<string> targetExtList = new List<string>(templateList[i][2].Split(','));
+                    for (int j = 0; j < targetExtList.Count(); j++)
+                    {
+                        // テキストベースでかつ画像フォーマットである場合
+                        if (templateList[i].Count() == 5 && imageFormatExt.Contains(targetExtList[j]))
+                        {
+                            unfair.Add(templateList[i][0]);
+                        }
+                        else if (templateList[i].Count() == 6 && !imageFormatExt.Contains(targetExtList[j]))
+                        {
+                            unfair.Add(templateList[i][0]);
+                        }
+                    }
+                }
+            }
+
+            return unfair;
         }
     }
 
