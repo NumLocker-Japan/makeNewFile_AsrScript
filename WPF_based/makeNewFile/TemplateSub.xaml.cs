@@ -36,7 +36,7 @@ namespace makeNewFile
         {
             if (TemplateTitle.Text == "")
             {
-                MessageBox.Show("テンプレートのタイトルを入力してください。");
+                MessageBox.Show("テンプレートのタイトルを入力してください。", "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
