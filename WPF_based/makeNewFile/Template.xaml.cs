@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace makeNewFile
             LoadTemplateConfigs loadTemplateConfigs = new LoadTemplateConfigs();
             List<List<string>> setupInfo = new List<List<string>>(loadTemplateConfigs.Load());
 
-            foreach(var templateInfo in setupInfo)
+            foreach (var templateInfo in setupInfo)
             {
                 if (templateInfo.Count() == 5)
                 {
@@ -560,10 +561,10 @@ namespace makeNewFile
     /// <summary>
     /// テンプレートのレジストリへの書き出しに対応
     /// </summary>
-    public class SetTemplateConfigs{
+    public class SetTemplateConfigs {
 
         private Template tp;
-        
+
         public SetTemplateConfigs(Template template)
         {
             tp = template;
@@ -596,7 +597,7 @@ namespace makeNewFile
                         {
                             isOK = false;
                         }
-                        
+
                     }
                     else if (isOK && (string)((System.Windows.Controls.GroupBox)childGroupBox).Tag == "Image")
                     {
@@ -666,6 +667,9 @@ namespace makeNewFile
                 return 1;
             }
 
+            ExportToText exportToText = new ExportToText();
+            exportToText.Clear();
+            
             int tagListNum = Convert.ToInt32(tagList, 2);
             ExportToReg(regInfo, tagListNum);
             return 0;
@@ -697,7 +701,7 @@ namespace makeNewFile
             {
                 isOK = false;
             }
-            
+
             if (isOK)
             {
                 return _return;
@@ -788,7 +792,8 @@ namespace makeNewFile
                     regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
                     regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
                     regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
-                    regTemplates.SetValue("defaultText_" + i.ToString(), infoList[i][3]);
+                    ExportToText exportToText = new ExportToText();
+                    regTemplates.SetValue("defaultText_" + i.ToString(), exportToText.Export(infoList[i][3]));
                     regTemplates.SetValue("charasetIndex_" + i.ToString(), int.Parse(infoList[i][4]));
                 }
                 else
@@ -812,6 +817,32 @@ namespace makeNewFile
             regTemplates.SetValue("OfficeSpreadsheetOOXMLExtensions", tp.OfficeSpreadsheet_OOXML_Extensions.Text);
 
             regTemplates.Close();
+        }
+    }
+
+    public class ExportToText {
+        /// <summary>
+        /// Templatesフォルダ以下を再帰的に削除
+        /// </summary>
+        public void Clear()
+        {
+            Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates", true);
+            Directory.CreateDirectory(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates");
+        }
+
+        public int Export(string text)
+        {
+            int index = 0;
+            while(true){
+                if (!File.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + index.ToString() + @".txt")){
+                    using(StreamWriter sw = new StreamWriter(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + index.ToString() + @".txt", false, System.Text.Encoding.UTF8)){
+                        sw.Write(text);
+                    }
+                    break;
+                }
+                index ++;
+            }
+            return index;
         }
     }
 
@@ -839,7 +870,9 @@ namespace makeNewFile
                     _return_child.Add((string)regTemplates.GetValue("headerTitle_" + i.ToString()));
                     _return_child.Add((string)regTemplates.GetValue("isEnabled_" + i.ToString()));
                     _return_child.Add((string)regTemplates.GetValue("targetExtension_" + i.ToString()));
-                    _return_child.Add((string)regTemplates.GetValue("defaultText_" + i.ToString()));
+                    using(StreamReader sr = new StreamReader(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + (regTemplates.GetValue("defaultText_" + i.ToString())).ToString() + @".txt", System.Text.Encoding.UTF8)){
+                        _return_child.Add(sr.ReadToEnd());
+                    }
                     _return_child.Add(regTemplates.GetValue("charasetIndex_" + i.ToString()).ToString());
                 }
                 else
