@@ -1042,8 +1042,8 @@ namespace makeNewFile
             {
                 // 初期値の設定
                 config_reg_window = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Config", true);
-                config_reg_window.SetValue("WindowHeight", 660, RegistryValueKind.DWord);
-                config_reg_window.SetValue("WindowWidth", 960, RegistryValueKind.DWord);
+                config_reg_window.SetValue("WindowHeight", 540, RegistryValueKind.DWord);
+                config_reg_window.SetValue("WindowWidth", 840, RegistryValueKind.DWord);
                 config_reg_window.SetValue("StartFromZero", "False", RegistryValueKind.String);
                 config_reg_window.SetValue("ZeroPadding", "True", RegistryValueKind.String);
                 config_reg_window.SetValue("UseReturnToMoveFocus", "False", RegistryValueKind.String);
