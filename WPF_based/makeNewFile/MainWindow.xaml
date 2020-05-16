@@ -51,7 +51,7 @@
                    Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
                    Margin="0,15,15,35" Padding="5,2"/>
         <Button x:Name="Sub1_Button"
-                Content="置換機能について (R)"
+                Content="置換機能 (R)"
                 Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
                 Margin="0,5,0,10" Padding="15,2"
                 HorizontalAlignment="Left" VerticalAlignment="Bottom"

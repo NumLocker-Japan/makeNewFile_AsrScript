@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
-        Title="置換機能について" Height="600" Width="700" WindowStartupLocation="CenterScreen" FontSize="12"
+        Title="置換機能" Height="800" Width="800" WindowStartupLocation="CenterScreen" FontSize="12"
         KeyUp="Window_KeyUp">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,8 +20,11 @@
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
             <RowDefinition Height="120"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" FontSize="14" Content="連番機能"/>
@@ -48,5 +51,13 @@
             <TextBlock TextWrapping="Wrap" Foreground="Blue" Cursor="Hand" MouseUp="TextBlock_MouseUp" Text="https://docs.microsoft.com/ja-jp/dotnet/api/system.globalization.datetimeformatinfo?view=netframework-4.7.2"></TextBlock>
             <TextBlock TextWrapping="Wrap" Text="また、置換フォーマットの展開方法は、地域設定に基づいているため、環境により展開される内容が異なる場合があります。"></TextBlock>
         </StackPanel>
+
+        <Label Grid.Column="0" Grid.Row="9" Margin="10,0,0,0" FontSize="14" Content="テンプレート置換機能"/>
+        <Label Grid.Column="0" Grid.Row="10" Margin="30,0,0,0" Content="記入例1 : サンプル画像.jpg@120x120&#10;記入例2 : 資料01.xlsx@本部データ,支部データ"></Label>
+        <StackPanel Grid.Column="0" Grid.Row="11" Margin="30,0,20,0">
+            <TextBlock TextWrapping="Wrap" Text="規定のテンプレート設定を上書きできます。"></TextBlock>
+            <TextBlock TextWrapping="Wrap" Text="画像形式の場合は、拡張子に続けて@[ヨコ]x[タテ]の順に画像サイズを指定できます。(規定サイズは100x100)&#10;スプレッドシート形式の場合は、作成されるブックのシート名を,(カンマ)区切りで入力します。 (規定のシート名はSheet1)"></TextBlock>
+        </StackPanel>
+        
     </Grid>
 </Window>
