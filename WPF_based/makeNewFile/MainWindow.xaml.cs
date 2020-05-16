@@ -1056,13 +1056,27 @@ namespace makeNewFile
             {
                 regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
                 // ここで初期値の代入
-                regTemplates.SetValue("count", 1);
-                regTemplates.SetValue("tagList", 0);
+                regTemplates.SetValue("count", 3);
+                regTemplates.SetValue("tagList", 1);
+
                 regTemplates.SetValue("headerTitle_0", "HTMLテンプレート");
                 regTemplates.SetValue("isEnabled_0", "False");
                 regTemplates.SetValue("targetExtension_0", "htm,html");
                 regTemplates.SetValue("defaultText_0", "0");
                 regTemplates.SetValue("charasetIndex_0", 0);
+
+                regTemplates.SetValue("headerTitle_1", "都道府県一覧");
+                regTemplates.SetValue("isEnabled_1", "False");
+                regTemplates.SetValue("targetExtension_1", "*");
+                regTemplates.SetValue("defaultText_1", "1");
+                regTemplates.SetValue("charasetIndex_1", 0);
+
+                regTemplates.SetValue("headerTitle_2", "フルHD画像出力");
+                regTemplates.SetValue("isEnabled_2", "False");
+                regTemplates.SetValue("targetExtension_2", "*");
+                regTemplates.SetValue("sizeX_2", "1920");
+                regTemplates.SetValue("sizeY_2", "1080");
+                regTemplates.SetValue("backgroundColor_2", "#FFFFFFFF");
 
                 regTemplates.SetValue("BmpExtensions", "bmp");
                 regTemplates.SetValue("GifExtensions", "gif");
