@@ -246,7 +246,7 @@ namespace makeNewFile
             childStackPanel_01.Margin = (Thickness)thicknessConverter.ConvertFromString("0,0,0,10");
 
             System.Windows.Controls.Label typeLabel = new System.Windows.Controls.Label();
-            typeLabel.Content = "種類";
+            typeLabel.Content = "種類 : ";
             typeLabel.VerticalAlignment = VerticalAlignment.Center;
 
             System.Windows.Controls.Label textLabel = new System.Windows.Controls.Label();
@@ -403,7 +403,7 @@ namespace makeNewFile
             childStackPanel_01.Margin = (Thickness)thicknessConverter.ConvertFromString("0,0,0,10");
 
             System.Windows.Controls.Label typeLabel = new System.Windows.Controls.Label();
-            typeLabel.Content = "種類";
+            typeLabel.Content = "種類 : ";
             typeLabel.VerticalAlignment = VerticalAlignment.Center;
 
             System.Windows.Controls.Label textLabel = new System.Windows.Controls.Label();
