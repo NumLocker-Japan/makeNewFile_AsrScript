@@ -5,18 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
-        Title="MainWindow" Foreground="White" Background="#FFF0F0F0" Height="663" Width="1043" FontFamily="Yu Gothic UI" FontSize="13"
-        Activated="Body_Activated" KeyDown="Body_KeyDown" Closing="Body_Closing">
+        Title="MainWindow" Foreground="White" Background="#FFF0F0F0" Height="663" Width="1043" FontSize="13"
+        Activated="Body_Activated" PreviewKeyUp="Body_PreviewKeyUp" PreviewKeyDown="Body_PreviewKeyDown" Closing="Body_Closing">
 
     <Grid FocusManager.FocusedElement="{Binding ElementName=Txtbox}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.5*"/>
-            <ColumnDefinition Width="0.55*"/>
-            <ColumnDefinition Width="0.45*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="60"/>
@@ -24,17 +24,17 @@
         
         <TextBox x:Name="Txtbox"
                  Text="" Background="White" Foreground="Black" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto"
-                 Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Padding="5,3,5,3" Margin="15,15,15,15"
+                 Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Padding="5,3,5,3" Margin="15,15,15,15"
                  PreviewKeyDown="Txtbox_PreviewKeyDown"/>
         <Label
             Content="共通拡張子" Foreground="Black"
-            Grid.Column="0" Grid.Row="3"
+            Grid.Column="0" Grid.Row="4"
             HorizontalAlignment="Left" VerticalAlignment="Center"
             Margin="15,0,0,0"
             Width="100"/>
         <TextBox x:Name="CmnExt"
                 TextWrapping="Wrap" Text="" Background="White" Foreground="Black"
-                Grid.Column="0" Grid.Row="3"
+                Grid.Column="0" Grid.Row="4"
                 Padding="5,3,5,3" Margin="120,0,15,0"
                 VerticalAlignment="Center"
                 KeyDown="CmnExt_KeyDown"/>
@@ -42,20 +42,20 @@
         <TextBlock
                 Text="一括で付与する拡張子を記入します。共通拡張子が入力されていない場合は、拡張子の一括付与は行われません。"
                 TextWrapping="Wrap" Foreground="Black" Background="#FFF0F0F0"
-                Grid.Column="0" Grid.Row="4"
+                Grid.Column="0" Grid.Row="5"
             Margin="15,0,15,0"
                 VerticalAlignment="Center"/>
         <TextBlock x:Name="Description"
-                   Text="作成するファイルの名前を入力します。必要に応じてフォルダも同時に作成されます。ファイルの拡張子が同じ場合は、共通拡張子を設定できます。&#10;ファイルの上書きは行われません。&#10;パスの区切り文字は、/ (スラッシュ) または、\ (バックスラッシュ・円マーク)を使用してください。(改行の入力はCtrl+Enter)&#10;&#10;-- 連番機能について ----&#10;記入例 : 資料$$.txt*10~51&#10;&#10;$記号は、1文字で1桁の数字を表し、末尾に*に続けて総数、~に続けて初期値を入力します。初期値を省略した場合、1が初期値になります。0埋めをする場合は、桁の不足に注意してください。任意の場所に複数の連番を入れる事が可能です。&#10;&#10;-- 日付・時刻挿入機能について ----&#10;記入例 : %yyyy年MM月dd日hh時mm分ss秒%&#10;&#10;%記号で置換フォーマットを囲うことで、日付・時刻を任意の場所に複数挿入できます。"
+                   Text="作成するファイルの名前を入力します。必要に応じてフォルダも同時に作成されます。ファイルの拡張子が同じ場合は、共通拡張子を設定できます。&#10;ファイルの上書きは行われません。&#10;パスの区切り文字は、/ (スラッシュ) または、\ (バックスラッシュ・円マーク)を使用してください。(改行の入力はCtrl+Enter)"
                    Foreground="Black" Background="#FFF0F0F0" TextWrapping="Wrap"
                    Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
                    Margin="0,15,15,35" Padding="5,2"/>
-        <Button x:Name="DateFormat"
-                Content="主な日付・時刻置換フォーマット"
+        <Button x:Name="Sub1_Button"
+                Content="置換機能について (R)"
                 Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
-                Margin="0,5,0,5" Padding="15,2"
+                Margin="0,5,0,10" Padding="15,2"
                 HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                Click="DateFormat_Click" Focusable="False"/>
+                Focusable="False" Click="Sub1_Button_Click"/>
         <CheckBox x:Name="StartFromZero"
                   Content="初期値省略時に0から連番を振る"
                   Grid.Column="1" Grid.Row="1"
@@ -64,20 +64,20 @@
                   Focusable="False"/>
         <CheckBox x:Name="ZeroPadding"
                   Content="0埋めする"
-                  Grid.Column="2" Grid.Row="1"
-                  Margin="0,5,5,0"
+                  Grid.Column="1" Grid.Row="1"
+                  Margin="0,30,5,0"
                   HorizontalAlignment="Left"  VerticalAlignment="Top"
                   Focusable="False"/>
         <CheckBox x:Name="UseReturnToMoveFocus"
                   Content="Enterでフォーカス移動"
                   Grid.Column="1" Grid.Row="1"
-                  Margin="0,30,5,0"
+                  Margin="0,55,5,0"
                   HorizontalAlignment="Left"  VerticalAlignment="Top"
                   Focusable="False"/>
         <CheckBox x:Name="CloseOnFinish"
                   Content="終了時にウィンドウを閉じる"
-                  Grid.Column="2" Grid.Row="1"
-                  Margin="0,30,5,0"
+                  Grid.Column="1" Grid.Row="1"
+                  Margin="0,80,5,0"
                   HorizontalAlignment="Left"  VerticalAlignment="Top"
                   Focusable="False"/>
         <Label
@@ -88,8 +88,8 @@
         <TextBox x:Name="DefaultText"
                  Text="" TextWrapping="Wrap"
                  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"
-                 Margin="120,0,15,0" Padding="5,3,5,3"
-                HorizontalAlignment="Stretch"  VerticalAlignment="Center"
+                 Margin="160,2,15,2" Padding="5,3,5,3"
+                 HorizontalAlignment="Stretch"  VerticalAlignment="Center"
                  KeyDown="DefaultText_KeyDown"/>
         <Label
                 Content="エンコーディング"
@@ -97,7 +97,7 @@
                 HorizontalAlignment="Left"  VerticalAlignment="Center"/>
         <ComboBox x:Name="TextEncoding"
                   Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Width="150"
-                  Margin="120,0,0,0" Padding="10,3"
+                  Margin="160,2,0,4" Padding="10,3"
                   HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Left"
                   Focusable="False"
                   SelectedIndex="0">
@@ -105,18 +105,20 @@
             <ComboBoxItem x:Name="TextEncoding_utf16" Content="UTF-16 (Unicode)" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
             <ComboBoxItem x:Name="TextEncoding_sjis" Content="Shift_JIS" HorizontalAlignment="Left" Padding="10,2" Width="150"/>
         </ComboBox>
+        <Button x:Name="EditTemplate" Grid.Column="1" Grid.Row="4" Padding="15,2" Content="テンプレートの編集 (T)" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="False"
+                Click="EditTemplate_Click"></Button>
 
         <Button x:Name="Btn"
                 Content="OK"
                 Background="#FFE1E1E1" Foreground="Black" BorderBrush="#FF0078D7" BorderThickness="2"
-                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4"
+                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Width="100" Height="26" Margin="0,0,150,15"
                 Click="Btn_Click"/>
         <Button x:Name="Btn_cancel"
-                Content="Cancel"
+                Content="キャンセル"
                 Background="#FFE1E1E1" Foreground="Black"
-                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4"
+                Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="5"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom"
                 Width="100" Height="26" Margin="0,0,25,15"
                 Click="Btn_cancel_Click"/>

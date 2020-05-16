@@ -1,0 +1,52 @@
+﻿<Window x:Class="makeNewFile.Sub1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:makeNewFile"
+        mc:Ignorable="d"
+        Title="置換機能について" Height="600" Width="700" WindowStartupLocation="CenterScreen" FontSize="12"
+        KeyUp="Window_KeyUp">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="1.5*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="120"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" Margin="10,0,0,0" FontSize="14" Content="連番機能"/>
+        <Label Grid.Column="0" Grid.Row="1" Margin="30,0,0,0" Content="記入例 : 資料$$.txt*10~51"></Label>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Margin="30,0,20,0"
+                   Text="$記号は、1文字で1桁の数字を表し、末尾に*に続けて総数、~に続けて初期値を入力します。初期値を省略した場合、1が初期値になります。0埋めをする場合は、桁の不足に注意してください。任意の場所に複数の連番を入れる事が可能です。"
+                   />
+
+        <Label Grid.Column="0" Grid.Row="3" Margin="10,0,0,0" FontSize="14" Content="日付・時刻挿入機能"></Label>
+        <Label Grid.Column="0" Grid.Row="4" Margin="30,0,0,0" Content="記入例 : %yyyy年MM月dd日hh時mm分ss秒%"></Label>
+
+        <TextBlock Grid.Column="0" Grid.Row="5" TextWrapping="Wrap" Margin="30,0,20,0"
+                   Text="%記号で置換フォーマットを囲うことで、日付・時刻を任意の場所に複数挿入できます。"
+                   />
+
+        <Label Grid.Column="0" Grid.Row="6" Margin="10,0,0,0" FontSize="13" Content="主な日付・時刻置換フォーマット (大文字・小文字は区別されます。)"></Label>
+
+        <TextBlock Grid.Column="0" Grid.Row="7" Margin="30,0,0,0" TextWrapping="Wrap"
+                   Text="西暦(年) : yyyy&#10;月 : MM&#10;日 : dd&#10;曜日 : ddd&#10;時刻(時) : hh&#10;時刻(分) : mm&#10;時刻(秒) : ss&#10;時刻(ミリ秒) : fff&#10;午前/午後 : tt&#10;世界標準時からの時差 (日本標準時は+09) : zz"
+                   />
+        <StackPanel Grid.Column="0" Grid.Row="8" Margin="30,0,20,0">
+            <TextBlock TextWrapping="Wrap" Text="これらは、.NET Framework 4.7.2 DateTimeFormatInfo クラスに準拠しています。&#10;その他のフォーマットおよび、より詳しい情報は、こちらをご覧ください。"></TextBlock>
+            <TextBlock TextWrapping="Wrap" Foreground="Blue" Cursor="Hand" MouseUp="TextBlock_MouseUp" Text="https://docs.microsoft.com/ja-jp/dotnet/api/system.globalization.datetimeformatinfo?view=netframework-4.7.2"></TextBlock>
+            <TextBlock TextWrapping="Wrap" Text="また、置換フォーマットの展開方法は、地域設定に基づいているため、環境により展開される内容が異なる場合があります。"></TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
