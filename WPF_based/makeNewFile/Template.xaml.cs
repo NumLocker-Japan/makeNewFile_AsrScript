@@ -491,16 +491,6 @@ namespace makeNewFile
             bgcLabel.Width = 90;
             bgcLabel.VerticalAlignment = VerticalAlignment.Center;
 
-            //System.Windows.Controls.Label colorNameLabel = new System.Windows.Controls.Label();
-
-            //System.Windows.Data.Binding colorNameLabelBinding = new System.Windows.Data.Binding();
-            //colorNameLabelBinding.Path = new PropertyPath("Background");
-            //colorNameLabelBinding.ElementName = "T" + count.ToString() + "_ColorSample";
-            //colorNameLabel.SetBinding(ContentProperty, colorNameLabelBinding);
-
-            //colorNameLabel.Margin = (Thickness)thicknessConverter.ConvertFromString("15,0,0,0");
-            //colorNameLabel.VerticalAlignment = VerticalAlignment.Center;
-
             System.Windows.Controls.Button colorChangeButton = new System.Windows.Controls.Button();
             colorChangeButton.Name = "T" + count.ToString() + "_ColorSample";
             colorChangeButton.Content = "";

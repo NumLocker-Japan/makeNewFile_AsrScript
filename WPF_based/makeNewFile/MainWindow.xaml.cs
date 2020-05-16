@@ -488,6 +488,7 @@ namespace makeNewFile
                     }
 
                     // フォーマット判別
+                    // @より後に$を入れると、この辺りの処理が上手くいかない
                     if (name_part__name_List.Last().Split('@').Length == 1)
                     {
                         subInfo = "";
@@ -511,24 +512,16 @@ namespace makeNewFile
                         }
                         else
                         {
-                            //if (name_part__name_List.Last().Count() <= 1)
-                            //{
-                            //    index = -1;
-                            //    template = new List<string>();
-                            //}
-                            //else
-                            //{
-                                if (Path.GetExtension(name_part__name_List.Last()) == "")     // 拡張子が存在しない場合
-                                {
-                                    index = -1;
-                                    template = new List<string>();
-                                }
-                                else
-                                {
-                                    index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
-                                    template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
-                                }
-                            //}
+                            if (Path.GetExtension(name_part__name_List.Last()) == "")     // 拡張子が存在しない場合
+                            {
+                                index = -1;
+                                template = new List<string>();
+                            }
+                            else
+                            {
+                                index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                                template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                            }
                         }
                     }
                     else

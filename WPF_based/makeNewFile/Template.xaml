@@ -60,65 +60,7 @@
 
         <ScrollViewer Grid.Column="0" Grid.Row="1" Margin="20,0,20,20">
             <StackPanel x:Name="TemplatesField" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
-                <!--
-                <GroupBox Header="HTMLテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10" Tag="Text">
-                    <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <Label Content="種類 : " VerticalAlignment="Center"/>
-                            <Label Content="テキスト"/>
-                            <CheckBox Content="有効" Margin="50,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <Label Content="対象拡張子" VerticalAlignment="Center" Width="90"/>
-                            <TextBox Width="200" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        </StackPanel>
-                        <TextBox AcceptsReturn="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Padding="5,2" Height="120"></TextBox>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <Label Content="文字コード" VerticalAlignment="Center" Width="90"/>
-                            <ComboBox SelectedIndex="0" Width="100" Margin="10,0,0,0" VerticalAlignment="Center">
-                                <ComboBoxItem Content="UFT-8"></ComboBoxItem>
-                                <ComboBoxItem Content="UFT-16"></ComboBoxItem>
-                                <ComboBoxItem Content="Shift_JIS"></ComboBoxItem>
-                            </ComboBox>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal"  Margin="0,15,0,0">
-                            <Button x:Name="delButton_1" Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Width="120" Height="25" Click="DeleteTemplate_Click"></Button>
-                            <Button x:Name="moveToUp_1" Content="↑" HorizontalAlignment="Left" Width="40" Height="25" Click="DeleteTemplate_Click" Margin="90,0,0,0"></Button>
-                            <Button x:Name="moveToBottom_1" Content="↓" HorizontalAlignment="Left" Width="40" Height="25" Click="DeleteTemplate_Click" Margin="10,0,0,0"></Button>
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-
-                <GroupBox Header="画像フォーマットテンプレート" HorizontalAlignment="Left" Margin="0,0,0,10" Tag="Image">
-                    <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <Label Content="種類 : " VerticalAlignment="Center"/>
-                            <Label Content="画像"/>
-                            <CheckBox Content="有効" Margin="50,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0">
-                            <Label Content="対象拡張子" Width="90" VerticalAlignment="Center"/>
-                            <TextBox Width="200" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0">
-                            <Label Content="サイズ (x:y)" Width="90" VerticalAlignment="Center"/>
-                            <TextBox Width="60" Margin="10,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                            <Label Content="x" VerticalAlignment="Center"/>
-                            <TextBox Width="60" Margin="0,0,0,0" Padding="5,2" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <Label Content="背景色" VerticalAlignment="Center" Width="90"/>
-                            <Label Content="{Binding ElementName=T2_ColorSample, Path=Background}" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                            <Button x:Name="T2_ColorSample" Content="" Background="Blue" Margin="10,0,0,0" Width="40" Template="{StaticResource ResourceKey=colorButton}" VerticalAlignment="Center" Click="ChangeColor"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal"  Margin="0,15,0,0">
-                            <Button x:Name="delButton_2" Content="テンプレートを削除" Template="{StaticResource ResourceKey=delButton}" HorizontalAlignment="Left" Width="120" Height="25" Click="DeleteTemplate_Click"></Button>
-                            <Button x:Name="moveToUp_2" Content="↑" HorizontalAlignment="Left" Width="40" Height="25" Click="DeleteTemplate_Click" Margin="90,0,0,0"></Button>
-                            <Button x:Name="moveToButtom_2" Content="↓" HorizontalAlignment="Left" Width="40" Height="25" Click="DeleteTemplate_Click" Margin="10,0,0,0"></Button>
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-                -->
+                <!-- ここにテンプレート要素が入る -->
             </StackPanel>
         </ScrollViewer>
 
