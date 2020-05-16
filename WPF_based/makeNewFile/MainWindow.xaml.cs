@@ -991,14 +991,28 @@ namespace makeNewFile
             List<List<string>> availableTemplates = loadTemplateConfigs.Load();
             List<string> _return = new List<string>();
 
+            int extIndex = GetFormats(ext);
+
             for (int i = 0; i < availableTemplates.Count(); i++)
             {
                 if (availableTemplates[i][1] == "True")
                 {
-                    if (availableTemplates[i][2].Split(',').Contains(ext))
-                    {
-                        _return = availableTemplates[i];
-                        break;
+                    if (availableTemplates[i][2] == "*"){
+                        if (extIndex == -1 && availableTemplates[i].Count() == 5){
+                            _return = availableTemplates[i];
+                            break;
+                        }
+                        else if (0 <= extIndex && extIndex <= 5  && availableTemplates[i].Count() == 6){
+                            _return = availableTemplates[i];
+                            break;
+                        }
+                    }
+                    else{
+                        if (availableTemplates[i][2].Split(',').Contains(ext))
+                        {
+                            _return = availableTemplates[i];
+                            break;
+                        }
                     }
                 }
             }

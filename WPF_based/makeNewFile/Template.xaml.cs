@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -658,6 +659,13 @@ namespace makeNewFile
                 return 1;
             }
 
+            List<string> res_03 = checkValue.CheckWildCard(regInfo);
+            if (res_03.Count() != 0)
+            {
+                System.Windows.MessageBox.Show("対象の拡張子を、ワイルドカードを用いて設定することはできません。\nデータを正しく修正してください。\n対象のテンプレート : " + string.Join(",", res_03), "エラー通知", MessageBoxButton.OK, MessageBoxImage.Error);
+                return 1;
+            }
+
             int tagListNum = Convert.ToInt32(tagList, 2);
             ExportToReg(regInfo, tagListNum);
             return 0;
@@ -917,16 +925,39 @@ namespace makeNewFile
                 // 有効化されているもののみ
                 if (templateList[i][1] == "True")
                 {
-                    List<string> targetExtList = new List<string>(templateList[i][2].Split(','));
-                    for (int j = 0; j < targetExtList.Count(); j++)
-                    {
-                        // テキストベースでかつ画像フォーマットである場合
-                        if (templateList[i].Count() == 5 && imageFormatExt__formatted.Contains(targetExtList[j]))
+                    // *を含まない場合のみ
+                    if (!Regex.IsMatch(templateList[i][2], @"[^*]*\*[^*]*")){
+                        List<string> targetExtList = new List<string>(templateList[i][2].Split(','));
+                        for (int j = 0; j < targetExtList.Count(); j++)
                         {
-                            unfair.Add(templateList[i][0]);
+                            // テキストベースでかつ画像フォーマットである場合
+                            if (templateList[i].Count() == 5 && imageFormatExt__formatted.Contains(targetExtList[j]))
+                            {
+                                unfair.Add(templateList[i][0]);
+                            }
+                            else if (templateList[i].Count() == 6 && !imageFormatExt__formatted.Contains(targetExtList[j]))
+                            {
+                                unfair.Add(templateList[i][0]);
+                            }
                         }
-                        else if (templateList[i].Count() == 6 && !imageFormatExt__formatted.Contains(targetExtList[j]))
-                        {
+                    }
+                }
+            }
+
+            return unfair;
+        }
+
+        public List<string> CheckWildCard(List<List<string>> templateList){
+            List<string> unfair = new List<string>();
+
+            for (int i = 0; i < templateList.Count(); i++)
+            {
+                // 有効化されているもののみ
+                if (templateList[i][1] == "True")
+                {
+                    // *を含む場合
+                    if (Regex.IsMatch(templateList[i][2], @"[^*]*\*[^*]*")){
+                        if (templateList[i][2] != "*"){
                             unfair.Add(templateList[i][0]);
                         }
                     }
