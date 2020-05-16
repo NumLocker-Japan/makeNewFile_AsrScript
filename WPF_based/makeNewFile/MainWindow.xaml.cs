@@ -193,7 +193,8 @@ namespace makeNewFile
                 AccessArgs accessArgs = new AccessArgs();
 
                 // フォントサイズ設定
-                if (accessArgs.ArgsList["fontSize"] != "")  // XAML側で13をデフォルトに設定している
+                // 明示的に指定された場合は、それぞれ再計算を行う。
+                if (accessArgs.ArgsList["fontSize"] != "")  // XAML側で12をデフォルトに設定している
                 {
                     this.FontSize = int.Parse(accessArgs.ArgsList["fontSize"]);
                     this.TextEncoding.Width = int.Parse(accessArgs.ArgsList["fontSize"]) * 12;
