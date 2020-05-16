@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Functions;
@@ -458,6 +458,7 @@ namespace makeNewFile
                     List<string> name_part__name_List = new List<string>(Regex.Split(name_part, @"\$+"));
                     List<string> name_part__number_List = new List<string>(Regex.Split(name_part, @"[^$]+"));
                     // 区切りの端には空文字が入るので、number_Listにあった場合のみ除去
+                    // name_part__number_Listの要素数 = name_part__name_Listの要素数の要素数 -1 が常に成立するようにする
                     if (name_part__number_List[0] == "") {
                         name_part__number_List.RemoveAt(0);
                     }
@@ -504,21 +505,21 @@ namespace makeNewFile
                     if (commonExtension == "")
                     {
                         // name_part__name_List.Last()は""である可能性があるので、回避する
-                        if (name_part__name_List.Last() == "")
+                        if (name_part__name_List.Last() == "")      // 拡張子がない場合なので、設定しない
                         {
                             index = -1;
                             template = new List<string>();
                         }
                         else
                         {
-                            if (name_part__name_List.Last().Count() <= 1)
-                            {
-                                index = -1;
-                                template = new List<string>();
-                            }
-                            else
-                            {
-                                if (Path.GetExtension(name_part__name_List.Last()).Length <= 1)
+                            //if (name_part__name_List.Last().Count() <= 1)
+                            //{
+                            //    index = -1;
+                            //    template = new List<string>();
+                            //}
+                            //else
+                            //{
+                                if (Path.GetExtension(name_part__name_List.Last()) == "")     // 拡張子が存在しない場合
                                 {
                                     index = -1;
                                     template = new List<string>();
@@ -528,7 +529,7 @@ namespace makeNewFile
                                     index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
                                     template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
                                 }
-                            }
+                            //}
                         }
                     }
                     else
@@ -583,7 +584,7 @@ namespace makeNewFile
                     int index;
                     if (commonExtension == "")
                     {
-                        if (Path.GetExtension(FormattedPathList).Length <= 1)
+                        if (Path.GetExtension(FormattedPathList) == "")   // 拡張子が存在しない場合
                         {
                             index = -1;
                             template = new List<string>();
