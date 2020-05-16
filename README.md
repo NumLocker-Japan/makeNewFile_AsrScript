@@ -11,7 +11,7 @@
 
 ### v3.x (WPFベース)
 
-すべてのコードをC#に移行。処理速度・起動速度の向上。連番機能・タイムスタンプ機能の搭載。
+すべてのコードをC#に移行。処理速度・起動速度の向上。置換機能・テンプレート機能の搭載。
 
 ### v2.x (Electronベース)
 
@@ -36,13 +36,16 @@ NumLocker ([https://github.com/NumLocker-Japan](https://github.com/NumLocker-Jap
 This software was made possible the following open source project.
 
 - [Json.NET](https://www.newtonsoft.com/json)  
-Released under the MIT license
+Licensed under the [MIT license](https://opensource.org/licenses/mit-license.php)
+
+- [NPOI](https://github.com/tonyqus/npoi/)  
+Licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## License
 
 *Copyright (c) 2020 NumLocker*  
 Released under the MIT license  
-[https://opensource.org/licenses/mit-license.php](https://opensource.org/licenses/mit-license.php)
+See [https://opensource.org/licenses/mit-license.php](https://opensource.org/licenses/mit-license.php)
 
 ## GitHub repository
 
