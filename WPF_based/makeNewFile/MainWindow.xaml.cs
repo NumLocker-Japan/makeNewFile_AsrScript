@@ -1158,7 +1158,7 @@ namespace makeNewFile
 
         // 以下2項目はリリース用ビルド毎に設定
         private string GitHubAPI_token = "fake";  // ビルド時のみ設定
-        private string version = "beta-3.1.0";  // バージョン
+        private string version = "beta-3.1.1";  // バージョン
 
         /// <summary>
         /// アップデートの確認
