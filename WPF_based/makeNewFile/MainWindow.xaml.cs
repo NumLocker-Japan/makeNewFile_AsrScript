@@ -207,7 +207,8 @@ namespace makeNewFile
                 StartUp = false;
 
                 // アップデート確認 (終了を待たない。終わらずに終了した場合は次回持ち越し)
-                _ = Task.Run(() => CheckForUpdate());
+                Update update = new Update();
+                _ = Task.Run(() => update.CheckForUpdate());
             }
         }
 
@@ -246,83 +247,6 @@ namespace makeNewFile
                 CmnExt.Text = "";
                 DefaultText.Text = "";
             }
-        }
-
-        private static HttpClient client = new HttpClient();
-        /// <summary>
-        /// アップデートの確認
-        /// </summary>
-        private async Task CheckForUpdate()
-        {
-            // 以下2項目はリリース用ビルド毎に設定
-            string GitHubAPI_token = "fake";  // ビルド時のみ設定
-            string version = "beta-3.1.0";  // バージョン
-            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Version", true);
-            if (config_reg_version == null)
-            {
-                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Version", true);
-                config_reg_version.SetValue("version", version, RegistryValueKind.String);
-                config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
-                config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
-            }
-            else if ((string)config_reg_version.GetValue("version") != version)
-            {
-                config_reg_version.SetValue("version", version, RegistryValueKind.String);
-            }
-
-            DateTime time = DateTime.Now;
-            var time_offset = new DateTimeOffset(time.Ticks, new TimeSpan(+09, 00, 00));
-            // 約1週間毎にアップデートを確認
-            AccessArgs accessArgs = new AccessArgs();
-            if (accessArgs.ArgsList["disableCheckForUpdate"] == "true")
-            {
-                // アップデート確認を行わない事を明示的に示されている場合はパス
-                return;
-            }
-
-            if (time_offset.ToUnixTimeSeconds() > (long)((long)config_reg_version.GetValue(@"lastCheck") + 600000))
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, @"https://api.github.com/repos/NumLocker-Japan/makeNewFile_AsrScript/releases/latest");
-                request.Headers.Add("User-Agent", "makeNewFile_AsrScript");
-                request.Headers.Add("Authorization", "token " + GitHubAPI_token);
-                var response = await client.SendAsync(request);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    config_reg_version.SetValue("lastCheck", time_offset.ToUnixTimeSeconds(), RegistryValueKind.QWord);
-                    config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
-                    string responseText = await response.Content.ReadAsStringAsync();
-                    var responseResult_obj = JObject.Parse(responseText);
-
-                    // バージョン情報をキャッチ
-                    if (version != (string)responseResult_obj["name"])
-                    {
-                        if (MessageBox.Show("更新があります。ダウンロードページを開きますか？\n使用中のバージョン : " + version + "\n最新のバージョン : " + (string)responseResult_obj["name"],
-                            "アップデートの通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                        {
-                            Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
-                        }
-                    }
-                }
-                else
-                {
-                    int failCount = (int)config_reg_version.GetValue("failCount");
-                    if (failCount >= 9)
-                    {
-                        config_reg_version.SetValue("lastCheck", time_offset.ToUnixTimeSeconds(), RegistryValueKind.QWord);
-                        config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
-                        if (MessageBox.Show("10回以上連続でアップデートの確認に失敗しました。\n手動でアップデートの確認を行うことができます。\n確認を行いますか？\n使用中のバージョン : " + version,
-                            "アップデート手動確認の通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                        {
-                            Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
-                        }
-                    }
-                    else
-                    {
-                        config_reg_version.SetValue("failCount", failCount + 1, RegistryValueKind.DWord);
-                    }
-                }
-            }
-            config_reg_version.Close();
         }
     }
 
@@ -1225,6 +1149,88 @@ namespace makeNewFile
                 config_reg_window.SetValue("CloseOnFinish", mw.CloseOnFinish.IsChecked.ToString(), RegistryValueKind.String);
                 config_reg_window.SetValue("TextEncodingIndex", mw.TextEncoding.SelectedIndex, RegistryValueKind.DWord);
             }
+        }
+    }
+
+    public class Update
+    {
+        private static HttpClient client = new HttpClient();
+
+        // 以下2項目はリリース用ビルド毎に設定
+        private string GitHubAPI_token = "fake";  // ビルド時のみ設定
+        private string version = "beta-3.1.0";  // バージョン
+
+        /// <summary>
+        /// アップデートの確認
+        /// </summary>
+        public async Task CheckForUpdate()
+        {
+            RegistryKey config_reg_version = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Version", true);
+            if (config_reg_version == null)
+            {
+                config_reg_version = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Version", true);
+                config_reg_version.SetValue("version", version, RegistryValueKind.String);
+                config_reg_version.SetValue("lastCheck", 0, RegistryValueKind.QWord);
+                config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
+            }
+            else if ((string)config_reg_version.GetValue("version") != version)
+            {
+                config_reg_version.SetValue("version", version, RegistryValueKind.String);
+            }
+
+            DateTime time = DateTime.Now;
+            var time_offset = new DateTimeOffset(time.Ticks, new TimeSpan(+09, 00, 00));
+            // 約1週間毎にアップデートを確認
+            AccessArgs accessArgs = new AccessArgs();
+            if (accessArgs.ArgsList["disableCheckForUpdate"] == "true")
+            {
+                // アップデート確認を行わない事を明示的に示されている場合はパス
+                return;
+            }
+
+            if (time_offset.ToUnixTimeSeconds() > (long)((long)config_reg_version.GetValue(@"lastCheck") + 600000))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, @"https://api.github.com/repos/NumLocker-Japan/makeNewFile_AsrScript/releases/latest");
+                request.Headers.Add("User-Agent", "makeNewFile_AsrScript");
+                request.Headers.Add("Authorization", "token " + GitHubAPI_token);
+                var response = await client.SendAsync(request);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    config_reg_version.SetValue("lastCheck", time_offset.ToUnixTimeSeconds(), RegistryValueKind.QWord);
+                    config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
+                    string responseText = await response.Content.ReadAsStringAsync();
+                    var responseResult_obj = JObject.Parse(responseText);
+
+                    // バージョン情報をキャッチ
+                    if (version != (string)responseResult_obj["name"])
+                    {
+                        if (MessageBox.Show("更新があります。ダウンロードページを開きますか？\n使用中のバージョン : " + version + "\n最新のバージョン : " + (string)responseResult_obj["name"],
+                            "アップデートの通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                        {
+                            Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
+                        }
+                    }
+                }
+                else
+                {
+                    int failCount = (int)config_reg_version.GetValue("failCount");
+                    if (failCount >= 9)
+                    {
+                        config_reg_version.SetValue("lastCheck", time_offset.ToUnixTimeSeconds(), RegistryValueKind.QWord);
+                        config_reg_version.SetValue("failCount", 0, RegistryValueKind.DWord);
+                        if (MessageBox.Show("10回以上連続でアップデートの確認に失敗しました。\n手動でアップデートの確認を行うことができます。\n確認を行いますか？\n使用中のバージョン : " + version,
+                            "アップデート手動確認の通知", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                        {
+                            Process.Start(@"https://github.com/NumLocker-Japan/makeNewFile_AsrScript/releases");
+                        }
+                    }
+                    else
+                    {
+                        config_reg_version.SetValue("failCount", failCount + 1, RegistryValueKind.DWord);
+                    }
+                }
+            }
+            config_reg_version.Close();
         }
     }
 }
