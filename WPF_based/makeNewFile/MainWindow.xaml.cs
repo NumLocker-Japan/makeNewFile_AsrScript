@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -337,6 +338,7 @@ namespace makeNewFile
         private string[] splittedPathList;
         private string subInfo;     // 画像サイズ・シート名
         private List<string> template;
+        private string firstCreated;
 
         public Exec(MainWindow mainWindow){
             mw = mainWindow;
@@ -431,6 +433,7 @@ namespace makeNewFile
             var AllErrors = new List<string>();
             for (int i = 0; i < splittedPathList.Length; i++)
             {
+                firstCreated = "";
                 string FormattedPathList = ReplaceDate(splittedPathList[i], StartTime);
                 if (Regex.IsMatch(FormattedPathList, @"^([^$*~]*\$+)+[^$*~]*\*[1-9]\d*(|~[1-9]\d*)$"))
                 {
@@ -549,6 +552,10 @@ namespace makeNewFile
                             break;
                         }
 
+                        if (firstCreated != ""){
+                            break;
+                        }
+
                         result = CallMakeFile(StartNumber, name_part__name_List, name_part__number_List, index);
                         if (result != "")
                         {
@@ -557,6 +564,47 @@ namespace makeNewFile
 
                         Counter += 1;
                         StartNumber += 1;
+                    }
+
+                    // 残る要素数で、テンプレートの有無によって処理を分けていく。
+                    if (template.Count() == 0 && index == -1){
+                        while (true){
+                            string result = "";
+
+                            if (Counter >= number_part__number)
+                            {
+                                break;
+                            }
+
+                            result = CallMakeFile(StartNumber, name_part__name_List, name_part__number_List, index);
+                            if (result != "")
+                            {
+                                AllErrors.Add(result);
+                            }
+
+                            Counter += 1;
+                            StartNumber += 1;
+                        }
+                    }
+                    else
+                    {
+                        while (true){
+                            string result = "";
+
+                            if (Counter >= number_part__number)
+                            {
+                                break;
+                            }
+
+                            result = CallMakeFile(StartNumber, name_part__name_List, name_part__number_List, index, "copy");
+                            if (result != "")
+                            {
+                                AllErrors.Add(result);
+                            }
+
+                            Counter += 1;
+                            StartNumber += 1;
+                        }
                     }
                 }
                 else
@@ -619,7 +667,7 @@ namespace makeNewFile
         /// <param name="name_part__name_List"></param>
         /// <param name="name_part__number_List"></param>
         /// <returns></returns>
-        private string CallMakeFile(int number, List<string> name_part__name_List, List<string> name_part__number_List, int index)
+        private string CallMakeFile(int number, List<string> name_part__name_List, List<string> name_part__number_List, int index, string mode = "create")
         {
             string formatted = "";
 
@@ -642,6 +690,10 @@ namespace makeNewFile
             }
             string err;
 
+            if (mode == "copy"){
+                err = MakeFile(formatted, true, -100, "copy");    // 第2,3引数の値は適当
+            }
+
             if (index == -1)
             {
                 err = MakeFile(formatted, true);
@@ -658,7 +710,7 @@ namespace makeNewFile
             return "";
         }
 
-        private string MakeFile(string path, bool isTextBased = true, int index = -1)
+        private string MakeFile(string path, bool isTextBased = true, int index = -1, string mode = "create")
         {
             string targetPath = currentDirectory + "\\" + path;
             string[] splittedPath = Regex.Split(targetPath, @"(\\|\/)");
@@ -703,74 +755,88 @@ namespace makeNewFile
                 {
                     try
                     {
-                        // テキストベースかどうかでファイル作成処理を分ける
-                        if (isTextBased)
+                        if (mode == "copy")
                         {
-                            // テンプレートが設定されているかどうかで処理を分ける
-                            if (template.Count() == 0)
+                            File.Copy(firstCreated, fullPath + commonExtension, false);
+                        }
+                        else
+                        {
+                            // テキストベースかどうかでファイル作成処理を分ける
+                            if (isTextBased)
                             {
-                                using (FileStream fs = File.Create(fullPath + commonExtension))
+                                // テンプレートが設定されているかどうかで処理を分ける
+                                if (template.Count() == 0)
                                 {
-                                    byte[] contents;
-                                    if (mw.TextEncoding.SelectedIndex == 0)
+                                    using (FileStream fs = File.Create(fullPath + commonExtension))
                                     {
-                                        contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
-                                    }
-                                    else if (mw.TextEncoding.SelectedIndex == 1)
-                                    {
-                                        contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
-                                    }
-                                    else
-                                    {
-                                        Encoding s_jis = Encoding.GetEncoding(932);
-                                        contents = s_jis.GetBytes(mw.DefaultText.Text);
-                                    }
+                                        byte[] contents;
+                                        if (mw.TextEncoding.SelectedIndex == 0)
+                                        {
+                                            contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
+                                        }
+                                        else if (mw.TextEncoding.SelectedIndex == 1)
+                                        {
+                                            contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
+                                        }
+                                        else
+                                        {
+                                            Encoding s_jis = Encoding.GetEncoding(932);
+                                            contents = s_jis.GetBytes(mw.DefaultText.Text);
+                                        }
 
-                                    fs.Write(contents, 0, contents.Length);
+                                        fs.Write(contents, 0, contents.Length);
+                                        if (firstCreated == "")
+                                        {
+                                            firstCreated = fullPath + commonExtension;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    using (FileStream fs = File.Create(fullPath + commonExtension))
+                                    {
+                                        byte[] contents;
+                                        if (int.Parse(template[4]) == 0)
+                                        {
+                                            contents = new UTF8Encoding().GetBytes(template[3]);
+                                        }
+                                        else if (int.Parse(template[4]) == 1)
+                                        {
+                                            contents = new UnicodeEncoding().GetBytes(template[3]);
+                                        }
+                                        else
+                                        {
+                                            Encoding s_jis = Encoding.GetEncoding(932);
+                                            contents = s_jis.GetBytes(template[3]);
+                                        }
+
+                                        fs.Write(contents, 0, contents.Length);
+                                        if (firstCreated == "")
+                                        {
+                                            firstCreated = fullPath + commonExtension;
+                                        }
+                                    }
                                 }
                             }
                             else
                             {
-                                using (FileStream fs = File.Create(fullPath + commonExtension))
+                                string err = "";
+                                err = MakeFileNotTextBased(fullPath + commonExtension, index);
+
+                                if (err != "")
                                 {
-                                    byte[] contents;
-                                    if (int.Parse(template[4]) == 0)
+                                    if (showDetailsOfErrors)
                                     {
-                                        contents = new UTF8Encoding().GetBytes(template[3]);
-                                    }
-                                    else if (int.Parse(template[4]) == 1)
-                                    {
-                                        contents = new UnicodeEncoding().GetBytes(template[3]);
+                                        return ("ファイル : " + fullPath + commonExtension + "\n詳細 : \n" + err);
                                     }
                                     else
                                     {
-                                        Encoding s_jis = Encoding.GetEncoding(932);
-                                        contents = s_jis.GetBytes(template[3]);
+                                        return ("ファイル : " + fullPath + commonExtension);
                                     }
-
-                                    fs.Write(contents, 0, contents.Length);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            string err = "";
-                            err = MakeFileNotTextBased(fullPath + commonExtension, index);
-
-                            if (err != "")
-                            {
-                                if (showDetailsOfErrors)
-                                {
-                                    return ("ファイル : " + fullPath + commonExtension + "\n詳細 : \n" + err);
-                                }
-                                else
-                                {
-                                    return ("ファイル : " + fullPath + commonExtension);
                                 }
                             }
                         }
                     }
-
                     catch (Exception ex)
                     {
                         if (showDetailsOfErrors)
@@ -893,7 +959,11 @@ namespace makeNewFile
                         wmpBitmapEncoder.Save(stream);
                         break;
                 }
-                
+
+                if (firstCreated == "")
+                {
+                    firstCreated = path;
+                }
                 stream.Close();
             }
             catch (Exception ex)
@@ -901,8 +971,6 @@ namespace makeNewFile
                 err = ex.ToString();
             }
 
-            // Set image source.
-            Console.WriteLine("image, size : " + subInfo);
             return err;
         }
 
@@ -942,6 +1010,11 @@ namespace makeNewFile
                 using (var fs = new FileStream(path, FileMode.Create))
                 {
                     book.Write(fs);
+                }
+
+                if (firstCreated == "")
+                {
+                    firstCreated = path;
                 }
             }
             catch (Exception ex)
