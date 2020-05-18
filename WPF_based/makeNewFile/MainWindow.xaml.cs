@@ -455,6 +455,7 @@ namespace makeNewFile
                     else
                     {
                         index = availableTemplates.GetFormats(commonExtension.Substring(1));
+                        template = availableTemplates.GetAvailableTemplates(commonExtension.Substring(1));
                     }
 
                     // 1つめの項目でエラーが出た場合、残る要素もエラーが出ることが必至なため、エラーを検知した場合はbreak
