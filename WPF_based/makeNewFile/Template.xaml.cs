@@ -53,11 +53,27 @@ namespace makeNewFile
             OfficeSpreadsheet_OOXML_Extensions.Text = setupExtensionsInfo[7];
         }
 
-        private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
                 this.Close();
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // テンプレート追加
+            if (Keyboard.IsKeyDown(Key.A) && (Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+            {
+                TemplateSub templateSub = new TemplateSub();
+                _ = templateSub.ShowDialog();
+
+                NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
+                if (newTemplateInfo.GetStatus())
+                {
+                    AddTemplateItem();
+                }
             }
         }
 

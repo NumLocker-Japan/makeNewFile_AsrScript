@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace makeNewFile
 {
@@ -13,6 +14,14 @@ namespace makeNewFile
 
             NewTemplateInfo newTemplateInfo = new NewTemplateInfo();
             newTemplateInfo.SetStatus(false);
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="テンプレートの編集" Height="700" Width="1080" WindowStartupLocation="CenterScreen"
-        KeyUp="Window_KeyUp" Loaded="Window_Loaded">
+        KeyUp="Window_KeyUp" Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown">
     
     <Window.Resources>
         <ControlTemplate TargetType="Button" x:Key="delButton">
@@ -64,7 +64,7 @@
             </StackPanel>
         </ScrollViewer>
 
-        <Button Grid.Column="0" Grid.Row="2" x:Name="AddTemplate" Content="テンプレートを追加" Margin="60,10" Click="AddTemplate_Click"></Button>
+        <Button Grid.Column="0" Grid.Row="2" x:Name="AddTemplate" Content="テンプレートを追加 (A)" Margin="60,10" Click="AddTemplate_Click"></Button>
 
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Right" Margin="0,0,20,0">
             <Button x:Name="OK_Button" Content="OK" Width="100" Padding="5,3" Margin="10,0" VerticalAlignment="Center" Click="OK_Button_Click"></Button>

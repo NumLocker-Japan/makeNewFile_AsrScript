@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
-        Title="テンプレートの追加" Height="180" Width="500" WindowStartupLocation="CenterScreen">
+        Title="テンプレートの追加" Height="180" Width="500" WindowStartupLocation="CenterScreen" KeyUp="Window_KeyUp">
     <Grid FocusManager.FocusedElement="{Binding ElementName=TemplateTitle}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -27,8 +27,8 @@
         </StackPanel>
         
         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,0,10">
-            <Button x:Name="OK" Content="OK" Width="90" Margin="0,0,10,0" Click="OK_Click"></Button>
-            <Button x:Name="Cancel" Content="キャンセル" Width="90" Margin="0,0,15,0" Click="Cancel_Click"></Button>
+            <Button x:Name="OK" Content="OK" Width="90" Padding="5,2" Margin="0,0,10,0" Click="OK_Click"></Button>
+            <Button x:Name="Cancel" Content="キャンセル" Width="90" Padding="5,2" Margin="0,0,15,0" Click="Cancel_Click"></Button>
         </StackPanel>
     </Grid>
 </Window>

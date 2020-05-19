@@ -282,7 +282,7 @@ namespace makeNewFile
                     deb_sam[i] = StartTime.ToString(TimeFormat);
                 }
             }
-            return String.Join("", deb_sam);
+            return string.Join("", deb_sam);
         }
 
         /// <summary>
@@ -641,7 +641,7 @@ namespace makeNewFile
             string[] splittedPath = Regex.Split(targetPath, @"(\\|\/)");
             int len = splittedPath.Length;
             string fileName = splittedPath[len - 1];
-            string fullPath = String.Join("\\", splittedPath);
+            string fullPath = string.Join("\\", splittedPath);
             string directoryPath;
             if (fullPath != fileName)
             {
