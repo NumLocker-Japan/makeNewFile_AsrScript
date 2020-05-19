@@ -587,7 +587,7 @@ namespace makeNewFile
         }
 
         /// <summary>
-        /// エラーがなくレジストリへの書き込みまで終了した場合に0を返す。その他は1を返す。
+        /// エラーがなくレジストリへの書き込みまで終了した場合に0を返す。エラーが出た場合は1を返す。
         /// </summary>
         /// <returns></returns>
         public int Export()
@@ -684,10 +684,17 @@ namespace makeNewFile
             }
 
             ExportToText exportToText = new ExportToText();
-            exportToText.Clear();
+            if (exportToText.Clear() == 1)
+            {
+                System.Windows.MessageBox.Show("設定の書き出しに失敗しました。権限によりブロックされている可能性があります。", "エラー通知", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             
             int tagListNum = Convert.ToInt32(tagList, 2);
-            ExportToReg(regInfo, tagListNum);
+            int res_04 = ExportToReg(regInfo, tagListNum);
+            if (res_04 == 1){
+                System.Windows.MessageBox.Show("レジストリへの設定の書き出しに失敗しました。権限によりブロックされている可能性があります。", "エラー通知", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             return 0;
         }
 
@@ -784,55 +791,64 @@ namespace makeNewFile
             return _return;
         }
 
-        private void ExportToReg(List<List<string>> infoList, int tagList)
+        private int ExportToReg(List<List<string>> infoList, int tagList)
         {
-            // Templatesキーを一度削除
-            if (Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", false) != null)
+            try
             {
-                RegistryKey parentRegTree = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\", true);
-                parentRegTree.DeleteSubKeyTree("Templates");
-                parentRegTree.Close();
+                // Templatesキーを一度削除
+                if (Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", false) != null)
+                {
+                    RegistryKey parentRegTree = Registry.CurrentUser.OpenSubKey(@"Software\ASR_UserTools\makeNewFile\", true);
+                    parentRegTree.DeleteSubKeyTree("Templates");
+                    parentRegTree.Close();
+                }
+
+                RegistryKey regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
+
+                int count = infoList.Count();
+                regTemplates.SetValue("count", count);
+                regTemplates.SetValue("tagList", tagList);
+
+                for (int i = 0; i < count; i++)
+                {
+                    string tagList_2 = Convert.ToString(tagList, 2).PadLeft(count, '0');
+                    if (tagList_2.Substring(i, 1) == "0")
+                    {
+                        regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
+                        regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
+                        regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
+                        ExportToText exportToText = new ExportToText();
+                        regTemplates.SetValue("defaultText_" + i.ToString(), exportToText.Export(infoList[i][3]));
+                        regTemplates.SetValue("charasetIndex_" + i.ToString(), int.Parse(infoList[i][4]));
+                    }
+                    else
+                    {
+                        regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
+                        regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
+                        regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
+                        regTemplates.SetValue("sizeX_" + i.ToString(), int.Parse(infoList[i][3]));
+                        regTemplates.SetValue("sizeY_" + i.ToString(), int.Parse(infoList[i][4]));
+                        regTemplates.SetValue("backgroundColor_" + i.ToString(), infoList[i][5]);
+                    }
+                }
+
+                regTemplates.SetValue("BmpExtensions", tp.BMP_Extensions.Text);
+                regTemplates.SetValue("GifExtensions", tp.GIF_Extensions.Text);
+                regTemplates.SetValue("JpegExtensions", tp.JPEG_Extensions.Text);
+                regTemplates.SetValue("PngExtensions", tp.PNG_Extensions.Text);
+                regTemplates.SetValue("TiffExtensions", tp.TIFF_Extensions.Text);
+                regTemplates.SetValue("WmpExtensions", tp.WMP_Extensions.Text);
+                regTemplates.SetValue("OfficeSpreadsheetBIFFExtensions", tp.OfficeSpreadsheet_BIFF_Extensions.Text);
+                regTemplates.SetValue("OfficeSpreadsheetOOXMLExtensions", tp.OfficeSpreadsheet_OOXML_Extensions.Text);
+
+                regTemplates.Close();
+                
+                return 0;
             }
-
-            RegistryKey regTemplates = Registry.CurrentUser.CreateSubKey(@"Software\ASR_UserTools\makeNewFile\Templates", true);
-
-            int count = infoList.Count();
-            regTemplates.SetValue("count", count);
-            regTemplates.SetValue("tagList", tagList);
-
-            for (int i = 0; i < count; i++)
+            catch (Exception)
             {
-                string tagList_2 = Convert.ToString(tagList, 2).PadLeft(count, '0');
-                if (tagList_2.Substring(i, 1) == "0")
-                {
-                    regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
-                    regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
-                    regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
-                    ExportToText exportToText = new ExportToText();
-                    regTemplates.SetValue("defaultText_" + i.ToString(), exportToText.Export(infoList[i][3]));
-                    regTemplates.SetValue("charasetIndex_" + i.ToString(), int.Parse(infoList[i][4]));
-                }
-                else
-                {
-                    regTemplates.SetValue("headerTitle_" + i.ToString(), infoList[i][0]);
-                    regTemplates.SetValue("isEnabled_" + i.ToString(), infoList[i][1]);
-                    regTemplates.SetValue("targetExtension_" + i.ToString(), infoList[i][2]);
-                    regTemplates.SetValue("sizeX_" + i.ToString(), int.Parse(infoList[i][3]));
-                    regTemplates.SetValue("sizeY_" + i.ToString(), int.Parse(infoList[i][4]));
-                    regTemplates.SetValue("backgroundColor_" + i.ToString(), infoList[i][5]);
-                }
+                return 1;
             }
-
-            regTemplates.SetValue("BmpExtensions", tp.BMP_Extensions.Text);
-            regTemplates.SetValue("GifExtensions", tp.GIF_Extensions.Text);
-            regTemplates.SetValue("JpegExtensions", tp.JPEG_Extensions.Text);
-            regTemplates.SetValue("PngExtensions", tp.PNG_Extensions.Text);
-            regTemplates.SetValue("TiffExtensions", tp.TIFF_Extensions.Text);
-            regTemplates.SetValue("WmpExtensions", tp.WMP_Extensions.Text);
-            regTemplates.SetValue("OfficeSpreadsheetBIFFExtensions", tp.OfficeSpreadsheet_BIFF_Extensions.Text);
-            regTemplates.SetValue("OfficeSpreadsheetOOXMLExtensions", tp.OfficeSpreadsheet_OOXML_Extensions.Text);
-
-            regTemplates.Close();
         }
     }
 
@@ -840,13 +856,22 @@ namespace makeNewFile
         /// <summary>
         /// Templatesフォルダ以下を再帰的に削除
         /// </summary>
-        public void Clear()
+        public int Clear()
         {
-            if (Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates"))
+            try
             {
-                Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates", true);
+                if (Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates"))
+                {
+                    Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates", true);
+                }
+                Directory.CreateDirectory(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates");
+
+                return 0;
             }
-            Directory.CreateDirectory(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates");
+            catch (Exception)
+            {
+                return 1;
+            }
         }
 
         public int Export(string text)
