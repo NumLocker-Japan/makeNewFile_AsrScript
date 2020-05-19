@@ -842,7 +842,10 @@ namespace makeNewFile
         /// </summary>
         public void Clear()
         {
-            Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates", true);
+            if (Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates"))
+            {
+                Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates", true);
+            }
             Directory.CreateDirectory(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates");
         }
 
@@ -850,12 +853,22 @@ namespace makeNewFile
         {
             int index = 0;
             while(true){
-                if (!File.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + index.ToString() + @".txt")){
-                    using(StreamWriter sw = new StreamWriter(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + index.ToString() + @".txt", false, System.Text.Encoding.UTF8)){
-                        sw.Write(text);
+                try
+                {
+                    if (!File.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + index.ToString() + @".txt"))
+                    {
+                        using (StreamWriter sw = new StreamWriter(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + index.ToString() + @".txt", false, System.Text.Encoding.UTF8))
+                        {
+                            sw.Write(text);
+                        }
+                        break;
                     }
-                    break;
                 }
+                catch (Exception)
+                {
+                    // エラーは無視
+                }
+                
                 index ++;
             }
             return index;
@@ -886,9 +899,25 @@ namespace makeNewFile
                     _return_child.Add((string)regTemplates.GetValue("headerTitle_" + i.ToString()));
                     _return_child.Add((string)regTemplates.GetValue("isEnabled_" + i.ToString()));
                     _return_child.Add((string)regTemplates.GetValue("targetExtension_" + i.ToString()));
-                    using(StreamReader sr = new StreamReader(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + (regTemplates.GetValue("defaultText_" + i.ToString())).ToString() + @".txt", System.Text.Encoding.UTF8)){
-                        _return_child.Add(sr.ReadToEnd());
+                    if (File.Exists(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + (regTemplates.GetValue("defaultText_" + i.ToString())).ToString() + @".txt"))
+                    {
+                        try
+                        {
+                            using (StreamReader sr = new StreamReader(System.AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\') + @"\Templates\defaultText" + (regTemplates.GetValue("defaultText_" + i.ToString())).ToString() + @".txt", System.Text.Encoding.UTF8))
+                            {
+                                _return_child.Add(sr.ReadToEnd());
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            _return_child.Add("");
+                        }
                     }
+                    else
+                    {
+                        _return_child.Add("");
+                    }
+
                     _return_child.Add(regTemplates.GetValue("charasetIndex_" + i.ToString()).ToString());
                 }
                 else
