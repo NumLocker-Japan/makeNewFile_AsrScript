@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Functions;
@@ -271,7 +271,7 @@ namespace makeNewFile
         /// <summary>
         /// 日付・時刻を指定フォーマットで置換
         /// </summary>
-        public static string ReplaceDate(string str, DateTime StartTime)
+        private string ReplaceDate(string str, DateTime StartTime)
         {
             string[] deb_sam = str.Split('%');
             for (int i = 0; i < deb_sam.Length; i++)
@@ -288,7 +288,7 @@ namespace makeNewFile
         /// <summary>
         /// タイプを指定し、パスが存在するかを確認
         /// </summary>
-        public static bool PathIsExsist(string path, string type)
+        private bool PathIsExsist(string path, string type)
         {
             if (type == "directory")
             {
