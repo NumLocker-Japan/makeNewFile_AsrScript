@@ -224,7 +224,9 @@ namespace makeNewFile
                 SaveSettings = false;
             }
 
-            // メイン処理を投げる
+            Body.IsEnabled = false;
+
+            // 非同期でメイン処理を投げる
             Exec exec = new Exec(this);
             Task<string> mainTask = Task.Run(() => exec.Start());
             string allErrors = await mainTask;
@@ -242,6 +244,8 @@ namespace makeNewFile
             }
             else
             {
+                Body.IsEnabled = true;
+
                 // ウインドウを閉じない場合は、次の入力に備えて変数を初期化。
                 // テキストボックスを空にし、終了の合図とする
                 Txtbox.Text = "";
@@ -271,6 +275,8 @@ namespace makeNewFile
         private List<string> template;
         private string firstCreated;
 
+        ProgressBarWindow progressBarWindow;
+
         public Exec(MainWindow mainWindow){
             mw = mainWindow;
 
@@ -288,6 +294,9 @@ namespace makeNewFile
             zeroPadding = (bool)mw.ZeroPadding.IsChecked;
             textEncoding = mw.TextEncoding.SelectedIndex;
             defaultText = mw.DefaultText.Text;
+
+            progressBarWindow = new ProgressBarWindow();
+            progressBarWindow.Show();
         }
 
         /// <summary>
@@ -512,6 +521,13 @@ namespace makeNewFile
 
                         Counter += 1;
                         StartNumber += 1;
+
+                        if (Counter % 100 == 0)
+                        {
+                            progressBarWindow.Dispatcher.Invoke((Action)(() => {
+                                progressBarWindow.SetProgressValue((i + (double)Counter / number_part__number) * 100 / splittedPathList.Length);
+                            }));
+                        }
                     }
 
                     // 残る要素数で、テンプレートの有無によって処理を分けていく。
@@ -532,6 +548,13 @@ namespace makeNewFile
 
                             Counter += 1;
                             StartNumber += 1;
+
+                            if (Counter % 100 == 0)
+                            {
+                                progressBarWindow.Dispatcher.Invoke((Action)(() => {
+                                    progressBarWindow.SetProgressValue((i + (double)Counter / number_part__number) * 100 / splittedPathList.Length);
+                                }));
+                            }
                         }
                     }
                     else
@@ -552,6 +575,13 @@ namespace makeNewFile
 
                             Counter += 1;
                             StartNumber += 1;
+
+                            if (Counter % 100 == 0)
+                            {
+                                progressBarWindow.Dispatcher.Invoke((Action)(() => {
+                                    progressBarWindow.SetProgressValue((i + (double)Counter / number_part__number) * 100 / splittedPathList.Length);
+                                }));
+                            }
                         }
                     }
                 }
@@ -612,7 +642,16 @@ namespace makeNewFile
                         AllErrors.Add(err);
                     }
                 }
+
+                progressBarWindow.Dispatcher.Invoke((Action)(() => {
+                    progressBarWindow.SetProgressValue((double)(i + 1) * 100 / splittedPathList.Length);
+                }));
             }
+
+            progressBarWindow.Dispatcher.Invoke((Action)(() => {
+                progressBarWindow.Close();
+            }));
+
             return AllErrors;
         }
 
