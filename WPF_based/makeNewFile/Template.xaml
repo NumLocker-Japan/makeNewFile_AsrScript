@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="テンプレートの編集" Height="700" Width="1080" WindowStartupLocation="CenterScreen"
+        Title="テンプレートの編集" Height="700" Width="1000" WindowStartupLocation="CenterScreen"
         KeyUp="Window_KeyUp" Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown">
     
     <Window.Resources>
