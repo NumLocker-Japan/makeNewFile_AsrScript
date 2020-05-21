@@ -325,7 +325,8 @@ namespace makeNewFile
             return false;
         }
 
-        public string Start(){
+        public string Start()
+        {
             // コマンドライン引数を取得
             AccessArgs accessArgs = new AccessArgs();
             currentDirectory = accessArgs.ArgsList["currentDirectory"];
@@ -454,15 +455,23 @@ namespace makeNewFile
                         }
                         else
                         {
-                            if (Path.GetExtension(name_part__name_List.Last()) == "")     // 拡張子が存在しない場合
+                            try
+                            {
+                                if (Path.GetExtension(name_part__name_List.Last()) == "")     // 拡張子が存在しない場合
+                                {
+                                    index = -1;
+                                    template = new List<string>();
+                                }
+                                else
+                                {
+                                    index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                                    template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
+                                }
+                            }
+                            catch (Exception)
                             {
                                 index = -1;
                                 template = new List<string>();
-                            }
-                            else
-                            {
-                                index = availableTemplates.GetFormats(Path.GetExtension(name_part__name_List.Last()).Substring(1));
-                                template = availableTemplates.GetAvailableTemplates(Path.GetExtension(name_part__name_List.Last()).Substring(1));
                             }
                         }
                     }
@@ -564,15 +573,23 @@ namespace makeNewFile
                     int index;
                     if (commonExtension == "")
                     {
-                        if (Path.GetExtension(FormattedPathList) == "")   // 拡張子が存在しない場合
+                        try
+                        {
+                            if (Path.GetExtension(FormattedPathList) == "")   // 拡張子が存在しない場合
+                            {
+                                index = -1;
+                                template = new List<string>();
+                            }
+                            else
+                            {
+                                index = availableTemplates.GetFormats(Path.GetExtension(FormattedPathList).Substring(1));
+                                template = availableTemplates.GetAvailableTemplates(Path.GetExtension(FormattedPathList).Substring(1));
+                            }
+                        }
+                        catch (Exception)
                         {
                             index = -1;
                             template = new List<string>();
-                        }
-                        else
-                        {
-                            index = availableTemplates.GetFormats(Path.GetExtension(FormattedPathList).Substring(1));
-                            template = availableTemplates.GetAvailableTemplates(Path.GetExtension(FormattedPathList).Substring(1));
                         }
                     }
                     else
