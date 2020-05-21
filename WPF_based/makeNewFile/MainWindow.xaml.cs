@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula.Functions;
@@ -33,7 +33,7 @@ namespace makeNewFile
         // クリックイベント処理
         private void Btn_Click(object sender, RoutedEventArgs e)
         {
-            StartProcess();
+            StartProcessAsync();
         }
 
         private void Btn_cancel_Click(object sender, RoutedEventArgs e)
@@ -114,7 +114,7 @@ namespace makeNewFile
                         else
                         {
                             e.Handled = true;  // キー処理が終了したことを明示し、処理終了後に改行を挿入させない
-                            StartProcess();
+                            StartProcessAsync();
                         }
                     }
                 }
@@ -140,7 +140,7 @@ namespace makeNewFile
                 }
                 else
                 {
-                    StartProcess();
+                    StartProcessAsync();
                 }
             }
         }
@@ -164,7 +164,7 @@ namespace makeNewFile
                 }
                 else
                 {
-                    StartProcess();
+                    StartProcessAsync();
                 }
             }
         }
@@ -215,7 +215,7 @@ namespace makeNewFile
         /// <summary>
         /// 処理開始
         /// </summary>
-        private void StartProcess()
+        private async void StartProcessAsync()
         {
             // Shiftキーが押されていた場合は、設定類を保存しない。
             bool SaveSettings = true;   // 設定をレジストリに残すかどうか
@@ -226,7 +226,8 @@ namespace makeNewFile
 
             // メイン処理を投げる
             Exec exec = new Exec(this);
-            string allErrors = exec.Start();
+            Task<string> mainTask = Task.Run(() => exec.Start());
+            string allErrors = await mainTask;
 
             if (allErrors != "")
             {
@@ -258,14 +259,35 @@ namespace makeNewFile
         private string currentDirectory;
         private bool showDetailsOfErrors;
         private string commonExtension;
+        private bool startFromZero;
+        private bool zeroPadding;
+        private int textEncoding;
+        private string defaultText;
+
         private DateTime StartTime;
         private string[] splittedPathList;
+
         private string subInfo;     // 画像サイズ・シート名
         private List<string> template;
         private string firstCreated;
 
         public Exec(MainWindow mainWindow){
             mw = mainWindow;
+
+            // 共通拡張子の設定
+            commonExtension = "";
+            if (!Regex.IsMatch(mw.CmnExt.Text, @"^ *$"))
+            {
+                commonExtension = '.' + mw.CmnExt.Text;
+            }
+
+            string[] pathListSeparator = new string[] { "\r\n" };
+            splittedPathList = mw.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+            startFromZero = (bool)mw.StartFromZero.IsChecked;
+            zeroPadding = (bool)mw.ZeroPadding.IsChecked;
+            textEncoding = mw.TextEncoding.SelectedIndex;
+            defaultText = mw.DefaultText.Text;
         }
 
         /// <summary>
@@ -313,17 +335,9 @@ namespace makeNewFile
             {
                 showDetailsOfErrors = true;
             }
-            // 共通拡張子の設定
-            commonExtension = "";
-            if (!Regex.IsMatch(mw.CmnExt.Text, @"^ *$"))
-            {
-                commonExtension = '.' + mw.CmnExt.Text;
-            }
+            
             // 日付・時刻の取得
             StartTime = DateTime.Now;
-
-            string[] pathListSeparator = new string[] { "\r\n" };
-            splittedPathList = mw.Txtbox.Text.Split(pathListSeparator, StringSplitOptions.RemoveEmptyEntries);
 
             // RunMakeFile()に処理を投げる。処理完了まで返らない。
             List<string> CatchedErrors = RunMakeFile();
@@ -367,7 +381,7 @@ namespace makeNewFile
                     int number_part__offset;
                     if (number_part.Split('~').Length == 1)
                     {
-                        if (mw.StartFromZero.IsChecked == true)
+                        if (startFromZero == true)
                         {
                             number_part__offset = 0;
                         }
@@ -400,7 +414,7 @@ namespace makeNewFile
                     name_part__number_List__CheckDigit.Sort();
                     int min_digit = name_part__number_List__CheckDigit[0].Length;
 
-                    if (mw.ZeroPadding.IsChecked == true && (number_part__offset + number_part__number - 1).ToString().Length > min_digit)
+                    if (zeroPadding == true && (number_part__offset + number_part__number - 1).ToString().Length > min_digit)
                     {
                         AllErrors.Add("連番 - 桁の不足 - 数字が大きすぎます。 : " + FormattedPathList);
                         continue;
@@ -604,7 +618,7 @@ namespace makeNewFile
                     break;
                 }
 
-                if (mw.ZeroPadding.IsChecked == true)
+                if (zeroPadding == true)
                 {
                     formatted = formatted + name_part__name_List[k] + number.ToString().PadLeft(name_part__number_List[k].Length, '0');
                 }
@@ -695,18 +709,18 @@ namespace makeNewFile
                                     using (FileStream fs = File.Create(fullPath + commonExtension))
                                     {
                                         byte[] contents;
-                                        if (mw.TextEncoding.SelectedIndex == 0)
+                                        if (textEncoding == 0)
                                         {
-                                            contents = new UTF8Encoding().GetBytes(mw.DefaultText.Text);
+                                            contents = new UTF8Encoding().GetBytes(defaultText);
                                         }
-                                        else if (mw.TextEncoding.SelectedIndex == 1)
+                                        else if (textEncoding == 1)
                                         {
-                                            contents = new UnicodeEncoding().GetBytes(mw.DefaultText.Text);
+                                            contents = new UnicodeEncoding().GetBytes(defaultText);
                                         }
                                         else
                                         {
                                             Encoding s_jis = Encoding.GetEncoding(932);
-                                            contents = s_jis.GetBytes(mw.DefaultText.Text);
+                                            contents = s_jis.GetBytes(defaultText);
                                         }
 
                                         fs.Write(contents, 0, contents.Length);
