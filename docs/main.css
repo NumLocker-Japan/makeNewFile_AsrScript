@@ -43,6 +43,7 @@ body {
   padding: 10px 30px;
   position: relative;
   width: 95vw;
+  word-wrap: break-word;
 }
 
 body[color_theme="light"] {
@@ -117,6 +118,7 @@ body #index #index_main #close_menu {
   cursor: pointer;
   fill: var(--text_color);
   height: 30px;
+  padding: 10px;
   position: absolute;
   right: 20px;
   top: 25px;
@@ -187,11 +189,13 @@ body #main #header #open_menu {
   cursor: pointer;
   fill: var(--text_color);
   height: 30px;
+  padding: 10px;
   width: 30px;
 }
 
 body #main #header .main_title {
   font-size: 2rem;
+  line-height: 2.5rem;
   margin-left: 30px;
   text-align: center;
 }
@@ -217,6 +221,7 @@ body #main .table_container {
 
 body #main table {
   border-collapse: collapse;
+  word-break: keep-all;
 }
 
 body #main table tr.table_header {
@@ -321,12 +326,23 @@ body #main #go_up #go_up_img {
   fill: var(--accent_color_icon);
 }
 
-@media screen and (max-width: 500px) {
-  body #main #open_menu {
-    display: none;
+@media screen and (max-width: 767px) {
+  body {
+    padding: 10px 15px;
   }
   body #main #go_up {
-    display: none;
+    bottom: 15px;
+    right: 15px;
+  }
+  body #main #header .main_title {
+    margin: 25px auto;
+    text-align: center;
+  }
+  body #main .article {
+    margin-left: 10px;
+  }
+  body #main ol {
+    padding-left: 20px;
   }
 }
 /*# sourceMappingURL=main.css.map */

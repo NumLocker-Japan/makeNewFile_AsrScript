@@ -55,6 +55,7 @@ body{
     padding: 10px 30px;
     position: relative;
     width: 95vw;
+    word-wrap: break-word;
 
     &[color_theme="light"]{
         --accent_color: #1bc40c;
@@ -126,6 +127,7 @@ body{
                 cursor: pointer;
                 fill: $textColor;
                 height: 30px;
+                padding: 10px;
                 position: absolute;
                 right: 20px;
                 top: 25px;
@@ -196,11 +198,13 @@ body{
                 cursor: pointer;
                 fill: $textColor;
                 height: 30px;
+                padding: 10px;
                 width: 30px;
             }
     
             .main_title{
                 font-size: 2rem;
+                line-height: 2.5rem;
                 margin-left: 30px;
                 text-align: center;
             }
@@ -226,6 +230,7 @@ body{
 
         table{
             border-collapse: collapse;
+            word-break: keep-all;       // tableでは折り返しではなく、スクロール
 
             tr.table_header{
                 border-bottom: 2px solid $textColor;
@@ -329,14 +334,31 @@ body{
                 fill: $accentColor_icon;
             }
         }
+    }
 
-        @media screen and (max-width: 500px){
-            #open_menu{
-                display: none;
-            }
-            
+    @media screen and (max-width: 767px){
+
+        padding: 10px 15px;
+
+        #main{
             #go_up{
-                display: none;
+                bottom: 15px;
+                right: 15px;
+            }
+    
+            #header{
+                .main_title{
+                    margin: 25px auto;
+                    text-align: center;
+                }
+            }
+    
+            .article{
+                margin-left: 10px;
+            }
+    
+            ol{
+                padding-left: 20px;
             }
         }
     }
