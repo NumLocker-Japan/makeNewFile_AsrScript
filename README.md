@@ -27,7 +27,7 @@ v3.xより搭載のGitHub API認証用トークンは、公開しているソー
 
 ## 詳しい使い方
 
-[オンラインヘルプ](https://numlocker-japan.github.io/makeNewFile_AsrScript/docs/)をご覧ください。
+[オンラインヘルプ](https://numlocker-japan.github.io/makeNewFile_AsrScript/)をご覧ください。
 
 ---------------------
 
