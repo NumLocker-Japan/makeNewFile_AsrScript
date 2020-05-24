@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>README - 新規ファイル作成 v3.2</title>
+    <meta name="author" content="NumLocker">
+    <link rel="stylesheet" href="main.css">
+</head>
+<body color_theme="light">
+    <div id="index" class="isInvisible">
+        <div id="index_main">
+
+            <svg id="close_menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+
+            <div class="index_title">
+                目次
+            </div>
+            <div id="container">
+                <div>
+                    <a target="_self" href="#platform">動作環境</a>
+                </div>
+                <div>
+                    <a target="_self" href="#cmd_reg">コマンド登録方法</a>
+                </div>
+                <div>
+                    <a target="_self" href="#howtouse">使用方法</a>
+                    <div>
+                        <a target="_self" href="#standard">基本的な使い方</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#keybind">キーボードショートカット</a>
+                    </div>
+                </div>
+                <div>
+                    <a target="_self" href="#save">実行と設定の保存</a>
+                </div>
+                <div>
+                    <a target="_self" href="#replace">置換機能</a>
+                    <div>
+                        <a target="_self" href="#rep">連番</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#rep_example">連番記入例</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#date">日付・時刻</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#date_example">日付・時刻展開例</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#replace_template">テンプレート置換</a>
+                    </div>
+                </div>
+                <div>
+                    <a target="_self" href="#other_options">その他のオプション</a>
+                    <div>
+                        <a target="_self" href="#start_from_0">初期値省略時に0から連番を振る</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#move_focus">Enterでフォーカス移動</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#close_on_finish">終了時にウィンドウを閉じる</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#default_text">デフォルトテキスト</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#encoding">エンコーディング</a>
+                    </div>
+                </div>
+                <div>
+                    <a target="_self" href="#template_func">テンプレート機能</a>
+                    <div>
+                        <a target="_self" href="#template">テンプレート</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#format">フォーマット</a>
+                    </div>
+                </div>
+                <div>
+                    <a target="_self" href="#commandline_option">コマンドラインオプション</a>
+                    <div>
+                        <a target="_self" href="#cmd01">--showDetailsOfErrors</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#cmd02">--alertManyItems</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#cmd03">--fontSize</a>
+                    </div>
+                    <div>
+                        <a target="_self" href="#cmd04">--disableCheckForUpdate</a>
+                    </div>
+                </div>
+                <div>
+                    <a target="_self" href="#update">アップデート通知</a>
+                </div>
+                <div>
+                    <a target="_self" href="#delete">ソフトウェアの削除</a>
+                </div>
+                <div>
+                    <a target="_self" href="#license">ライセンス</a>
+                </div>
+                <div>
+                    <a target="_self" href="#virus_soft">ウイルス対策ソフトについて</a>
+                </div>
+                <div>
+                    <a target="_self" href="#others01">その他</a>
+                </div>
+                <div>
+                    <a target="_self" href="#others02">雑記</a>
+                </div>
+            </div>
+            <div class="index_title color_theme">
+                カラーテーマ
+            </div>
+            <select id="select_color_theme">
+                <option>ライト</option>
+                <option>ダーク</option>
+                <option>ハイコントラスト</option>
+            </select>
+        </div>
+        <div id="index_sub"></div>
+    </div>
+    <div id="main">
+        <div id="header">
+            <svg id="open_menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+
+            <h1 class="main_title">新規ファイル作成 v3.2</h1>
+        </div>
+        <div class="article">
+            <em>※ 以下のブラウザで動作確認を行っていますが、環境により正しく閲覧できない場合があります。その場合、ブラウザを変更することで問題が解決することがあります。(Windows10以外のOSでの閲覧は想定していません。)<br>
+            </em>
+        </div>
+        <ul class="article">
+            <li>Google Chrome 最新版</li>
+            <li>Mozilla Firefox 最新版</li>
+            <li>Microsoft Edge 最新版</li>
+            <li>Opera 最新版</li>
+            <li>Vivaldi 最新版</li>
+        </ul>
+
+        <h2 id="platform" class="sub_header">動作環境</h2>
+        <div class="article">
+            <p>.NET Framework 4.7.2が動作する環境で使用することができます。<br>
+                Windows10最新版であればすでにより上位のバージョンがインストールされているはずなので、そのまま使うことができます。( Windows10 Home 64bit Ver 1909 で動作確認済み)<br>
+                Windows7・Windows 8.1・Windows 10 Fall Creators Update (1709)以前を使用している場合、または何らかの理由でインストールされていなかった場合は、以下のリンクからインストーラを入手出来ます。<br>
+                &gt;&gt; <a href="https://support.microsoft.com/ja-jp/help/4054531/microsoft-net-framework-4-7-2-web-installer-for-windows" target="_blank" rel="noopener">Windows 用の Microsoft .NET Framework 4.7.2 Web インストーラー</a><br>
+                必要な画面サイズは、最小で1000ピクセルx700ピクセルです。
+            </p>
+        </div>
+
+        <h2 id="cmd_reg" class="sub_header">コマンド登録方法</h2><br>
+        <div class="article">
+            <em>前バージョン(v2以前)からのアップデートも合わせて説明します。32bit用/64bit用の2つの実行ファイルが付属しますが、64bit環境を前提に説明を行うので、32bit環境の場合は適宜読み替えてください。</em>
+        </div>
+
+        <h3>注意</h3>
+        <div class="article">
+            <em>※ このソフトウェアは、$(ドルマーク)、および@(アットマーク)に特殊な機能を割り当てているため、これらの文字を含むファイル・フォルダを作成しないでください。値が正しく展開されません。<br>
+                ※ ローカルファイルへの書き込みが頻繁に行われるため、権限により失敗する可能性のあるフォルダには配置しないでください。
+            </em>
+        </div>
+        
+        <ol class="user_ext_command article">
+            <li>前作(v2以前)が存在する場合は、前作で使用した、<span class="inline_code">makeNewFileフォルダ</span>と<span class="inline_code">新規ファイル作成.txt</span>はどちらも必要ないので、まとめて削除してください。</li>
+            <li>次に、配布zipファイル内のすべてのファイル、フォルダをお好きなフォルダに配置します。必ずすべてのファイル・フォルダを同じディレクトリに配置してください。</li>
+            <li>実行ファイルをAs/Rのスクリプトに登録します。前作と異なり、基本的なオプションはUIに移行したので、コマンドラインオプションをいじる必要はほぼ無いと思います。ですので今回は、ユーザー外部コマンドとして登録する方が簡単かと思いますので、そちらで説明します。(もちろん、スクリプトコマンドでもユーザー定義バーでも、全く問題はありません)<br>
+                <span class="inline_code">オプション>インターフェース>コマンド定義>ユーザー外部コマンド</span>でスクリプトを登録します。<br>
+                コマンドラインは、<span class="inline_code">[makeNewFile_x64.exeまでのパス] ?NowDir?</span>として登録してください。<br>
+                <img src="./images/ユーザー外部コマンド登録.png" alt="コマンド登録" class="enableShadow">
+            </li>
+            <li>コマンドをお好きなキーに登録して、呼び出せれば完了です。 (例のごとく警告が出るかもしれませんが、いつものです。)</li>
+        </ol>
+        
+        <div class="split"></div>
+
+        <h2 id="howtouse" class="sub_header">使用方法</h2>
+        <div class="article">
+            <p>
+                以下、実際に使用している様子です。所々に含まれる記号にはそれぞれ機能が割り当てられています。
+            </p>
+            <img src="./images/details_01.png" alt="使用方法" class="enableShadow">
+            <p>
+                こちらは、共通拡張子を使用し、拡張子を省略した状態でファイル作成を行う様子です。
+            </p>
+            <img src="./images/details_02.png" alt="使用方法" class="enableShadow">
+        </div>
+
+        <h3 id="standard" class="sub_sub_header">基本的な使い方</h3>
+        <div class="article">
+            <p>
+                左側のテキストボックスに、作成するファイルのパス(相対パス)を入力します。フォルダも同時に作成可能です。 パスの区切り文字は、<span class="inline_code">\</span>または<span class="inline_code">/</span>を使用します。<span class="inline_code">.</span>から始まるファイル(<span class="inline_code">.gitignore</span>等)も問題なく作成できます。<br>
+                例えば、<span class="inline_code">東京\新宿\新宿駅.txt</span>と入力すれば、現在開いているディレクトリから、<span class="inline_code">東京</span>フォルダが存在しない場合新規作成・<span class="inline_code">東京\新宿</span>フォルダが存在しない場合新規作成・<span class="inline_code">東京\新宿\新宿駅.txt</span>ファイルが存在しない場合は、新規作成...のように処理されます。<br>
+                ちなみに、<span class="inline_code">東京\新宿\</span>のように、パスの区切り文字を末尾に持ってくると、フォルダのみ作成します。ファイルと同時に空のフォルダを作成したい場合に使えます。<br>
+                置換機能・テンプレート機能を用いることで、より柔軟かつ効率的なファイル作成が可能です。ただし、あくまで自分用ソフトなので、万人受けする実装では無い点はご了承ください。
+            </p>
+        </div>
+
+        <h3 id="keybind" class="sub_sub_header">キーボードショートカット</h3>
+        <ul class="article">
+            <li>Esc<br>ウィンドウを閉じます。</li>
+            <li>F1<br>オンライン版ドキュメントを開きます。(内容はREADMEと同じです。)</li>
+            <li>Alt + R<br>「置換機能」ウィンドウを開きます。</li>
+            <li>Alt + T<br>「テンプレートの編集」ウィンドウを開きます。</li>
+        </ul>
+
+        <h2 id="save" class="sub_header">実行と設定の保存</h2>
+        <div class="article">
+            <p>
+                実行は、OKボタンを押すか、各種入力欄でEnterキーを押します。(Shift+Enterで、設定を保存せず実行します。)<br>
+                テキストボックスは複数行の入力が可能ですが、改行はCtrl+Enterで行います。<br>
+                初回起動時に、レジストリにデフォルトの設定を書き込みます。終了時に、各種設定およびウィンドウサイズを保存します。<br>
+                設定を保存しない場合は、実行時にShiftキーを押すことでウィンドウサイズ以外の各種設定の保存を一時的に無効化します。
+            </p>
+        </div>
+
+        <div class="split"></div>
+
+        <h2 id="replace" class="sub_header">置換機能</h2>
+
+        <h3 id="rep" class="sub_sub_header">連番</h3>
+        <div class="article">
+            <p>
+                連番機能は、入力されたパスが、正規表現<span class="inline_code">^([^$*~]*\$+)+[^$*~]*\*[1-9]\d*(|~[1-9]\d*)$</span>に一致する場合のみ自動的に連番を振る機能です。初めはEmmet記法を参考に、と考えていましたが、結局微妙に独自の文法になりました。orz<br>
+                ちなみに、正規表現をビジュアル化するとこんな感じです。複数の連番を埋め込めるよう設計されています。
+            </p>
+            <img src="./images/連番正規表現.png" alt="連番正規表現">
+            <p>
+                (<a href="https://regexper.com/" target="_blank" rel="noopener">https://regexper.com/</a>で作成)<br>
+                <span class="inline_code">$</span>は任意の数字1桁を表し、<span class="inline_code">*</span>の後に総数、さらにその後に<span class="inline_code">~</span>に続けて初期値を入力します。初期値を省略した場合は、通常1が初期値になりますが、オプションで0を初期値にすることも可能です。
+            </p>
+        </div>
+
+        <h3 id="rep_example" class="sub_sub_header">連番記入例</h3>
+        <div class="table_container">
+            <table class="article">
+                <tr class="table_header">
+                    <th>記入例</th>
+                    <th>作成されるファイル/フォルダ</th>
+                </tr>
+                <tr class="table_item_with_border">
+                    <td><span class="inline_code">
+                        project\資料$$$.txt*20
+                    </span></td>
+                    <td>
+                        project\資料001.txt<br>project\資料002.txt<br>project\資料003.txt<br>project\資料004.txt<br>project\資料005.txt<br>project\資料006.txt<br>project\資料007.txt<br>project\資料008.txt<br>project\資料009.txt<br>project\資料010.txt<br>project\資料011.txt<br>project\資料012.txt<br>project\資料013.txt<br>project\資料014.txt<br>project\資料015.txt<br>project\資料016.txt<br>project\資料017.txt<br>project\資料018.txt<br>project\資料019.txt<br>project\資料020.txt
+                    </td>
+                </tr>
+                <tr class="table_item_with_border">
+                    <td><span class="inline_code">
+                        初期値込み$$$.log*20~101
+                    </span></td>
+                    <td>
+                        初期値込み101.log<br>初期値込み102.log<br>初期値込み103.log<br>初期値込み104.log<br>初期値込み105.log<br>初期値込み106.log<br>初期値込み107.log<br>初期値込み108.log<br>初期値込み109.log<br>初期値込み110.log<br>初期値込み111.log<br>初期値込み112.log<br>初期値込み113.log<br>初期値込み114.log<br>初期値込み115.log<br>初期値込み116.log<br>初期値込み117.log<br>初期値込み118.log<br>初期値込み119.log<br>初期値込み120.log
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="inline_code">
+                        project_$$\サンプル$$.ini*10
+                    </span></td>
+                    <td>
+                        project_01\サンプル01.ini<br>project_02\サンプル02.ini<br>project_03\サンプル03.ini<br>project_04\サンプル04.ini<br>project_05\サンプル05.ini<br>project_06\サンプル06.ini<br>project_07\サンプル07.ini<br>project_08\サンプル08.ini<br>project_09\サンプル09.ini<br>project_10\サンプル10.ini
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+
+        <div class="article">
+            <p>
+                処理実行中はメイン画面が操作できないようになっていますが、処理自体はUIとは違うスレッドに投げているので、画面がフリーズするということはない(はず)です。処理落ちしているかどうかは、プログレスバーで判断してください。
+            </p>
+        </div>
+
+
+        <h3 id="date" class="sub_sub_header">日付・時刻</h3>
+        <div class="article">
+            <p>
+                日付・時刻は、<span class="inline_code">%</span>で括った置換フォーマットを自動展開する機能です。複数の箇所に分けて挿入可能なので、柔軟に対応出来ます。置換フォーマットと見なされなければ展開されないだけなので、年や月といった文字を含める事ができます。ちなみに、実行開始時刻を付与する設計なので、重い処理のせいで途中で時間が変わる、といったことは起こりません。
+            </p>
+        </div>
+
+        <h3 id="date_example" class="sub_sub_header">日付・時刻展開例</h3>
+        <div class="table_container">
+            <table class="article">
+                <tr class="table_header">
+                    <th>記入例</th>
+                    <th>展開例</th>
+                </tr>
+                <tr class="table_item_with_border">
+                    <td><span class="inline_code">
+                        %yyyy_MM_dd%
+                    </span></td>
+                    <td>
+                        2020_04_18
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="inline_code">
+                        %hh時mm分ss秒%
+                    </span></td>
+                    <td>
+                        10時15分58秒
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="article">
+            <p>
+                これらのフォーマットは、.NET Framework 4.7.2 DateTimeFormatInfo クラスに準拠しており、例として提示している以外の置換フォーマットも使えます。<br>
+                詳しくはこちらをどうぞ。 &gt;&gt; <a href="https://docs.microsoft.com/ja-jp/dotnet/api/system.globalization.datetimeformatinfo?view=netframework-4.7.2" target="_blank" rel="noopener">DateTimeFormatInfo クラス</a><br>
+                また、置換フォーマットの展開方法は、地域設定に基づいているため、環境により展開される内容が異なる場合があります。(曜日が「Wednesday」と置換されるか、「水曜日」と置換されるかは、OSの地域設定で決まります。)
+            </p>
+        </div>
+
+        <div class="article">
+            <p>
+                以下に、連番機能と日付・時刻機能を合わせた記入例も示します。
+            </p>
+        </div>
+        <div class="table_container">
+            <table class="article">
+                <tr class="table_header">
+                    <th>記入例</th>
+                    <th>作成されるファイル/フォルダ</th>
+                </tr>
+                <tr>
+                    <td><span class="inline_code">
+                        project\log_%yyyy_MM_dd_hh_mm_ss%__$$.log*10
+                    </span></td>
+                    <td>
+                        project\log_2020_04_18_10_20_57__01.log<br>project\log_2020_04_18_10_20_57__02.log<br>project\log_2020_04_18_10_20_57__03.log<br>project\log_2020_04_18_10_20_57__04.log<br>project\log_2020_04_18_10_20_57__05.log<br>project\log_2020_04_18_10_20_57__06.log<br>project\log_2020_04_18_10_20_57__07.log<br>project\log_2020_04_18_10_20_57__08.log<br>project\log_2020_04_18_10_20_57__09.log<br>project\log_2020_04_18_10_20_57__10.log
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <h3 id="replace_template" class="sub_sub_header">テンプレート置換</h3>
+        <div class="article">
+            <p>
+                規定のテンプレート設定を上書きできます。 上書き可能な値は、<span class="inline_code">画像サイズ</span>と、<span class="inline_code">スプレッドシートのシート名</span>です。<br>
+                スプレッドシートのシート名を指定してxlsxファイルを出力する例を示します。
+            </p>
+        </div>
+        <div class="table_container">
+            <table class="article">
+                <tr class="table_header">
+                    <th>記入例</th>
+                    <th>作成されるファイル</th>
+                </tr>
+                <tr>
+                    <td><span class="inline_code">
+                        株価メモ.xlsx@サービス,情報・通信,小売り,卸売り,その他
+                    </span></td>
+                    <td>
+                        「サービス」,「情報・通信」,「小売り」,「卸売り」,「その他」の5つのシートを持つ、株価メモ.xlsx
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="split"></div>
+
+        <h2 id="other_options" class="sub_header">その他のオプション</h2>
+        
+        <h3 id="start_from_0" class="sub_sub_header">初期値省略時に0から連番を振る</h3>
+        <div class="article">
+            <p>
+                連番付与時に、初期値を省略した場合、1ではなく0から連番を付与します。
+            </p>
+        </div>
+
+        <h3 id="zero_padding" class="sub_sub_header">0埋めする</h3>
+        <div class="article">
+            <p>
+                連番付与時に、余った桁を0で埋めます。
+            </p>
+
+            <h4>0埋めをする場合</h4>
+            <div class="table_container">
+                <table>
+                    <tr class="table_header">
+                        <th>記入例</th>
+                        <th>作成されるファイル</th>
+                    </tr>
+                    <tr class="table_item_with_border">
+                        <td><span class="inline_code">
+                            sample_$$$.txt*5
+                        </span></td>
+                        <td>
+                            sample_001.txt<br>sample_002.txt<br>sample_003.txt<br>sample_004.txt<br>sample_005.txt
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline_code">
+                            sample2_$.txt*10
+                        </span></td>
+                        <td>
+                            エラー(桁の不足)
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4>0埋めをしない場合</h4>
+            <div class="table_container">
+                <table>
+                    <tr class="table_header">
+                        <th>記入例</th>
+                        <th>作成されるファイル</th>
+                    </tr>
+                    <tr class="table_item_with_border">
+                        <td><span class="inline_code">
+                            sample_$$$.txt*5
+                        </span></td>
+                        <td>
+                            sample_1.txt<br>sample_2.txt<br>sample_3.txt<br>sample_4.txt<br>sample_5.txt
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline_code">
+                            sample2_$.txt*10
+                        </span></td>
+                        <td>
+                            sample2_1.txt<br>sample2_2.txt<br>sample2_3.txt<br>sample2_4.txt<br>sample2_5.txt<br>sample2_6.txt<br>sample2_7.txt<br>sample2_8.txt<br>sample2_9.txt<br>sample2_10.txt
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h3 id="move_focus" class="sub_sub_header">Enterでフォーカス移動</h3>
+        <div class="article">
+            <p>
+                「Ctrl+Enterで改行・Enterで実行・Tabでフォーカス移動」を「Ctrl+Enterで改行・Enter / Tabでフォーカス移動」に変更します。
+            </p>
+        </div>
+
+        <h3 id="close_on_finish" class="sub_sub_header">終了時にウィンドウを閉じる</h3>
+        <div class="article">
+            <p>
+                実行終了と共にウィンドウを閉じるかどうかを設定します。
+            </p>
+        </div>
+
+        <h3 id="default_text" class="sub_sub_header">デフォルトテキスト</h3>
+        <div class="article">
+            <p>
+                ファイルの新規作成と同時に、ファイルに書き込むテキストを設定します。テキストボックス内で改行することはできません。より細かく書き込み設定を変更したい場合は、後述のテンプレート機能を使用してください。また、デフォルトテキストが、テンプレートの設定を上書きすることはありません。
+            </p>
+        </div>
+
+        <h3 id="encoding" class="sub_sub_header">エンコーディング</h3>
+        <div class="article">
+            <p>
+                デフォルトテキストのエンコーディングを設定します。デフォルトテキストが空文字の場合は、どれを選んでも変わりません。どっちにしろ0バイトなので。。。また、こちらもテンプレートの設定を上書きすることはありません。
+            </p>
+        </div>
+
+        <div class="split"></div>
+
+        <h2 id="template_func" class="sub_header">テンプレート機能</h2>
+        
+        <h3 id="template" class="sub_sub_header">テンプレート</h3>
+        <div class="article">
+            <p>
+                ファイルを作成する際に、デフォルトで使用する書き出し設定を自由に決めることができます。<br>
+                テンプレートには、「テキスト」および「画像」の2つの種類が存在します。テキストテンプレートの場合は、書き込むテキストとエンコーディング、画像テンプレートの場合は、サイズと背景色を設定することができます。 <br>
+                テキストテンプレ－トの対応拡張子に、画像フォーマットに登録されている拡張子を設定することはできません。また、画像テンプレートの対応拡張子に、テキストフォーマットに登録されている拡張子を設定することはできません。<br>
+                対応する拡張子は、拡張子を列挙するか、<span class="inline_code">*</span>を用いて設定します。<span class="inline_code">Bitmap</span>を用いた場合、テキストテンプレートの場合は、画像フォーマット、およびOfficeフォーマットに登録されている以外のすべての拡張子が対象になり、画像テンプレートの場合は、画像フォーマットに登録されているすべての拡張子が対象になります。<br>
+                テンプレートの名前が被っても特に問題はありません。あらかじめサンプルとしていくつかのテンプレートを用意しておくので、参考にしてください。<br>
+                ちなみに、一部のテキストテンプレートのデータのみ、データサイズに起因するエラーを避ける目的で、ローカルのファイルに保存されています。
+            </p>
+        </div>
+
+        <h3 id="format" class="sub_sub_header">フォーマット</h3>
+        <div class="article">
+            <p>
+                現在対応しているフォーマットは、画像形式が、<span class="inline_code">Bitmap</span>, <span class="inline_code">GIF</span>, <span class="inline_code">JPEG</span>, <span class="inline_code">PNG</span>, <span class="inline_code">TIFF</span>, <span class="inline_code">WMP</span>、スプレッドシート形式が、<span class="inline_code">バイナリ形式 (BIFF)</span>, <span class="inline_code">XML形式 (OOXML)</span>です。<br>
+                <span class="inline_code">バイナリ形式</span>は、xlsファイルとして、Excel2003まで利用されていた形式、<span class="inline_code">XML形式</span>は、xlsxファイルとして、Excel2007から採用された形式です。<br>
+                また、スプレッドシート形式で書き出しを行う場合、使用するPCにExcelがインストールされている必要はありません。<br>
+                対応フォーマットを自由に追加することはできませんが、フォーマットに対応する拡張子を追加することはできます。(需要があるかは知りません。)
+            </p>
+        </div>
+
+        <div class="split"></div>
+
+        <h2 id="commandline_option" class="sub_header">コマンドラインオプション</h2>
+        <div class="article">
+            <p>
+                コマンドラインオプションは、一度設定すれば変更する必要の無い設定、通常使用しない機能を設定する目的で用意されています。<br>
+                コマンドラインオプションのは、<span class="inline_code">makeNewFile.exe ?NowDir? --showDetailsOfErrors=false --alertManyItems=1000</span>のようにして使用します。<br>
+                ほぼ必要ない代わりに、不必要なスペースやダブルクォーテーション、大文字・小文字の差異など、1箇所でも間違えると反映されない、全く融通の利かないオプションなので、使用する際はコピペ推奨です。
+            </p>
+        </div>
+
+        <h3 id="cmd01" class="sub_sub_header">--showDetailsOfErrors</h3>
+        <div class="article">
+            <p>
+                <span class="inline_code">設定可能な値 : true, false</span><br>
+                <span class="inline_code">初期値 : false</span><br>
+                エラーが発生した場合、エラーの詳細を表示します。エラーが多く出るとスクリーンからはみ出すことと、単に邪魔なので、エラーの原因究明以外の目的で使用するメリットはありません。
+            </p>
+        </div>
+
+        <h3 id="cmd02" class="sub_sub_header">--alertManyItems</h3>
+        <div class="article">
+            <p>
+                <span class="inline_code">設定可能な値 : 任意の整数値</span><br>
+                <span class="inline_code">初期値 : 1000</span><br>
+                デフォルトでは、連番作成時に1000以上のアイテムを作成する場合に、一度警告を出します。主な目的は数字の打ち間違えの防止です。このオプションを用いて、エラーを出すアイテム数を設定できます。0を指定して起動すると、アラートを出さなくなります。
+            </p>
+        </div>
+
+        <h3 id="cmd03" class="sub_sub_header">--fontSize</h3>
+        <div class="article">
+            <p>
+                <span class="inline_code">設定可能な値 : 任意の整数値</span><br>
+                <span class="inline_code">初期値 : 12</span><br>
+                スクリーンサイズの問題で、文字が見づらい場合に、フォントサイズを変更することができます。想定しているフォントサイズは、10～14px程度です。大きすぎたり、小さすぎたりする場合は、レイアウトが崩れます。
+            </p>
+        </div>
+
+        <h3 id="cmd04" class="sub_sub_header">--disableCheckForUpdate</h3>
+        <div class="article">
+            <p>
+                <span class="inline_code">設定可能な値 : true, false</span><br>
+                <span class="inline_code">初期値 : false</span><br>
+                通常、約1週間に一度アップデート確認を行いますが、インターネット接続を断った環境では常に確認に失敗するため、10回起動する毎にエラーが表示されます。そのような環境では、アップデート自動確認機能を切ることができます。主に、オフライン環境において、不必要なエラーを回避する目的で用意したオプションです。
+            </p>
+        </div>
+
+        <div class="split"></div>
+
+        <h2 id="update" class="sub_header">アップデート通知</h2>
+        <div class="article">
+            <p>
+                アップデートはおよそ1週間に一度、起動時に自動的に確認を行います。最新版がリリースされている場合、またはアップデートの確認に10回以上連続で失敗した場合には、アップデートを促す通知が表示されます。また、アップデートはその都度回避可能です。<span class="inline_code">--disableCheckForUpdate=true</span>を指定して起動することで、常に回避することも可能です。
+            </p>
+        </div>
+
+        <h2 id="delete" class="sub_header">ソフトウェアの削除</h2>
+        <div class="article">
+            <p>
+                ソフトウェアを削除する場合は、zipファイルに含まれていた全てのファイルとフォルダを削除してください。<br>
+                レジストリの方はミスするとダメなので、やり方を詳しく説明するのは止めときますが、<span class="inline_code">HKEY_CURRENT_USER\Software\ASR_UserTools\makeNewFile</span>が関連するレジストリキーです。どうしてもレジストリごと削除したいという方は、自己責任でお願いします。
+            </p>
+        </div>
+
+        <h2 id="license" class="sub_header">ライセンス</h2>
+        <div class="article">
+            <p>
+                MITライセンスですので、コピー・配布・変更・商用利用すべてOKです。ただし、保証は一切ついていません。
+            </p>
+        </div>
+
+        <h2 id="virus_soft" class="sub_header">ウイルス対策ソフトについて</h2>
+        <div class="article">
+            <p>
+                動作確認中に複数回ウイルス対策ソフトに検知されたので、一応書いておくことにしました。<br>
+                このソフトウェアはオープンソースとして、ビルドに必要なコードはすべて公開していますので、<span class="inline_code">git clone</span>して、Visual Studioでビルドすれば使えます。(良く分からなければ無視してください。)<br>
+                また、配布しているexeに関しては、ハッシュ値を公開しているので、ダウンロードしたファイルとの同一性を確認することも可能です。(ただし、<span class="inline_code">git clone</span>して、Visual Studioでビルドして作成した場合のexeと、公開しているexeのバイナリは一致しません。これは、コード内にあるGitHub APIの認証キーを偽の文字列にした状態でコードを公開しているためです。ぶっちゃけ、ばれたからといって大して困りませんが。。。ちなみに、認証キーが正しくない場合は、アップデートの確認ができなくなるだけで、他の機能は普通に使えます。)
+            </p>
+        </div>
+
+        <h2 id="others01" class="sub_header">その他</h2>
+        <div class="article">
+            <p>
+                その他要望等がある際は、GitHubでissueを立てていただければ、できる限りの対応はさせて頂きます。 <br>
+                また、このソフトは、As/Rと連動して使用する前提で設計されていますが、As/Rからは独立したソフトウェアであり、発生したエラー・不具合およびあらゆるアンチウイルスソフトウェアによる検出に関しては、無関係ですので、不具合報告等は適切なところへお願いします。
+            </p>
+        </div>
+
+        <h2 id="others02" class="sub_header">雑記</h2>
+        <div class="article">
+            <p>
+                前作までの、JavaScript+HTML/CSSベースのElectronをやめて、C#ベースのWPFに移行しました。WPFには未来はないとか、UWPも思ったほどじゃないとか、じゃあ見た目は古いけどWindows Formsかだとか、散々言ってる人もいましたが、どれもそれなりの良さがあるという感じらしいので、まあどれでもいいか、と。まあ、いまだに7とかxpとか現役で動いてるような世界ですから、10で動くものはしばらく見捨てられることは無いでしょう。そんな感じで、WPFを選びました。速度的には若干見劣りするところもあるらしいですが、個人的には満足です。<br>
+                あとソフトの名前が適当すぎるのは、そもそもこのソフトが、数年前に超適当に作ったバッチファイルから派生したもので、それが次第にGUIツール化したという経緯からです。
+            </p>
+        </div>
+
+        <div class="split"></div>
+
+        <h2 class="footer_header">Author</h2>
+        <p class="article">NumLocker (<a href="https://github.com/NumLocker-Japan" target="_blank" rel="noopener">https://github.com/NumLocker-Japan</a>)</p>
+
+        <h2 class="footer_header">Credits</h2>
+        <p class="article">This software was made possible the following open source project.</p>
+        <ul class="article">
+            <li><a href="https://www.newtonsoft.com/json" target="_blank" rel="noopener">Json.NET</a><br>Licensed under the MIT license</li>
+            <li><a href="https://github.com/tonyqus/npoi/" target="_blank" rel="noopener">NPOI</a><br>Licensed under the Apache License 2.0</li>
+        </ul>
+        <div id="Apache_License_2" class="article">
+            Apache License<br>                           Version 2.0, January 2004<br>                        http://www.apache.org/licenses/<br><br>   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION<br><br>   1. Definitions.<br><br>      "License" shall mean the terms and conditions for use, reproduction,<br>      and distribution as defined by Sections 1 through 9 of this document.<br><br>      "Licensor" shall mean the copyright owner or entity authorized by<br>      the copyright owner that is granting the License.<br><br>      "Legal Entity" shall mean the union of the acting entity and all<br>      other entities that control, are controlled by, or are under common<br>      control with that entity. For the purposes of this definition,<br>      "control" means (i) the power, direct or indirect, to cause the<br>      direction or management of such entity, whether by contract or<br>      otherwise, or (ii) ownership of fifty percent (50%) or more of the<br>      outstanding shares, or (iii) beneficial ownership of such entity.<br><br>      "You" (or "Your") shall mean an individual or Legal Entity<br>      exercising permissions granted by this License.<br><br>      "Source" form shall mean the preferred form for making modifications,<br>      including but not limited to software source code, documentation<br>      source, and configuration files.<br><br>      "Object" form shall mean any form resulting from mechanical<br>      transformation or translation of a Source form, including but<br>      not limited to compiled object code, generated documentation,<br>      and conversions to other media types.<br><br>      "Work" shall mean the work of authorship, whether in Source or<br>      Object form, made available under the License, as indicated by a<br>      copyright notice that is included in or attached to the work<br>      (an example is provided in the Appendix below).<br><br>      "Derivative Works" shall mean any work, whether in Source or Object<br>      form, that is based on (or derived from) the Work and for which the<br>      editorial revisions, annotations, elaborations, or other modifications<br>      represent, as a whole, an original work of authorship. For the purposes<br>      of this License, Derivative Works shall not include works that remain<br>      separable from, or merely link (or bind by name) to the interfaces of,<br>      the Work and Derivative Works thereof.<br><br>      "Contribution" shall mean any work of authorship, including<br>      the original version of the Work and any modifications or additions<br>      to that Work or Derivative Works thereof, that is intentionally<br>      submitted to Licensor for inclusion in the Work by the copyright owner<br>      or by an individual or Legal Entity authorized to submit on behalf of<br>      the copyright owner. For the purposes of this definition, "submitted"<br>      means any form of electronic, verbal, or written communication sent<br>      to the Licensor or its representatives, including but not limited to<br>      communication on electronic mailing lists, source code control systems,<br>      and issue tracking systems that are managed by, or on behalf of, the<br>      Licensor for the purpose of discussing and improving the Work, but<br>      excluding communication that is conspicuously marked or otherwise<br>      designated in writing by the copyright owner as "Not a Contribution."<br><br>      "Contributor" shall mean Licensor and any individual or Legal Entity<br>      on behalf of whom a Contribution has been received by Licensor and<br>      subsequently incorporated within the Work.<br><br>   2. Grant of Copyright License. Subject to the terms and conditions of<br>      this License, each Contributor hereby grants to You a perpetual,<br>      worldwide, non-exclusive, no-charge, royalty-free, irrevocable<br>      copyright license to reproduce, prepare Derivative Works of,<br>      publicly display, publicly perform, sublicense, and distribute the<br>      Work and such Derivative Works in Source or Object form.<br><br>   3. Grant of Patent License. Subject to the terms and conditions of<br>      this License, each Contributor hereby grants to You a perpetual,<br>      worldwide, non-exclusive, no-charge, royalty-free, irrevocable<br>      (except as stated in this section) patent license to make, have made,<br>      use, offer to sell, sell, import, and otherwise transfer the Work,<br>      where such license applies only to those patent claims licensable<br>      by such Contributor that are necessarily infringed by their<br>      Contribution(s) alone or by combination of their Contribution(s)<br>      with the Work to which such Contribution(s) was submitted. If You<br>      institute patent litigation against any entity (including a<br>      cross-claim or counterclaim in a lawsuit) alleging that the Work<br>      or a Contribution incorporated within the Work constitutes direct<br>      or contributory patent infringement, then any patent licenses<br>      granted to You under this License for that Work shall terminate<br>      as of the date such litigation is filed.<br><br>   4. Redistribution. You may reproduce and distribute copies of the<br>      Work or Derivative Works thereof in any medium, with or without<br>      modifications, and in Source or Object form, provided that You<br>      meet the following conditions:<br><br>      (a) You must give any other recipients of the Work or<br>          Derivative Works a copy of this License; and<br><br>      (b) You must cause any modified files to carry prominent notices<br>          stating that You changed the files; and<br><br>      (c) You must retain, in the Source form of any Derivative Works<br>          that You distribute, all copyright, patent, trademark, and<br>          attribution notices from the Source form of the Work,<br>          excluding those notices that do not pertain to any part of<br>          the Derivative Works; and<br><br>      (d) If the Work includes a "NOTICE" text file as part of its<br>          distribution, then any Derivative Works that You distribute must<br>          include a readable copy of the attribution notices contained<br>          within such NOTICE file, excluding those notices that do not<br>          pertain to any part of the Derivative Works, in at least one<br>          of the following places: within a NOTICE text file distributed<br>          as part of the Derivative Works; within the Source form or<br>          documentation, if provided along with the Derivative Works; or,<br>          within a display generated by the Derivative Works, if and<br>          wherever such third-party notices normally appear. The contents<br>          of the NOTICE file are for informational purposes only and<br>          do not modify the License. You may add Your own attribution<br>          notices within Derivative Works that You distribute, alongside<br>          or as an addendum to the NOTICE text from the Work, provided<br>          that such additional attribution notices cannot be construed<br>          as modifying the License.<br><br>      You may add Your own copyright statement to Your modifications and<br>      may provide additional or different license terms and conditions<br>      for use, reproduction, or distribution of Your modifications, or<br>      for any such Derivative Works as a whole, provided Your use,<br>      reproduction, and distribution of the Work otherwise complies with<br>      the conditions stated in this License.<br><br>   5. Submission of Contributions. Unless You explicitly state otherwise,<br>      any Contribution intentionally submitted for inclusion in the Work<br>      by You to the Licensor shall be under the terms and conditions of<br>      this License, without any additional terms or conditions.<br>      Notwithstanding the above, nothing herein shall supersede or modify<br>      the terms of any separate license agreement you may have executed<br>      with Licensor regarding such Contributions.<br><br>   6. Trademarks. This License does not grant permission to use the trade<br>      names, trademarks, service marks, or product names of the Licensor,<br>      except as required for reasonable and customary use in describing the<br>      origin of the Work and reproducing the content of the NOTICE file.<br><br>   7. Disclaimer of Warranty. Unless required by applicable law or<br>      agreed to in writing, Licensor provides the Work (and each<br>      Contributor provides its Contributions) on an "AS IS" BASIS,<br>      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or<br>      implied, including, without limitation, any warranties or conditions<br>      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A<br>      PARTICULAR PURPOSE. You are solely responsible for determining the<br>      appropriateness of using or redistributing the Work and assume any<br>      risks associated with Your exercise of permissions under this License.<br><br>   8. Limitation of Liability. In no event and under no legal theory,<br>      whether in tort (including negligence), contract, or otherwise,<br>      unless required by applicable law (such as deliberate and grossly<br>      negligent acts) or agreed to in writing, shall any Contributor be<br>      liable to You for damages, including any direct, indirect, special,<br>      incidental, or consequential damages of any character arising as a<br>      result of this License or out of the use or inability to use the<br>      Work (including but not limited to damages for loss of goodwill,<br>      work stoppage, computer failure or malfunction, or any and all<br>      other commercial damages or losses), even if such Contributor<br>      has been advised of the possibility of such damages.<br><br>   9. Accepting Warranty or Additional Liability. While redistributing<br>      the Work or Derivative Works thereof, You may choose to offer,<br>      and charge a fee for, acceptance of support, warranty, indemnity,<br>      or other liability obligations and/or rights consistent with this<br>      License. However, in accepting such obligations, You may act only<br>      on Your own behalf and on Your sole responsibility, not on behalf<br>      of any other Contributor, and only if You agree to indemnify,<br>      defend, and hold each Contributor harmless for any liability<br>      incurred by, or claims asserted against, such Contributor by reason<br>      of your accepting any such warranty or additional liability.<br><br>   END OF TERMS AND CONDITIONS
+        </div>
+
+        <h2 class="footer_header">License</h2>
+        <p class="article"><span class="copyright">Copyright (c) 2020 NumLocker</span><br>
+            Released under the MIT license</p>
+        <div id="MIT_License" class="article">
+            Permission is hereby granted, free of charge,<br>to any person obtaining a copy of this software and associated documentation files (the "Software"),<br>to deal in the Software without restriction, including without limitation the rights<br>to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,<br>and to permit persons to whom the Software is furnished to do so, subject to the following conditions:<br><br>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.<br><br>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,<br>INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.<br>IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,<br>WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<br>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+        </div>
+
+        <h2 class="footer_header">GitHub repository</h2>
+        <a href="https://github.com/NumLocker-Japan/makeNewFile_AsrScript" class="article" target="_blank" rel="noopener">https://github.com/NumLocker-Japan/makeNewFile_AsrScript</a>
+
+        <div id="go_up">
+            <a href="#header" target="_self">
+                <svg id="go_up_img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</body>
+<script src="./main.js"></script>
+</html>

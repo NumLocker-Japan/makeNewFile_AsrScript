@@ -1,0 +1,332 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+JP&family=Source+Code+Pro&display=swap");
+::-webkit-scrollbar-corner, ::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar:vertical {
+  background-color: transparent;
+  width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+  background-color: transparent;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--accentColor_thumb_normal);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accentColor_thumb_hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--accentColor_thumb_active);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background_color);
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: var(--text_color);
+  font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+  line-height: 1.5rem;
+  margin: 0;
+  max-width: 2000px;
+  overflow: scroll;
+  padding: 10px 30px;
+  position: relative;
+  width: 95vw;
+}
+
+body[color_theme="light"] {
+  --accent_color: #1bc40c;
+  --accent_color_icon: white;
+  --accent_color_marker: #1bc40c73;
+  --background_color: #F1F1F1;
+  --text_color: black;
+  --sub_color_small: #ddd;
+  --sub_color_big: #e6e6e6;
+  --accentColor_thumb_normal: #1bc40c73;
+  --accentColor_thumb_hover: #1bc40cc5;
+  --accentColor_thumb_active: #1bc40c;
+}
+
+body[color_theme="dark"] {
+  --accent_color: #1bc40c;
+  --accent_color_icon: white;
+  --accent_color_marker: #1bc40c73;
+  --background_color: #333;
+  --text_color: white;
+  --sub_color_small: #444;
+  --sub_color_big: #3c3c3c;
+  --accentColor_thumb_normal: #1bc40c73;
+  --accentColor_thumb_hover: #1bc40cc5;
+  --accentColor_thumb_active: #1bc40c;
+}
+
+body[color_theme="high_contrast"] {
+  --accent_color: yellow;
+  --accent_color_icon: black;
+  --accent_color_marker: yellow;
+  --background_color: black;
+  --text_color: white;
+  --sub_color_small: purple;
+  --sub_color_big: purple;
+  --accentColor_thumb_normal: aqua;
+  --accentColor_thumb_hover: aqua;
+  --accentColor_thumb_active: aqua;
+}
+
+body a {
+  color: var(--text_color);
+  text-decoration: none;
+}
+
+body a:hover {
+  color: var(--accent_color);
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+body #index {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+body #index #index_main {
+  background-color: var(--background_color);
+  border-right: 3px solid var(--accent_color);
+  height: 100vh;
+  left: 0;
+  overflow: scroll;
+  padding: 15px 45px 0 0;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+}
+
+body #index #index_main #close_menu {
+  cursor: pointer;
+  fill: var(--text_color);
+  height: 30px;
+  position: absolute;
+  right: 20px;
+  top: 25px;
+  width: 30px;
+}
+
+body #index #index_main .index_title {
+  font-size: 1.5rem;
+  margin: 10px 0 20px 20px;
+}
+
+body #index #index_main .index_title.color_theme {
+  margin-top: 50px;
+}
+
+body #index #index_main #container > div {
+  margin-left: 40px;
+}
+
+body #index #index_main #container > div a {
+  padding-left: 20px;
+  position: relative;
+  text-decoration: none;
+}
+
+body #index #index_main #container > div a::after {
+  content: '>';
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+body #index #index_main #container > div div {
+  margin-left: 20px;
+}
+
+body #index #index_main #select_color_theme {
+  background-color: var(--background_color);
+  color: var(--text_color);
+  margin-bottom: 40px;
+  margin-left: 40px;
+  padding: 2px 5px;
+}
+
+body #index #index_sub {
+  background-color: #27272760;
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+body #index.isInvisible {
+  display: none;
+}
+
+body #main #header {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+body #main #header #open_menu {
+  cursor: pointer;
+  fill: var(--text_color);
+  height: 30px;
+  width: 30px;
+}
+
+body #main #header .main_title {
+  font-size: 2rem;
+  margin-left: 30px;
+  text-align: center;
+}
+
+body #main em {
+  font-style: normal;
+  font-weight: bold;
+}
+
+body #main img {
+  margin: 10px;
+  max-width: 75vw;
+}
+
+body #main img.enableShadow {
+  -webkit-box-shadow: 0 0 7px var(--text_color);
+          box-shadow: 0 0 7px var(--text_color);
+}
+
+body #main .table_container {
+  overflow: scroll;
+}
+
+body #main table {
+  border-collapse: collapse;
+}
+
+body #main table tr.table_header {
+  border-bottom: 2px solid var(--text_color);
+}
+
+body #main table tr.table_item_with_border {
+  border-bottom: 1px solid var(--text_color);
+}
+
+body #main table th, body #main table td {
+  padding: 2px 10px;
+}
+
+body #main .user_ext_command > li {
+  padding: 10px 0;
+}
+
+body #main .inline_code {
+  background-color: var(--sub_color_small);
+  border-radius: 3px;
+  font-family: 'Source Code Pro', 'Noto Sans JP', monospace;
+  margin: 0 3px;
+  padding: 2px 5px;
+}
+
+body #main .split {
+  background-color: var(--accent_color);
+  height: 3px;
+  margin: 45px 0;
+  width: 100%;
+}
+
+body #main .sub_header {
+  display: inline-block;
+  margin: 10px 0;
+  padding-left: 15px;
+  position: relative;
+}
+
+body #main .sub_header::before {
+  background-color: var(--accent_color);
+  bottom: 0;
+  content: '';
+  height: 100%;
+  left: 0;
+  position: absolute;
+  width: 5px;
+}
+
+body #main .sub_header::after {
+  background-color: var(--accent_color);
+  bottom: 0;
+  content: '';
+  height: 100%;
+  left: 8px;
+  position: absolute;
+  width: 2px;
+}
+
+body #main .footer_header {
+  margin: 10px 0;
+}
+
+body #main .article {
+  margin-left: 40px;
+}
+
+body #main #Apache_License_2 {
+  background-color: var(--sub_color_big);
+  height: 400px;
+  margin-bottom: 40px;
+  overflow: scroll;
+  padding: 20px;
+  width: 80%;
+}
+
+body #main #MIT_License {
+  background-color: var(--sub_color_big);
+  max-height: 400px;
+  margin-bottom: 40px;
+  overflow: scroll;
+  padding: 20px;
+  width: 80%;
+}
+
+body #main .copyright {
+  font-style: italic;
+}
+
+body #main #go_up {
+  background-color: var(--accent_color_marker);
+  border-radius: 50%;
+  bottom: 30px;
+  height: 50px;
+  position: fixed;
+  right: 30px;
+  width: 50px;
+}
+
+body #main #go_up #go_up_img {
+  fill: var(--accent_color_icon);
+}
+
+@media screen and (max-width: 500px) {
+  body #main #open_menu {
+    display: none;
+  }
+  body #main #go_up {
+    display: none;
+  }
+}
+/*# sourceMappingURL=main.css.map */

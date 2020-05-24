@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Sans+JP&family=Source+Code+Pro&display=swap');
+
+$accentColor: var(--accent_color);
+$accentColor_icon: var(--accent_color_icon);
+$accentColor_marker: var(--accent_color_marker);
+$backgroundColor: var(--background_color);
+$textColor: var(--text_color);
+$subColor_small: var(--sub_color_small);
+$subColor_big: var(--sub_color_big);
+
+$accentColorThumbNormal: var(--accentColor_thumb_normal);
+$accentColorThumbHover: var(--accentColor_thumb_hover);
+$accentColorThumbActive: var(--accentColor_thumb_active);
+
+::-webkit-scrollbar-corner, ::-webkit-scrollbar {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar:vertical {
+    background-color: transparent;
+    width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+    background-color: transparent;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $accentColorThumbNormal;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: $accentColorThumbHover;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: $accentColorThumbActive;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    background-color: $backgroundColor;
+    box-sizing: border-box;
+    color: $textColor;
+    font-family: 'Noto Sans', 'Noto Sans JP', sans-serif;
+    line-height: 1.5rem;
+    margin: 0;
+    max-width: 2000px;
+    overflow: scroll;
+    padding: 10px 30px;
+    position: relative;
+    width: 95vw;
+
+    &[color_theme="light"]{
+        --accent_color: #1bc40c;
+        --accent_color_icon: white;
+        --accent_color_marker: #1bc40c73;
+        --background_color: #F1F1F1;
+        --text_color: black;
+        --sub_color_small: #ddd;
+        --sub_color_big: #e6e6e6;
+
+        --accentColor_thumb_normal: #1bc40c73;
+        --accentColor_thumb_hover: #1bc40cc5;
+        --accentColor_thumb_active: #1bc40c;
+            }
+
+    &[color_theme="dark"]{
+        --accent_color: #1bc40c;
+        --accent_color_icon: white;
+        --accent_color_marker: #1bc40c73;
+        --background_color: #333;
+        --text_color: white;
+        --sub_color_small: #444;
+        --sub_color_big: #3c3c3c;
+
+        --accentColor_thumb_normal: #1bc40c73;
+        --accentColor_thumb_hover: #1bc40cc5;
+        --accentColor_thumb_active: #1bc40c;
+    }
+
+    &[color_theme="high_contrast"]{
+        --accent_color: yellow;
+        --accent_color_icon: black;
+        --accent_color_marker: yellow;
+        --background_color: black;
+        --text_color: white;
+        --sub_color_small: purple;
+        --sub_color_big: purple;
+
+        --accentColor_thumb_normal: aqua;
+        --accentColor_thumb_hover: aqua;
+        --accentColor_thumb_active: aqua;
+    }
+
+    a{
+        color: $textColor;
+        text-decoration: none;
+
+        &:hover{
+            color: $accentColor;
+            transition: .3s;
+        }
+    }
+
+    #index{
+        display: flex;
+
+        #index_main{
+            background-color: $backgroundColor;
+            border-right: 3px solid $accentColor;
+            height: 100vh;
+            left: 0;
+            overflow: scroll;
+            padding: 15px 45px 0 0;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+
+            #close_menu{
+                cursor: pointer;
+                fill: $textColor;
+                height: 30px;
+                position: absolute;
+                right: 20px;
+                top: 25px;
+                width: 30px;
+            }
+
+            .index_title{
+                font-size: 1.5rem;
+                margin: 10px 0 20px 20px;
+
+                &.color_theme{
+                    margin-top: 50px;
+                }
+            }
+
+            #container{
+                > div{
+                    margin-left: 40px;
+    
+                    a{
+                        padding-left: 20px;
+                        position: relative;
+                        text-decoration: none;
+            
+                        &::after{
+                            content: '>';
+                            left: 0;
+                            position: absolute;
+                            top: 0;
+                        }
+                    }
+
+                    div{
+                        margin-left: 20px;
+                    }
+                }
+            }
+
+            #select_color_theme{
+                background-color: $backgroundColor;
+                color: $textColor;
+                margin-bottom: 40px;
+                margin-left: 40px;
+                padding: 2px 5px;
+            }
+        }
+
+        #index_sub{
+            background-color: #27272760;
+            height: 100vh;
+            left: 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        &.isInvisible{
+            display: none;
+        }
+    }
+
+    #main{
+        #header{
+            align-items: center;
+            display: flex;
+
+            #open_menu{
+                cursor: pointer;
+                fill: $textColor;
+                height: 30px;
+                width: 30px;
+            }
+    
+            .main_title{
+                font-size: 2rem;
+                margin-left: 30px;
+                text-align: center;
+            }
+        }
+
+        em{
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        img{
+            margin: 10px;
+            max-width: 75vw;
+
+            &.enableShadow{
+                box-shadow: 0 0 7px $textColor;
+            }
+        }
+
+        .table_container{
+            overflow: scroll;
+        }
+
+        table{
+            border-collapse: collapse;
+
+            tr.table_header{
+                border-bottom: 2px solid $textColor;
+            }
+
+            tr.table_item_with_border{
+                border-bottom: 1px solid $textColor;
+            }
+
+            th,td{
+                padding: 2px 10px;
+            }
+        }
+
+        .user_ext_command > li{
+            padding: 10px 0;
+        }
+    
+        .inline_code{
+            background-color: $subColor_small;
+            border-radius: 3px;
+            font-family: 'Source Code Pro', 'Noto Sans JP', monospace;
+            margin: 0 3px;
+            padding: 2px 5px;
+        }
+    
+        .split{
+            background-color: $accentColor;
+            height: 3px;
+            margin: 45px 0;
+            width: 100%;
+        }
+    
+        .sub_header{
+            display: inline-block;
+            margin: 10px 0;
+            padding-left: 15px;
+            position: relative;
+
+            &::before{
+                background-color: $accentColor;
+                bottom: 0;
+                content: '';
+                height: 100%;
+                left: 0;
+                position: absolute;
+                width: 5px;
+            }
+
+            &::after{
+                background-color: $accentColor;
+                bottom: 0;
+                content: '';
+                height: 100%;
+                left: 8px;
+                position: absolute;
+                width: 2px;
+            }
+        }
+    
+        .footer_header{
+            margin: 10px 0;
+        }
+
+        .article{
+            margin-left: 40px;
+        }
+    
+        #Apache_License_2{
+            background-color: $subColor_big;
+            height: 400px;
+            margin-bottom: 40px;
+            overflow: scroll;
+            padding: 20px;
+            width: 80%;
+        }
+
+        #MIT_License{
+            background-color: $subColor_big;
+            max-height: 400px;
+            margin-bottom: 40px;
+            overflow: scroll;
+            padding: 20px;
+            width: 80%;
+        }
+
+        .copyright{
+            font-style: italic;
+        }
+
+        #go_up{
+            background-color: $accentColor_marker;
+            border-radius: 50%;
+            bottom: 30px;
+            height: 50px;
+            position: fixed;
+            right: 30px;
+            width: 50px;
+
+            #go_up_img{
+                fill: $accentColor_icon;
+            }
+        }
+
+        @media screen and (max-width: 500px){
+            #open_menu{
+                display: none;
+            }
+            
+            #go_up{
+                display: none;
+            }
+        }
+    }
+}
