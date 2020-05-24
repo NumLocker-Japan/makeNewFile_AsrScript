@@ -5,7 +5,7 @@
 
 [こちら](https://all.undo.jp/asr/Appendix_UserTools.html)で配布していただいております。詳しい使用方法等は同梱のドキュメントをご確認ください。
 
-その他詳しい使い方等は、[オンラインドキュメント](https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/Document_v3)をご覧ください。  
+その他詳しい使い方等は、[オンラインドキュメント](https://numlocker-japan.github.io/makeNewFile_AsrScript/)をご覧ください。  
 
 ## 主な変更
 
@@ -24,10 +24,6 @@
 ## その他
 
 v3.xより搭載のGitHub API認証用トークンは、公開しているソースコード上では、**fake** と表記しています。ビルド時のみ正しいトークンに書き換えて公開しています。
-
-## 詳しい使い方
-
-[オンラインヘルプ](https://numlocker-japan.github.io/makeNewFile_AsrScript/)をご覧ください。
 
 ---------------------
 

@@ -55,7 +55,7 @@ namespace makeNewFile
 
             if (e.Key == Key.F1)
             {
-                Process.Start("https://github.com/NumLocker-Japan/makeNewFile_AsrScript/wiki/Document_v3");  // GitHub Wikiのオンラインドキュメントに飛ばす
+                Process.Start("https://numlocker-japan.github.io/makeNewFile_AsrScript/");  // docs/ の GitHub Pages に飛ばす
             }
         }
 
