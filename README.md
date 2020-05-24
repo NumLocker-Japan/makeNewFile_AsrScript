@@ -25,6 +25,10 @@
 
 v3.xより搭載のGitHub API認証用トークンは、公開しているソースコード上では、**fake** と表記しています。ビルド時のみ正しいトークンに書き換えて公開しています。
 
+## 詳しい使い方
+
+[オンラインヘルプ](https://numlocker-japan.github.io/makeNewFile_AsrScript/docs/)をご覧ください。
+
 ---------------------
 
 ## Author
@@ -35,17 +39,19 @@ NumLocker ([https://github.com/NumLocker-Japan](https://github.com/NumLocker-Jap
 
 This software was made possible the following open source project.
 
-- [Json.NET](https://www.newtonsoft.com/json)  
+### [Json.NET](https://www.newtonsoft.com/json)  
+
+*Copyright (c) 2020 Newtonsoft*  
 Licensed under the [MIT license](https://opensource.org/licenses/mit-license.php)
 
-- [NPOI](https://github.com/tonyqus/npoi/)  
+### [NPOI](https://github.com/tonyqus/npoi/)  
+
 Licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 ## License
 
 *Copyright (c) 2020 NumLocker*  
-Released under the MIT license  
-See [https://opensource.org/licenses/mit-license.php](https://opensource.org/licenses/mit-license.php)
+Released under the MIT license. See LICENSE file.
 
 ## GitHub repository
 
