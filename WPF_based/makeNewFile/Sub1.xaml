@@ -16,7 +16,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <ScrollViewer>
+        <ScrollViewer Margin="20">
             <StackPanel Grid.Column="0" Grid.Row="0" Margin="20">
                 <Label Margin="10,0,0,5" FontSize="14" Content="連番機能"/>
                 <Label Margin="25,0,0,5" Content="記入例 : 資料$$.txt*10~51"></Label>
