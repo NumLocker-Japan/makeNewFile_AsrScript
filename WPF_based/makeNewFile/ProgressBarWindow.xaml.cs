@@ -26,7 +26,7 @@ namespace makeNewFile
 
         public void SetProgressValue(double num)
         {
-            progress_text.Content = Math.Floor(num).ToString();
+            this.Title = "実行中... " + Math.Floor(num).ToString() + "%";
             progress_bar.Value = Math.Floor(num);
         }
     }

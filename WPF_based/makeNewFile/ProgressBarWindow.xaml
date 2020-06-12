@@ -5,22 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:makeNewFile"
         mc:Ignorable="d"
-        Title="実行中..." Height="75" Width="600" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="実行中..." Height="75" Width="600" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
-            <Label VerticalAlignment="Center" Padding="0" Margin="10,0,0,0">実行中...</Label>
-            <Label x:Name="progress_text" Width="30" Margin="10,0,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0">0</Label>
-            <Label VerticalAlignment="Center" Padding="0">%</Label>
-        </StackPanel>
         <ProgressBar x:Name="progress_bar" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Height="16" HorizontalAlignment="Stretch" Margin="10,0"/>
     </Grid>
 </Window>
